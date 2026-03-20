@@ -1,1 +1,0 @@
-# wafir_mobile
