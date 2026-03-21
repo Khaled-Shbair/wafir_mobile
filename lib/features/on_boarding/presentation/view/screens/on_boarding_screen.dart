@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wafir_mobile/core/resource/manager_assets.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/features/on_boarding/presentation/view/widgets/custom_page_view_content.dart';
+import 'package:wafir_mobile/routes/routes.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -85,8 +86,13 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             subTitle: ManagerStrings.subTitleOnBoardingThree,
             textTopButton: ManagerStrings.login,
             textBottomButton: ManagerStrings.loginAsGuest,
-            functionTopButton: () {},
-            functionBottomButton: () {},
+            functionTopButton: () {
+              Navigator.pushReplacementNamed(context, Routes.loginScreen);
+            },
+            functionBottomButton: () {
+              //TODO: add later with add home screen (login as guest)
+              // Navigator.pushReplacementNamed(context, Routes.loginScreen);
+            },
           ),
         ],
       ),
