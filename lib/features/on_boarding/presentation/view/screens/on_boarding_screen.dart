@@ -92,6 +92,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             functionBottomButton: () {
               //TODO: add later with add home screen (login as guest)
               // Navigator.pushReplacementNamed(context, Routes.loginScreen);
+              //test
             },
           ),
         ],
