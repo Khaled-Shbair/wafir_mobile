@@ -20,7 +20,7 @@ class ManagerTextsStyles {
   }
 
   static TextStyle font24whiteBold = _mainTextStyle(
-    fontSize: ManagerFontsSizes.f24,
+    fontSize: ManagerFontsSizes.f22,
     fontWeight: ManagerFontWeight.bold,
     color: ManagerColors.whiteColor,
   );
