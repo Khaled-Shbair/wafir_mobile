@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
+import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_assets.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
+import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/features/on_boarding/presentation/view/widgets/custom_page_view_content.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
@@ -28,6 +31,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     super.dispose();
   }
 
+  void _viewOnBoarding() {
+    instance<SharedPreferencesController>()
+        .setData(SharedPreferencesKeys.viewOnBoarding, true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +47,10 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       ),
       body: PageView(
         controller: _pageController,
-        physics: const NeverScrollableScrollPhysics(),
+        // physics: const NeverScrollableScrollPhysics(),
         children: [
           CustomPageViewContent(
+            controller: _pageController,
             image: ManagerAssets.onBoardingImageOne,
             title: ManagerStrings.titleOnBoardingOne,
             subTitle: ManagerStrings.subTitleOnBoardingOne,
@@ -62,6 +71,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             },
           ),
           CustomPageViewContent(
+            controller: _pageController,
             image: ManagerAssets.onBoardingImageTwo,
             title: ManagerStrings.titleOnBoardingTwo,
             subTitle: ManagerStrings.subTitleOnBoardingTwo,
@@ -81,17 +91,20 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             },
           ),
           CustomPageViewContent(
+            controller: _pageController,
             image: ManagerAssets.onBoardingImageThree,
             title: ManagerStrings.titleOnBoardingThree,
             subTitle: ManagerStrings.subTitleOnBoardingThree,
             textTopButton: ManagerStrings.login,
             textBottomButton: ManagerStrings.loginAsGuest,
             functionTopButton: () {
+
+              _viewOnBoarding();
               Navigator.pushReplacementNamed(context, Routes.loginScreen);
             },
             functionBottomButton: () {
-              //TODO: add later with add home screen (login as guest)
-              // Navigator.pushReplacementNamed(context, Routes.loginScreen);
+              _viewOnBoarding();
+              Navigator.pushReplacementNamed(context, Routes.homeScreen);
             },
           ),
         ],

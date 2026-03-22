@@ -3,6 +3,7 @@ import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class CustomPageViewContent extends StatelessWidget {
   const CustomPageViewContent({
@@ -14,6 +15,7 @@ class CustomPageViewContent extends StatelessWidget {
     required this.textTopButton,
     required this.functionTopButton,
     required this.functionBottomButton,
+    required this.controller,
   });
 
   final String image;
@@ -23,29 +25,42 @@ class CustomPageViewContent extends StatelessWidget {
   final Function() functionTopButton;
   final String textBottomButton;
   final Function() functionBottomButton;
+  final PageController controller;
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Image.asset(
-          alignment: AlignmentDirectional.bottomCenter,
-          image,
-          height: 300,
-          width: ManagerWidths.infinity,
-          fit: BoxFit.fill,
+        Expanded(
+          child: Image.asset(
+            alignment: AlignmentDirectional.bottomCenter,
+            image,
+            height: 300,
+            width: ManagerWidths.infinity,
+            fit: BoxFit.fill,
+          ),
         ),
+        SmoothPageIndicator(
+          controller: controller,
+          count: 3,
+          effect: ExpandingDotsEffect(
+            activeDotColor: ManagerColors.primaryColor,
+            dotColor: Colors.grey.shade400,
+            dotHeight: ManagerHeights.h7,
+            dotWidth: ManagerWidths.w20,
+            expansionFactor: 2,
+          ),
+        ),
+        verticalSpace(ManagerHeights.h20),
         Container(
           padding: EdgeInsetsDirectional.only(
             start: ManagerWidths.w20,
             end: ManagerWidths.w20,
-            top: ManagerHeights.h40,
-            bottom: ManagerHeights.h30,
+            top: ManagerHeights.h20,
+            bottom: ManagerHeights.h20,
           ),
           width: ManagerWidths.infinity,
-          height: ManagerHeights.h350,
           decoration: BoxDecoration(
             color: ManagerColors.primaryColor,
             gradient: const LinearGradient(
@@ -84,14 +99,24 @@ class CustomPageViewContent extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              const Spacer(),
-              CustomButton(
-                text: textTopButton,
-                onPressed: functionTopButton,
+              verticalSpace(ManagerHeights.h20),
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomButton(
+                      text: textTopButton,
+                      onPressed: functionTopButton,
+                    ),
+                  ),
+                  horizontalSpace(ManagerWidths.w20),
+                  Expanded(
+                    child: CustomButton(
+                      text: textBottomButton,
+                      onPressed: functionBottomButton,
+                    ),
+                  ),
+                ],
               ),
-              verticalSpace(ManagerHeights.h10),
-              CustomButton(
-                  text: textBottomButton, onPressed: functionBottomButton),
             ],
           ),
         ),
