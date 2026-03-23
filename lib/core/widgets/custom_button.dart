@@ -6,43 +6,52 @@ import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
-    required this.text,
+    this.text,
     required this.onPressed,
     this.height,
     this.color,
     this.fontSize,
     this.fontWeight,
     this.colorText,
+    this.child,
+    this.borderColor,
   });
 
-  final String text;
+  final String? text;
   final double? height;
   final Function() onPressed;
   final Color? color;
   final double? fontSize;
   final FontWeight? fontWeight;
   final Color? colorText;
+  final Widget? child;
+  final Color? borderColor;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: color ?? ManagerColors.whiteColor,
+        backgroundColor: color ?? ManagerColors.primaryColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(ManagerRadius.r10),
+        ),
+        side: BorderSide(color: borderColor ?? ManagerColors.transparentColor),
         minimumSize: Size(
           ManagerWidths.infinity,
           height ?? ManagerHeights.h50,
         ),
       ),
       onPressed: onPressed,
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: ManagerFontFamily.tajawal,
-          fontSize: fontSize ?? ManagerFontsSizes.f18,
-          fontWeight: fontWeight ?? ManagerFontWeight.bold,
-          color: colorText?? ManagerColors.primaryColor
-        ),
-      ),
+      child: child ??
+          Text(
+            text ?? '',
+            style: TextStyle(
+              fontFamily: ManagerFontFamily.tajawal,
+              fontSize: fontSize ?? ManagerFontsSizes.f18,
+              fontWeight: fontWeight ?? ManagerFontWeight.bold,
+              color: colorText ?? ManagerColors.whiteColor,
+            ),
+          ),
     );
   }
 }
