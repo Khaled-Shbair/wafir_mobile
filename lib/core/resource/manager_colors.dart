@@ -6,4 +6,7 @@ class ManagerColors {
   static const Color blackColor = Color(0xff010e0a);
   static const Color whiteColor = Color(0xfffffff2);
   static Color shadowColor = blackColor.withOpacity(0.25);
+  static Color transparentColor = Colors.transparent;
+  static Color successfullyColor = Colors.green;
+  static Color  failureColor = Colors.red;
 }
