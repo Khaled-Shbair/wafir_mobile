@@ -28,6 +28,7 @@ class ManagerRadius {
 }
 class ManagerIconsSizes {
   static double i18 = SizeUtil.setIconSize(18);
+  static double i20 = SizeUtil.setIconSize(20);
   static double i24 = SizeUtil.setIconSize(24);
 }
 
