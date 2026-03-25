@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -8,7 +7,7 @@ class CustomTextField extends StatelessWidget {
     required this.labelText,
     required this.validator,
     required this.controller,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.keyboardType,
     this.functionVisibilityPassword,
     this.isPassword = false,
@@ -20,7 +19,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final Function()? functionVisibilityPassword;
-  final IconData prefixIcon;
+  final IconData? prefixIcon;
   final bool obscureText;
   final TextInputType? keyboardType;
   final bool isPassword;
@@ -36,6 +35,7 @@ class CustomTextField extends StatelessWidget {
       style: Theme.of(context).textTheme.labelLarge,
       obscureText: obscureText,
       decoration: InputDecoration(
+        contentPadding: EdgeInsetsDirectional.zero,
         labelText: labelText,
         counter: SizedBox.shrink(),
         prefixIcon: Icon(
@@ -45,7 +45,7 @@ class CustomTextField extends StatelessWidget {
         iconColor: Theme.of(context).inputDecorationTheme.iconColor,
         suffixIcon: isPassword
             ? IconButton(
-                highlightColor: ManagerColors.transparentColor,
+                highlightColor: Theme.of(context).disabledColor,
                 onPressed: functionVisibilityPassword,
                 icon: Icon(obscureText
                     ? Icons.visibility_outlined
