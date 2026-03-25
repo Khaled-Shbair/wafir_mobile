@@ -18,6 +18,7 @@ class ManagerTextsStyles {
       fontFamily: fontFamily ?? ManagerFontFamily.tajawal,
     );
   }
+
   static TextStyle font24BlackBold = _mainTextStyle(
     fontSize: ManagerFontsSizes.f22,
     fontWeight: ManagerFontWeight.bold,
@@ -27,6 +28,11 @@ class ManagerTextsStyles {
     fontSize: ManagerFontsSizes.f22,
     fontWeight: ManagerFontWeight.bold,
     color: ManagerColors.whiteColor,
+  );
+  static TextStyle font22PrimaryBold = _mainTextStyle(
+    color: ManagerColors.primaryColor,
+    fontWeight: ManagerFontWeight.bold,
+    fontSize: ManagerFontsSizes.f22,
   );
   static TextStyle font16whiteRegular = _mainTextStyle(
     fontSize: ManagerFontsSizes.f16,
@@ -43,7 +49,4 @@ class ManagerTextsStyles {
     fontWeight: ManagerFontWeight.bold,
     color: ManagerColors.primaryColor,
   );
-
-
-
 }
