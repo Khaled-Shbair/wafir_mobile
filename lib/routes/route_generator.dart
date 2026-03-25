@@ -4,6 +4,8 @@ import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
+import 'package:wafir_mobile/features/create_account/presentation/controller/create_account_bloc.dart';
+import 'package:wafir_mobile/features/create_account/presentation/screens/create_account_screen.dart';
 import 'package:wafir_mobile/features/login/presentation/controller/login_bloc.dart';
 import 'package:wafir_mobile/features/login/presentation/view/screens/login_screen.dart';
 import 'package:wafir_mobile/features/on_boarding/presentation/view/screens/on_boarding_screen.dart';
@@ -18,6 +20,14 @@ class RouteGenerator {
           builder: (_) => BlocProvider<LoginBloc>(
             create: (context) => instance<LoginBloc>(),
             child: LoginScreen(),
+          ),
+        );
+      case Routes.createAccountScreen:
+        initCreateAccount();
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<CreateAccountBloc>(
+            create: (context) => instance<CreateAccountBloc>(),
+            child: CreateAccountScreen(),
           ),
         );
       case Routes.onBoardingScreen:
