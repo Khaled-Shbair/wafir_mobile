@@ -100,22 +100,12 @@ class CustomPageViewContent extends StatelessWidget {
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               verticalSpace(ManagerHeights.h20),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomButton(
-                      text: textTopButton,
-                      onPressed: functionTopButton,
-                    ),
-                  ),
-                  horizontalSpace(ManagerWidths.w20),
-                  Expanded(
-                    child: CustomButton(
-                      text: textBottomButton,
-                      onPressed: functionBottomButton,
-                    ),
-                  ),
-                ],
+              SizedBox(
+                width: 150,
+                child: CustomButton(
+                  text: textBottomButton,
+                  onPressed: functionBottomButton,
+                ),
               ),
             ],
           ),
