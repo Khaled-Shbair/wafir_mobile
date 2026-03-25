@@ -25,4 +25,22 @@ class ManagerStrings {
   static String google = 'google'.tr();
   static String rememberMy = 'remember_my'.tr();
   static String didYouForgetYourPassword = 'did_you_forget_your_password'.tr();
+  static String createAccount = 'create_account'.tr();
+  static String firstName = 'first_name'.tr();
+  static String create = 'create'.tr();
+  static String lastName = 'last_name'.tr();
+  static String phoneNumber = 'phone_number'.tr();
+  static String doHaveAnAccount = 'do_have_an_account'.tr();
+  static String createAccountSubTitle = 'create_account_sub_title'.tr();
+  static String governorate = 'governorate'.tr();
+  static String selectGovernorate = 'select_governorate'.tr();
+  static String city = 'city'.tr();
+  static String selectCity = 'select_city'.tr();
+
+  static String privacyPolicy = 'privacy_policy'.tr();
+  static String byCreatingThisAccountIAgreeTo = 'by_creating_this_account_i_agree_to'.tr();
+  static String termsOfUse = 'terms_of_use'.tr();
+  static String and = 'and'.tr();
+  static String search = 'search'.tr();
+
 }

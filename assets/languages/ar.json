@@ -22,5 +22,21 @@
   "or_login_by": "أو سجل الدخول بواسطة",
   "google": "جوجل",
   "remember_my": "تذكرني",
-  "did_you_forget_your_password": "هل نسيت كلمة المرور؟"
+  "did_you_forget_your_password": "هل نسيت كلمة المرور؟",
+  "create_account": "إنشاء حساب",
+  "create": "إنشاء",
+  "first_name": "الأسم الأول",
+  "last_name": "الأسم الأخير",
+  "phone_number": "رقم الهاتف",
+  "do_have_an_account": "لديك لديك حساب؟",
+  "create_account_sub_title": "قم بإنشاء حساب جديد",
+  "governorate": "المحافظة",
+  "select_governorate": "اختر المحافظة",
+  "city": "الولاية",
+  "select_city": "اختر الولاية",
+  "privacy_policy": "سياسة الخصوصية",
+  "by_creating_this_account_i_agree_to": "بإنشاء الحساب أوافق على",
+  "terms_of_use": "شروط الاستخدام",
+  "and": "و",
+  "search": "بحث"
 }
