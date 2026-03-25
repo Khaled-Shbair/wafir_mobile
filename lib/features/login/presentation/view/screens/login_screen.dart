@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_assets.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
@@ -178,10 +179,11 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                       TextSpan(
                         text: ' ${ManagerStrings.register}',
                         style: Theme.of(context).textTheme.labelMedium,
-                        recognizer: controller.forgetPassword
+                        recognizer: controller.createAccount
                           ..onTap = () {
+                          disposeLogin();
                             Navigator.pushNamed(
-                                context, Routes.forgetPasswordScreen);
+                                context, Routes.createAccountScreen);
                           },
                       ),
                     ],

@@ -14,7 +14,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<TogglePasswordVisibility>(_togglePasswordVisibility);
   }
 
-  final TapGestureRecognizer forgetPassword = TapGestureRecognizer();
+  final TapGestureRecognizer createAccount = TapGestureRecognizer();
 
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
@@ -46,7 +46,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Future<void> close() {
     email.clear();
     password.dispose();
-    forgetPassword.dispose();
+    createAccount.dispose();
     return super.close();
   }
 }
