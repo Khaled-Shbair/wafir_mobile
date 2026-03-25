@@ -7,24 +7,41 @@ import 'package:wafir_mobile/core/resource/manager_texts_styles.dart';
 ThemeData managerLightTheme() {
   return ThemeData.light(useMaterial3: true).copyWith(
     scaffoldBackgroundColor: ManagerColors.whiteColor,
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
       backgroundColor: ManagerColors.whiteColor,
+      surfaceTintColor: ManagerColors.transparentColor,
       centerTitle: true,
-      titleTextStyle: TextStyle(
-        color: ManagerColors.primaryColor,
-        fontFamily: ManagerFontFamily.tajawal,
-        fontWeight: ManagerFontWeight.bold,
-        fontSize: 24,
+      titleTextStyle: ManagerTextsStyles.font22PrimaryBold,
+      iconTheme: IconThemeData(
+        size: ManagerIconsSizes.i20,
       ),
     ),
+    primaryColor: ManagerColors.primaryColor,
+    colorScheme: ColorScheme(
+      brightness: Brightness.dark,
+      primary: ManagerColors.primaryColor,
+      secondary: ManagerColors.whiteColor,
+      error: Colors.red,
+      surface: ManagerColors.whiteColor,
+      onSurface: Colors.red,
+      onPrimary: Colors.red,
+      onSecondary: Colors.red,
+      onError: Colors.red,
+    ),
+    disabledColor: ManagerColors.transparentColor,
     inputDecorationTheme: InputDecorationThemeData(
       labelStyle: TextStyle(
-
         fontFamily: ManagerFontFamily.tajawal,
         fontSize: ManagerFontsSizes.f16,
         fontWeight: ManagerFontWeight.regular,
+        color: ManagerColors.blackColor,
       ),
+      prefixIconColor: ManagerColors.primaryColor,
       focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: ManagerColors.blackColor),
+        borderRadius: BorderRadius.circular(ManagerRadius.r10),
+      ),
+      enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: ManagerColors.blackColor),
         borderRadius: BorderRadius.circular(ManagerRadius.r10),
       ),
@@ -48,6 +65,14 @@ ThemeData managerLightTheme() {
 
       ///[login_screen],[]
       headlineLarge: ManagerTextsStyles.font24BlackBold,
+    ),
+    dropdownMenuTheme: DropdownMenuThemeData(
+      textStyle: TextStyle(
+        fontFamily: ManagerFontFamily.tajawal,
+        fontSize: ManagerFontsSizes.f16,
+        fontWeight: ManagerFontWeight.regular,
+        color: ManagerColors.blackColor,
+      ),
     ),
     checkboxTheme: CheckboxThemeData(
       checkColor: WidgetStateProperty.all(ManagerColors.whiteColor),
