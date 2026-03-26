@@ -181,7 +181,7 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                         style: Theme.of(context).textTheme.labelMedium,
                         recognizer: controller.createAccount
                           ..onTap = () {
-                          disposeLogin();
+                            disposeLogin();
                             Navigator.pushNamed(
                                 context, Routes.createAccountScreen);
                           },
