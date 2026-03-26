@@ -16,6 +16,15 @@ ThemeData managerLightTheme() {
         size: ManagerIconsSizes.i20,
       ),
     ),
+    listTileTheme: ListTileThemeData(
+      titleTextStyle: TextStyle(
+        fontFamily: ManagerFontFamily.tajawal,
+        fontSize: ManagerFontsSizes.f16,
+        fontWeight: ManagerFontWeight.regular,
+        color: ManagerColors.blackColor,
+      ),
+    iconColor: ManagerColors.primaryColor,
+    ),
     primaryColor: ManagerColors.primaryColor,
     colorScheme: ColorScheme(
       brightness: Brightness.dark,
@@ -51,10 +60,10 @@ ThemeData managerLightTheme() {
       ),
     ),
     textTheme: TextTheme(
-      ///[],[]
+      ///[Title onBoarding screen],[]
       titleLarge: ManagerTextsStyles.font24whiteBold,
 
-      ///[],[]
+      ///[subTitle onBoarding screen],[]
       bodyMedium: ManagerTextsStyles.font16whiteRegular,
 
       ///[login_screen],[]
@@ -63,8 +72,12 @@ ThemeData managerLightTheme() {
       ///[login_screen],[]
       labelLarge: ManagerTextsStyles.font16BlackRegular,
 
-      ///[login_screen],[]
-      headlineLarge: ManagerTextsStyles.font24BlackBold,
+      ///[login_screen],[name setting screen]
+      headlineLarge: ManagerTextsStyles.font22BlackBold,
+
+      ///[email setting screen]
+      labelSmall:  ManagerTextsStyles.font14GreyRegular,
+
     ),
     dropdownMenuTheme: DropdownMenuThemeData(
       textStyle: TextStyle(
