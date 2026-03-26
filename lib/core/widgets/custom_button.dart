@@ -9,6 +9,7 @@ class CustomButton extends StatelessWidget {
     this.text,
     required this.onPressed,
     this.height,
+    this.width,
     this.color,
     this.fontSize,
     this.fontWeight,
@@ -19,6 +20,7 @@ class CustomButton extends StatelessWidget {
 
   final String? text;
   final double? height;
+  final double? width;
   final Function() onPressed;
   final Color? color;
   final double? fontSize;
@@ -37,7 +39,7 @@ class CustomButton extends StatelessWidget {
         ),
         side: BorderSide(color: borderColor ?? ManagerColors.transparentColor),
         minimumSize: Size(
-          ManagerWidths.infinity,
+          width??  ManagerWidths.infinity,
           height ?? ManagerHeights.h50,
         ),
       ),
