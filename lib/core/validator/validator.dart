@@ -1,5 +1,16 @@
 class Validator {
-  static String? emailValidator(String? email) {}
+  static String? emailValidator(String? email) {
+    if (email == null || email.trim().isEmpty) {
+      return 'Invalid Email';
+    }
+
+    const String pattern = r'^[^@\s]+@[^@\s]+\.[^@\s]+';
+    final regex = RegExp(pattern);
+    if (!regex.hasMatch(email.trim())) {
+      return 'Invalid Email';
+    }
+    return null;
+  }
 
   static String? nameValidate(String? name) {
     if (name!.isEmpty) {
@@ -39,6 +50,27 @@ class Validator {
     }
     if (password.length < 8) {
       return 'Password must be at least 8 characters long.';
+    }
+    return null;
+  }
+
+  static String? confirmPasswordValidator(String? confirmPassword, String originalPassword) {
+    if (confirmPassword == null || confirmPassword.isEmpty) {
+      return 'Invalid Password';
+    }
+    if (confirmPassword != originalPassword) {
+      return 'Passwords do not match.';
+    }
+    return null;
+  }
+
+  static String? otpValidator(String? value) {
+    final code = value?.trim() ?? '';
+    if (code.isEmpty) {
+      return 'Invalid code';
+    }
+    if (!RegExp(r'^\d{4}$').hasMatch(code)) {
+      return 'Code must be 4 digits long.';
     }
     return null;
   }
