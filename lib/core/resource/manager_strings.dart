@@ -43,4 +43,43 @@ class ManagerStrings {
   static String and = 'and'.tr();
   static String search = 'search'.tr();
 
+  // Change password
+  static String changePasswordTitle = 'change_password_title'.tr();
+  static String changePasswordDescription = 'change_password_description'.tr();
+  static String currentPassword = 'current_password'.tr();
+  static String newPassword = 'new_password'.tr();
+  static String confirmPassword = 'confirm_password'.tr();
+  static String changePasswordButton = 'change_password_button'.tr();
+  static String changePasswordSuccess = 'change_password_success'.tr();
+  static String changePasswordFailure = 'change_password_failure'.tr();
+  static String incorrectCurrentPassword = 'incorrect_current_password'.tr();
+  static String passwordsDoNotMatch = 'passwords_do_not_match'.tr();
+
+  // Forget password
+  static String forgetPasswordTitle = 'forget_password_title'.tr();
+  static String forgetPasswordDescription = 'forget_password_description'.tr();
+  static String forgetPasswordButton = 'forget_password_button'.tr();
+  static String forgetPasswordSuccess = 'forget_password_success'.tr();
+  static String forgetPasswordFailure = 'forget_password_failure'.tr();
+
+  // OTP
+  static String otpTitle = 'otp_title'.tr();
+  static String otpDescription = 'otp_description'.tr();
+  static String otpCodeLabel = 'otp_code_label'.tr();
+  static String otpVerifyButton = 'otp_verify_button'.tr();
+  static String otpResendButton = 'otp_resend_button'.tr();
+  static String otpVerificationSuccess = 'otp_verification_success'.tr();
+  static String otpVerificationFailed = 'otp_verification_failed'.tr();
+
+  // Setting
+  static String profile = 'setting'.tr();
+  static String setting = 'setting'.tr();
+  static String editProfile = 'edit_profile'.tr();
+  static String logout = 'logout'.tr();
+  static String changePassword = 'change_password'.tr();
+  static String info = 'info'.tr();
+  static String favorite = 'favorite'.tr();
+  static String contactUs = 'contact_us'.tr();
+  static String notifications = 'notifications'.tr();
+
 }
