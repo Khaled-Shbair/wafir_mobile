@@ -11,6 +11,7 @@ ThemeData managerLightTheme() {
       backgroundColor: ManagerColors.whiteColor,
       surfaceTintColor: ManagerColors.transparentColor,
       centerTitle: true,
+
       titleTextStyle: ManagerTextsStyles.font22PrimaryBold,
       iconTheme: IconThemeData(
         size: ManagerIconsSizes.i20,
