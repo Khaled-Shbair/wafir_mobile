@@ -16,8 +16,7 @@ class SettingScreen extends StatelessWidget {
     SettingItemModel(
       title: ManagerStrings.changePassword,
       icon: ManagerAssets.lockIcon,
-      route:
-      Routes.changePasswordScreen,
+      route: Routes.changePasswordScreen,
     ),
     SettingItemModel(
       title: ManagerStrings.favorite,
@@ -56,62 +55,48 @@ class SettingScreen extends StatelessWidget {
           end: ManagerWidths.w20,
         ),
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                margin: EdgeInsetsDirectional.only(
-                  bottom: ManagerHeights.h15,
-                ),
-                height: ManagerHeights.h120,
-                width: ManagerWidths.w120,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: ManagerColors.blackColor,
-                ),
-                child: ClipOval(
-                  child: Image.asset(
-                    ManagerAssets.personImage,
-                    fit: BoxFit.fill,
-                  ),
-                ),
+          Container(
+            margin: EdgeInsetsDirectional.only(
+              bottom: ManagerHeights.h15,
+            ),
+            height: ManagerHeights.h120,
+            width: ManagerWidths.w120,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: ManagerColors.blackColor,
+            ),
+            child: ClipOval(
+              child: Image.asset(
+                ManagerAssets.personImage,
+                fit: BoxFit.fill,
               ),
-              Text(
-                'عبدالرحمن محمد',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .headlineLarge,
-              ),
-              verticalSpace(ManagerHeights.h5),
-              Text(
-                'abdulrahman_m@',
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .labelSmall,
-              ),
-              verticalSpace(ManagerHeights.h15),
-              CustomButton(
-                text: ManagerStrings.editProfile,
-                onPressed: () {
-                  Navigator.of(context).pushNamed(Routes.editProfileScreen);
-                },
-              ),
-              verticalSpace(ManagerHeights.h20),
-              ...List.generate(
-                settingItems.length,
-                    (i) =>
-                    CustomSettingItem(
-                      icon: settingItems[i].icon,
-                      title: settingItems[i].title,
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                            settingItems[i].route);
-                      }
-                    ),
-              ),
-            ],
+            ),
+          ),
+          Text(
+            'عبدالرحمن محمد',
+            style: Theme.of(context).textTheme.headlineLarge,
+          ),
+          verticalSpace(ManagerHeights.h5),
+          Text(
+            'abdulrahman_m@',
+            style: Theme.of(context).textTheme.labelSmall,
+          ),
+          verticalSpace(ManagerHeights.h15),
+          CustomButton(
+            text: ManagerStrings.editProfile,
+            onPressed: () {
+              Navigator.of(context).pushNamed(Routes.editProfileScreen);
+            },
+          ),
+          verticalSpace(ManagerHeights.h20),
+          ...List.generate(
+            settingItems.length,
+            (i) => CustomSettingItem(
+                icon: settingItems[i].icon,
+                title: settingItems[i].title,
+                onTap: () {
+                  Navigator.of(context).pushNamed(settingItems[i].route);
+                }),
           ),
         ],
       ),
