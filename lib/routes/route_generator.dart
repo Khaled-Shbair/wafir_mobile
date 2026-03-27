@@ -14,6 +14,7 @@ import 'package:wafir_mobile/features/on_boarding/presentation/view/screens/on_b
 import 'package:wafir_mobile/features/forget_password/presentation/controller/forget_password_bloc.dart';
 import 'package:wafir_mobile/features/forget_password/presentation/view/forget_password_screen.dart';
 import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
+import 'package:wafir_mobile/features/edit_profile/presentation/view/screens/edit_profile_screen.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class RouteGenerator {
@@ -56,6 +57,10 @@ class RouteGenerator {
       case Routes.settingScreen:
         return MaterialPageRoute(
           builder: (_) => SettingScreen(),
+        );
+      case Routes.editProfileScreen:
+        return MaterialPageRoute(
+          builder: (_) => const EditProfileScreen(),
         );
       default:
         return unDefinedRoute();
