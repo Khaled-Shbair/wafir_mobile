@@ -24,6 +24,7 @@ class ManagerHeights {
   static double h30 = SizeUtil.setHeight(30);
   static double h40 = SizeUtil.setHeight(40);
   static double h120 = SizeUtil.setHeight(120);
+  static double h140 = SizeUtil.setHeight(140);
   static double h300 = SizeUtil.setHeight(300);
   static double h320 = SizeUtil.setHeight(320);
   static double h350 = SizeUtil.setHeight(350);
@@ -32,6 +33,7 @@ class ManagerHeights {
 
 class ManagerRadius {
   static double r45 = SizeUtil.setRadius(45);
+  static double r15 = SizeUtil.setRadius(15);
   static double r20 = SizeUtil.setRadius(20);
   static double r10 = SizeUtil.setRadius(10);
   static double r5 = SizeUtil.setRadius(5);
