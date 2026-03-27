@@ -32,21 +32,22 @@ void initLogin() async {
 
 void initCreateAccount() async {
   if (!GetIt.I.isRegistered<CreateAccountBloc>()) {
-    instance.registerLazySingleton<CreateAccountBloc>(() => CreateAccountBloc());
+    instance
+        .registerLazySingleton<CreateAccountBloc>(() => CreateAccountBloc());
   }
 }
 
 void initChangePassword() async {
   if (!GetIt.I.isRegistered<ChangePasswordBloc>()) {
-    instance.registerLazySingleton<ChangePasswordBloc>(
-        () => ChangePasswordBloc());
+    instance
+        .registerLazySingleton<ChangePasswordBloc>(() => ChangePasswordBloc());
   }
 }
 
 void initForgetPassword() async {
   if (!GetIt.I.isRegistered<ForgetPasswordBloc>()) {
-    instance.registerLazySingleton<ForgetPasswordBloc>(
-        () => ForgetPasswordBloc());
+    instance
+        .registerLazySingleton<ForgetPasswordBloc>(() => ForgetPasswordBloc());
   }
 }
 
@@ -85,3 +86,6 @@ void disposeOtp() async {
     instance.unregister<OtpBloc>();
   }
 }
+
+void initEditProfile() async {}
+void disposeEditProfile() async {}
