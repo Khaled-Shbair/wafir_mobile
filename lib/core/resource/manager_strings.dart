@@ -38,7 +38,8 @@ class ManagerStrings {
   static String selectCity = 'select_city'.tr();
 
   static String privacyPolicy = 'privacy_policy'.tr();
-  static String byCreatingThisAccountIAgreeTo = 'by_creating_this_account_i_agree_to'.tr();
+  static String byCreatingThisAccountIAgreeTo =
+      'by_creating_this_account_i_agree_to'.tr();
   static String termsOfUse = 'terms_of_use'.tr();
   static String and = 'and'.tr();
   static String search = 'search'.tr();
@@ -81,5 +82,5 @@ class ManagerStrings {
   static String favorite = 'favorite'.tr();
   static String contactUs = 'contact_us'.tr();
   static String notifications = 'notifications'.tr();
-
+  static String save = 'save'.tr();
 }
