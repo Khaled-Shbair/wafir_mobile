@@ -54,4 +54,5 @@ class ManagerTextsStyles {
     fontWeight: ManagerFontWeight.bold,
     color: ManagerColors.primaryColor,
   );
+
 }
