@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 class ManagerStrings {
   static String noRouteFound = 'no_route_found'.tr();
+  static String badRequest = 'bad_request'.tr();
   static String titleOnBoardingOne = 'title_on_boarding_one'.tr();
   static String titleOnBoardingTwo = 'title_on_boarding_two'.tr();
   static String titleOnBoardingThree = 'title_on_boarding_three'.tr();
@@ -83,4 +84,27 @@ class ManagerStrings {
   static String contactUs = 'contact_us'.tr();
   static String notifications = 'notifications'.tr();
   static String save = 'save'.tr();
+
+  // Store details
+  static String storeDetailsTitle = 'store_details_title'.tr();
+  static String storeCategoryLabel = 'store_category_label'.tr();
+  static String storeLocationLabel = 'store_location_label'.tr();
+  static String storeOpenNowButton = 'store_open_now_button'.tr();
+  static String aboutStoreTitle = 'about_store_title'.tr();
+  static String aboutStoreDescription = 'about_store_description'.tr();
+  static String storeFastDelivery = 'store_fast_delivery'.tr();
+  static String storeFamilySeating = 'store_family_seating'.tr();
+  static String storeCategoryShort = 'store_category_short'.tr();
+  static String publishedOffersTitle = 'published_offers_title'.tr();
+  static String publishedOffersSubtitle = 'published_offers_subtitle'.tr();
+  static String offerDiscountBadge = 'offer_discount_badge'.tr();
+  static String offerTitle = 'offer_title'.tr();
+  static String offerDescription = 'offer_description'.tr();
+  static String offerPrice = 'offer_price'.tr();
+  static String offerOldPrice = 'offer_old_price'.tr();
+  static String offerDetailsButton = 'offer_details_button'.tr();
+  static String showMore = 'show_more'.tr();
+  static String aboutStore = 'about_store'.tr();
+  static String availableOffers = 'available_offers'.tr();
+  static String searchOnStoreOrOffer = 'search_on_store_or_offer'.tr();
 }
