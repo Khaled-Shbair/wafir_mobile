@@ -4,7 +4,7 @@ import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
-    required this.labelText,
+    this.labelText,
     required this.validator,
     required this.controller,
     this.prefixIcon,
@@ -13,9 +13,11 @@ class CustomTextField extends StatelessWidget {
     this.isPassword = false,
     this.obscureText = false,
     this.maxLength,
+    this.hintText,
   });
 
-  final String labelText;
+  final String? labelText;
+  final String? hintText;
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final Function()? functionVisibilityPassword;
@@ -42,6 +44,7 @@ class CustomTextField extends StatelessWidget {
           prefixIcon,
           size: ManagerIconsSizes.i24,
         ),
+        hintText: hintText,
         iconColor: Theme.of(context).inputDecorationTheme.iconColor,
         suffixIcon: isPassword
             ? IconButton(
