@@ -9,7 +9,7 @@ class CustomDropDownList extends StatelessWidget {
     required this.onChangedFunction,
     this.labelText,
     this.hintText,
-    this.labelStyle,
+    this.textStyle,
     this.validator,
     this.enabled = true,
     super.key,
@@ -21,7 +21,7 @@ class CustomDropDownList extends StatelessWidget {
   final List<String> items;
   final Function(String? v) onChangedFunction;
   final String? Function(String?)? validator;
-  final TextStyle? labelStyle;
+  final TextStyle? textStyle;
   final bool enabled;
 
   @override
@@ -39,10 +39,14 @@ class CustomDropDownList extends StatelessWidget {
         dropdownButtonProps: DropdownButtonProps(
           splashColor: Theme.of(context).disabledColor,
           padding: EdgeInsetsDirectional.zero,
-          iconClosed: Icon(Icons.keyboard_arrow_down_sharp,
-              color: Theme.of(context).colorScheme.primary),
-          iconOpened: Icon(Icons.keyboard_arrow_up_sharp,
-              color: Theme.of(context).colorScheme.primary),
+          iconClosed: Icon(
+            Icons.keyboard_arrow_down_sharp,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          iconOpened: Icon(
+            Icons.keyboard_arrow_up_sharp,
+            color: Theme.of(context).colorScheme.primary,
+          ),
           iconSize: ManagerIconsSizes.i24,
         ),
       ),
@@ -81,6 +85,8 @@ class CustomDropDownList extends StatelessWidget {
       decoratorProps: DropDownDecoratorProps(
         textAlign: TextAlign.center,
         decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
           disabledBorder: OutlineInputBorder(
             borderSide: BorderSide(color: Colors.grey.shade400),
             borderRadius: BorderRadius.circular(ManagerRadius.r10),
@@ -88,8 +94,10 @@ class CustomDropDownList extends StatelessWidget {
           labelText: labelText,
           isDense: true,
           hintText: hintText,
-          hintStyle: labelStyle,
-          labelStyle: labelStyle,
+          hintStyle:
+              textStyle ?? Theme.of(context).inputDecorationTheme.hintStyle,
+          labelStyle:
+              textStyle ?? Theme.of(context).inputDecorationTheme.labelStyle,
         ),
       ),
     );
