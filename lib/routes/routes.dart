@@ -12,4 +12,6 @@ class Routes {
   static const String contactUsScreen = '/contact_us_Screen';
   static const String infoScreen = '/info_screen';
   static const String logoutScreen = '/logout_screen';
+  static const String storeProfileScreen = '/store_profile_screen';
+  static const String offersScreen = '/offers_screen';
 }

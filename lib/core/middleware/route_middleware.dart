@@ -13,7 +13,7 @@ class RouteMiddleware {
         false) {
       return Routes.onBoardingScreen;
     } else {
-      return Routes.editProfileScreen;
+      return Routes.loginScreen;
     }
   }
 }
