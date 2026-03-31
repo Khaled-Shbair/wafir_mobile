@@ -12,6 +12,16 @@ class Validator {
     return null;
   }
 
+  static String? searchValidate(String? keyWord) {
+    if (keyWord!.isEmpty) {
+      return 'Invalid Name';
+    }
+    if (keyWord.length < 3) {
+      return 'Name must contain only letters.';
+    }
+    return null;
+  }
+
   static String? nameValidate(String? name) {
     if (name!.isEmpty) {
       return 'Invalid Name';
@@ -54,7 +64,8 @@ class Validator {
     return null;
   }
 
-  static String? confirmPasswordValidator(String? confirmPassword, String originalPassword) {
+  static String? confirmPasswordValidator(
+      String? confirmPassword, String originalPassword) {
     if (confirmPassword == null || confirmPassword.isEmpty) {
       return 'Invalid Password';
     }
