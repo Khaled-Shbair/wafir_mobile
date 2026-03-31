@@ -11,7 +11,6 @@ ThemeData managerLightTheme() {
       backgroundColor: ManagerColors.whiteColor,
       surfaceTintColor: ManagerColors.transparentColor,
       centerTitle: true,
-
       titleTextStyle: ManagerTextsStyles.font22PrimaryBold,
       iconTheme: IconThemeData(
         size: ManagerIconsSizes.i20,
@@ -24,7 +23,7 @@ ThemeData managerLightTheme() {
         fontWeight: ManagerFontWeight.regular,
         color: ManagerColors.blackColor,
       ),
-    iconColor: ManagerColors.primaryColor,
+      iconColor: ManagerColors.primaryColor,
     ),
     primaryColor: ManagerColors.primaryColor,
     colorScheme: ColorScheme(
@@ -40,6 +39,12 @@ ThemeData managerLightTheme() {
     ),
     disabledColor: ManagerColors.transparentColor,
     inputDecorationTheme: InputDecorationThemeData(
+      hintStyle: TextStyle(
+        fontFamily: ManagerFontFamily.tajawal,
+        fontSize: ManagerFontsSizes.f16,
+        fontWeight: ManagerFontWeight.regular,
+        color: ManagerColors.blackColor,
+      ),
       labelStyle: TextStyle(
         fontFamily: ManagerFontFamily.tajawal,
         fontSize: ManagerFontsSizes.f16,
@@ -77,8 +82,7 @@ ThemeData managerLightTheme() {
       headlineLarge: ManagerTextsStyles.font22BlackBold,
 
       ///[email setting screen]
-      labelSmall:  ManagerTextsStyles.font14GreyRegular,
-
+      labelSmall: ManagerTextsStyles.font14GreyRegular,
     ),
     dropdownMenuTheme: DropdownMenuThemeData(
       textStyle: TextStyle(
@@ -86,6 +90,20 @@ ThemeData managerLightTheme() {
         fontSize: ManagerFontsSizes.f16,
         fontWeight: ManagerFontWeight.regular,
         color: ManagerColors.blackColor,
+      ),
+      inputDecorationTheme: InputDecorationThemeData(
+        hintStyle: TextStyle(
+          fontFamily: ManagerFontFamily.tajawal,
+          fontSize: 10,
+          fontWeight: ManagerFontWeight.bold,
+          color: ManagerColors.blackColor,
+        ),
+        labelStyle:  TextStyle(
+          fontFamily: ManagerFontFamily.tajawal,
+          fontSize: 10,
+          fontWeight: ManagerFontWeight.bold,
+          color: ManagerColors.blackColor,
+        ),
       ),
     ),
     checkboxTheme: CheckboxThemeData(
