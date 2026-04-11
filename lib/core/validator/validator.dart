@@ -1,13 +1,13 @@
+import 'package:wafir_mobile/core/resource/manager_strings.dart';
+
 class Validator {
   static String? emailValidator(String? email) {
     if (email == null || email.trim().isEmpty) {
-      return 'Invalid Email';
+      return ManagerStrings.pleaseEnterYourEmailAddress;
     }
 
-    const String pattern = r'^[^@\s]+@[^@\s]+\.[^@\s]+';
-    final regex = RegExp(pattern);
-    if (!regex.hasMatch(email.trim())) {
-      return 'Invalid Email';
+    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+').hasMatch(email.trim())) {
+      return ManagerStrings.pleaseEnterYourEmailAddressCorrectly;
     }
     return null;
   }
@@ -23,54 +23,56 @@ class Validator {
   }
 
   static String? nameValidate(String? name) {
-    if (name!.isEmpty) {
-      return 'Invalid Name';
-    }
-    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(name)) {
-      return 'Name must contain only letters.';
+    if (name == null || name.isEmpty || name.length < 3 || name == '') {
+      return ManagerStrings.pleaseEnterYourName;
     }
     return null;
   }
 
   static String? phoneValidate(String? phone) {
-    if (phone!.isEmpty) {
+    if (phone == null || phone.isEmpty) {
       return 'Invalid Phone Number';
     }
-    if (!RegExp(r'^\d{10}$').hasMatch(phone)) {
+    if (!RegExp(r'^\d{9}$').hasMatch(phone)) {
       return 'Phone number must be 10 digits long.';
     }
     return null;
   }
 
-  static String? passwordValidator(String? password) {
-    if (password!.isEmpty) {
-      return 'Invalid Password';
-    }
-    if (!RegExp(r'(?=.*[A-Z])').hasMatch(password)) {
-      return 'Password must contain at least one uppercase letter.';
-    }
-    if (!RegExp(r'(?=.*[a-z])').hasMatch(password)) {
-      return 'Password must contain at least one lowercase letter.';
-    }
-    if (!RegExp(r'(?=.*[@$!%*?&])').hasMatch(password)) {
-      return 'Password must contain at least one special character.';
-    }
-    if (!RegExp(r'(?=.*\d)').hasMatch(password)) {
-      return 'Password must contain at least one digit.';
+  static String? passwordValidator(String? password,
+      {String? confirmPassword}) {
+    if (password == null || password.isEmpty) {
+      return ManagerStrings.pleaseEnterYourPassword;
     }
     if (password.length < 8) {
-      return 'Password must be at least 8 characters long.';
+      return ManagerStrings.pleaseEnterYourPasswordCorrectly;
     }
+    if (confirmPassword != null) {
+      // Validate confirm password when provided
+      if (confirmPassword.isEmpty) {
+        return ManagerStrings.pleaseEnterYourPassword;
+      }
+
+      if (confirmPassword.length < 8) {
+        return ManagerStrings.pleaseEnterYourPasswordCorrectly;
+      }
+
+      if (password != confirmPassword) {
+        return ManagerStrings.passwordsDoNotMatch;
+      }
+      return ManagerStrings.pleaseEnterYourPassword;
+    }
+
     return null;
   }
 
   static String? confirmPasswordValidator(
       String? confirmPassword, String originalPassword) {
     if (confirmPassword == null || confirmPassword.isEmpty) {
-      return 'Invalid Password';
+      return ManagerStrings.pleaseEnterYourPassword;
     }
     if (confirmPassword != originalPassword) {
-      return 'Passwords do not match.';
+      return ManagerStrings.passwordsDoNotMatch;
     }
     return null;
   }
@@ -82,6 +84,20 @@ class Validator {
     }
     if (!RegExp(r'^\d{4}$').hasMatch(code)) {
       return 'Code must be 4 digits long.';
+    }
+    return null;
+  }
+
+  static String? governorateValidator(String? value) {
+    if (value == null) {
+      return ManagerStrings.pleaseSelectGovernorate;
+    }
+    return null;
+  }
+
+  static String? wilayaValidator(String? value) {
+    if (value == null) {
+      return ManagerStrings.pleaseSelectWilaya;
     }
     return null;
   }
