@@ -14,6 +14,8 @@ class CustomTextField extends StatelessWidget {
     this.obscureText = false,
     this.maxLength,
     this.hintText,
+    this.prefixText,
+    this.textInputAction,
   });
 
   final String? labelText;
@@ -21,11 +23,13 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final Function()? functionVisibilityPassword;
-  final IconData? prefixIcon;
+  final Widget? prefixIcon;
   final bool obscureText;
   final TextInputType? keyboardType;
   final bool isPassword;
   final int? maxLength;
+  final TextInputAction? textInputAction;
+  final String? prefixText;
 
   @override
   Widget build(BuildContext context) {
@@ -34,16 +38,17 @@ class CustomTextField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType ?? TextInputType.emailAddress,
       validator: validator,
+      textInputAction: textInputAction,
       style: Theme.of(context).textTheme.labelLarge,
       obscureText: obscureText,
       decoration: InputDecoration(
         contentPadding: EdgeInsetsDirectional.zero,
         labelText: labelText,
         counter: SizedBox.shrink(),
-        prefixIcon: Icon(
-          prefixIcon,
-          size: ManagerIconsSizes.i24,
-        ),
+        // prefixText: prefixText,
+
+        prefixIconColor: Theme.of(context).inputDecorationTheme.prefixIconColor,
+        prefixIcon:prefixIcon ,
         hintText: hintText,
         iconColor: Theme.of(context).inputDecorationTheme.iconColor,
         suffixIcon: isPassword
