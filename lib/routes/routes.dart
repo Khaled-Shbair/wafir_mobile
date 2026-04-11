@@ -3,9 +3,9 @@ class Routes {
   static const String loginScreen = '/login_screen';
   static const String homeScreen = '/home_screen';
   static const String forgetPasswordScreen = '/forget_password_screen';
-  static const String createAccountScreen = '/create_account_screen';
-  static const String changePasswordScreen = '/change_password_screen';
-  static const String otpScreen = '/otp_screen';
+  static const String registerScreen = '/register_screen';
+  static const String resetPasswordScreen = '/change_password_screen';
+  static const String verifyOtpScreen = '/verify_otp_screen';
   static const String settingScreen = '/setting_screen';
   static const String editProfileScreen = '/edit_profile_screen';
   static const String favoriteScreen = '/favorite_screen';
