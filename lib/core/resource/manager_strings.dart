@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 class ManagerStrings {
   static String noRouteFound = 'no_route_found'.tr();
+  static String noInternetConnection = 'no_internet_connection'.tr();
   static String badRequest = 'bad_request'.tr();
   static String titleOnBoardingOne = 'title_on_boarding_one'.tr();
   static String titleOnBoardingTwo = 'title_on_boarding_two'.tr();
@@ -35,8 +36,8 @@ class ManagerStrings {
   static String createAccountSubTitle = 'create_account_sub_title'.tr();
   static String governorate = 'governorate'.tr();
   static String selectGovernorate = 'select_governorate'.tr();
-  static String city = 'city'.tr();
-  static String selectCity = 'select_city'.tr();
+  static String wilaya = 'wilaya'.tr();
+  static String selectWilaya = 'select_wilaya'.tr();
 
   static String privacyPolicy = 'privacy_policy'.tr();
   static String byCreatingThisAccountIAgreeTo =
@@ -60,7 +61,7 @@ class ManagerStrings {
   // Forget password
   static String forgetPasswordTitle = 'forget_password_title'.tr();
   static String forgetPasswordDescription = 'forget_password_description'.tr();
-  static String forgetPasswordButton = 'forget_password_button'.tr();
+  static String send = 'send'.tr();
   static String forgetPasswordSuccess = 'forget_password_success'.tr();
   static String forgetPasswordFailure = 'forget_password_failure'.tr();
 
@@ -72,6 +73,8 @@ class ManagerStrings {
   static String otpResendButton = 'otp_resend_button'.tr();
   static String otpVerificationSuccess = 'otp_verification_success'.tr();
   static String otpVerificationFailed = 'otp_verification_failed'.tr();
+  static String pleaseEnterOtp = 'please_enter_otp'.tr();
+  static String pleaseEnterYourName = 'please_enter_your_name'.tr();
 
   // Setting
   static String profile = 'setting'.tr();
@@ -107,4 +110,16 @@ class ManagerStrings {
   static String aboutStore = 'about_store'.tr();
   static String availableOffers = 'available_offers'.tr();
   static String searchOnStoreOrOffer = 'search_on_store_or_offer'.tr();
+  static String pleaseEnterYourEmailAddress =
+      'please_enter_your_email_address'.tr();
+  static String pleaseEnterYourEmailAddressCorrectly =
+      'please_enter_your_email_address_correctly'.tr();
+  static String pleaseEnterYourPassword = 'please_enter_your_password'.tr();
+  static String pleaseEnterYourPasswordCorrectly =
+      'please_enter_your_password_correctly'.tr();
+  static String yourAccountIsNotYetActivated =
+      'your_account_is_not_yet_activated'.tr();
+  static String activateNow = 'activate_now'.tr();
+  static String pleaseSelectGovernorate = 'please_select_governorate'.tr();
+  static String pleaseSelectWilaya = 'please_select_wilaya'.tr();
 }
