@@ -27,6 +27,7 @@ class CustomDropDownList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownSearch<String>(
+
       validator: validator,
       enabled: enabled,
       autoValidateMode: AutovalidateMode.onUnfocus,

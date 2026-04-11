@@ -97,7 +97,11 @@ class _OffersScreenState extends State<OffersScreen> {
             CustomTextField(
               controller: _searchController,
               hintText: ManagerStrings.searchOnStoreOrOffer,
-              prefixIcon: Icons.search,
+              prefixIcon: Icon(
+
+                Icons.search,
+                size: ManagerIconsSizes.i24,
+              ),
               validator: (value) => Validator.searchValidate(value),
             ),
             const SizedBox(height: 18),
@@ -125,7 +129,7 @@ class _OffersScreenState extends State<OffersScreen> {
                 childAspectRatio: 0.60,
               ),
               itemBuilder: (context, index) {
-                return  CustomOfferCardWidget(item: offers[index]);
+                return CustomOfferCardWidget(item: offers[index]);
               },
             ),
           ],

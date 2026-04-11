@@ -82,7 +82,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     labelText: ManagerStrings.firstName,
                     controller: TextEditingController(),
                     validator: (v) => Validator.nameValidate(v),
-                    prefixIcon: Icons.person_outline,
+                    prefixIcon: Icon(
+                      Icons.person_outline,
+                      size: ManagerIconsSizes.i24,
+                    ),
                     keyboardType: TextInputType.name,
                   ),
                 ),
@@ -92,7 +95,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     labelText: ManagerStrings.lastName,
                     controller: TextEditingController(),
                     validator: (v) => Validator.nameValidate(v),
-                    prefixIcon: Icons.person_outline,
+                    prefixIcon: Icon(
+                      Icons.person_outline,
+                      size: ManagerIconsSizes.i24,
+                    ),
                     keyboardType: TextInputType.name,
                   ),
                 ),
@@ -103,7 +109,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               labelText: ManagerStrings.email,
               controller: TextEditingController(),
               validator: (v) => Validator.emailValidator(v),
-              prefixIcon: Icons.email_outlined,
+              prefixIcon: Icon(
+                Icons.mail_outline,
+                size: ManagerIconsSizes.i24,
+              ),
               keyboardType: TextInputType.emailAddress,
             ),
             verticalSpace(ManagerHeights.h20),
@@ -111,7 +120,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               labelText: ManagerStrings.phoneNumber,
               controller: TextEditingController(),
               validator: (v) => Validator.phoneValidate(v),
-              prefixIcon: Icons.phone_outlined,
+              prefixIcon: Icon(
+                Icons.phone_outlined,
+                size: ManagerIconsSizes.i24,
+              ),
               keyboardType: TextInputType.phone,
             ),
             verticalSpace(ManagerHeights.h20),
@@ -136,7 +148,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     : AppConstants.omanLocations[selectedGovernorate] ??
                         <String>[];
                 return CustomDropDownList(
-                  labelText: ManagerStrings.city,
+                  labelText: ManagerStrings.wilaya,
                   items: cities,
                   selectedItem: _selectedCity,
                   enabled: selectedGovernorate != null,
