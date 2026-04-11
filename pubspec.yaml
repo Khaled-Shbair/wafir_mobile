@@ -43,6 +43,14 @@ dependencies:
   get_it: ^9.2.1
   fluttertoast: ^9.0.0
   dropdown_search: ^6.0.2
+  dio: ^5.9.2
+  pretty_dio_logger: ^1.4.0
+  internet_connection_checker_plus: ^2.9.1+2
+  dartz: ^0.10.1
+  json_annotation: ^4.11.0
+  retrofit: ^4.9.2
+  retrofit_generator: ^10.2.3
+  google_sign_in: ^7.2.0
 
 dev_dependencies:
   flutter_test:
@@ -54,6 +62,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  build_runner: ^2.13.1
+  json_serializable: ^6.13.1
 
 
 flutter:
@@ -65,6 +75,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/images/
     - assets/images/on_boarding_images/
     - assets/images/login_images/
     - assets/images/profile_images/
@@ -80,6 +91,9 @@ flutter:
   fonts:
     - family: Tajawal
       fonts:
+
+        - asset: assets/fonts/tajawal/Tajawal-ExtraBold.ttf
+          weight: 800
         - asset: assets/fonts/tajawal/Tajawal-Bold.ttf
           weight: 700
         - asset: assets/fonts/tajawal/Tajawal-Medium.ttf
