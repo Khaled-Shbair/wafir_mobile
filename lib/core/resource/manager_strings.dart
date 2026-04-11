@@ -122,4 +122,6 @@ class ManagerStrings {
   static String activateNow = 'activate_now'.tr();
   static String pleaseSelectGovernorate = 'please_select_governorate'.tr();
   static String pleaseSelectWilaya = 'please_select_wilaya'.tr();
+  static String pleaseAcceptTermsAndConditions =
+      'please_accept_terms_and_conditions'.tr();
 }

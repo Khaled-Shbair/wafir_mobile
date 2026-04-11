@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
+import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/register_by_email_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/register_by_google_use_case.dart';
 
@@ -34,46 +35,56 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   void _registerByEmailProcess(
       RegisterByEmailProcess event, Emitter emit) async {
     if (formKey.currentState!.validate()) {
-      emit(
-        RegisterLoading(
-          isAccepted: state.isAccepted,
-          selectedGovernorate: state.selectedGovernorate,
-          selectedCity: state.selectedCity,
-        ),
-      );
-      (await _registerByEmailUseCase.execute(
-        RegisterByEmailUseCaseInput(
-          email: email.text,
-          password: password.text,
-          firstName: firstName.text,
-          lastName: lastName.text,
-          phoneNumber: '+968${phoneNumber.text}',
-          governorate: state.selectedGovernorate ?? '',
-          city: state.selectedCity ?? '',
-
-        ),
-      )
-        ..fold(
-          (f) {
-            emit(
-              RegisterFailure(
-                errorMessage: f.message,
-                isAccepted: state.isAccepted,
-                selectedGovernorate: state.selectedGovernorate,
-                selectedCity: state.selectedCity,
-              ),
-            );
-          },
-          (r) {
-            emit(
-              RegisterSuccessfully(
-                isAccepted: state.isAccepted,
-                selectedGovernorate: state.selectedGovernorate,
-                selectedCity: state.selectedCity,
-              ),
-            );
-          },
-        ));
+      if (state.isAccepted) {
+        emit(
+          RegisterLoading(
+            isAccepted: state.isAccepted,
+            selectedGovernorate: state.selectedGovernorate,
+            selectedCity: state.selectedCity,
+          ),
+        );
+        (await _registerByEmailUseCase.execute(
+          RegisterByEmailUseCaseInput(
+            email: email.text,
+            password: password.text,
+            firstName: firstName.text,
+            lastName: lastName.text,
+            phoneNumber: '+968${phoneNumber.text}',
+            governorate: state.selectedGovernorate ?? '',
+            city: state.selectedCity ?? '',
+          ),
+        )
+          ..fold(
+            (f) {
+              emit(
+                RegisterFailure(
+                  errorMessage: f.message,
+                  isAccepted: state.isAccepted,
+                  selectedGovernorate: state.selectedGovernorate,
+                  selectedCity: state.selectedCity,
+                ),
+              );
+            },
+            (r) {
+              emit(
+                RegisterSuccessfully(
+                  isAccepted: state.isAccepted,
+                  selectedGovernorate: state.selectedGovernorate,
+                  selectedCity: state.selectedCity,
+                ),
+              );
+            },
+          ));
+      } else {
+        emit(
+          RegisterFailure(
+            errorMessage: ManagerStrings.pleaseAcceptTermsAndConditions,
+            isAccepted: state.isAccepted,
+            selectedGovernorate: state.selectedGovernorate,
+            selectedCity: state.selectedCity,
+          ),
+        );
+      }
     }
   }
 
