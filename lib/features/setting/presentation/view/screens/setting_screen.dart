@@ -16,7 +16,7 @@ class SettingScreen extends StatelessWidget {
     SettingItemModel(
       title: ManagerStrings.changePassword,
       icon: ManagerAssets.lockIcon,
-      route: Routes.changePasswordScreen,
+      route: Routes.resetPasswordScreen,
     ),
     SettingItemModel(
       title: ManagerStrings.favorite,
