@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_assets.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
@@ -12,16 +11,16 @@ import 'package:wafir_mobile/core/widgets/custom_loading.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
 import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
+import 'package:wafir_mobile/features/auth/presentation/view/widgets/custom_activation_messenger.dart';
 import 'package:wafir_mobile/routes/routes.dart';
-import 'package:wafir_mobile/features/login/presentation/controller/login_bloc.dart';
+import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 
 class LoginScreen extends StatelessWidget with CustomToastMassage {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     var controller = context.read<LoginBloc>();
-
     return BlocListener<LoginBloc, LoginState>(
       listener: (_, state) {
         if (state is LoginLoading) {
@@ -32,7 +31,11 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
               context, Routes.homeScreen, (route) => false);
         } else if (state is LoginFailure) {
           context.hideLoading();
-          showToast(state.errorMessage);
+          if (state.errorMessage.contains('غير مفعل')) {
+            customActivationMessenger(context);
+          } else {
+            showToast(state.errorMessage);
+          }
         }
       },
       child: Scaffold(
@@ -73,9 +76,13 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                     children: [
                       CustomTextField(
                         maxLength: 30,
-                        prefixIcon: Icons.email_outlined,
+                        prefixIcon: Icon(
+                          Icons.email_outlined,
+                          size: ManagerIconsSizes.i24,
+                        ),
                         keyboardType: TextInputType.emailAddress,
-                        labelText: ManagerStrings.email,
+                        hintText: ManagerStrings.email,
+                        textInputAction: TextInputAction.next,
                         controller: controller.email,
                         validator: (v) => Validator.emailValidator(v),
                       ),
@@ -83,12 +90,16 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                       BlocBuilder<LoginBloc, LoginState>(
                         builder: (context, state) {
                           return CustomTextField(
-                            maxLength: 20,
-                            prefixIcon: Icons.lock_outline,
+                            maxLength: 50,
+                            textInputAction: TextInputAction.done,
+                            prefixIcon: Icon(
+                              Icons.lock_outline,
+                              size: ManagerIconsSizes.i24,
+                            ),
                             keyboardType: TextInputType.visiblePassword,
                             obscureText: state.passwordVisible,
                             isPassword: true,
-                            labelText: ManagerStrings.password,
+                            hintText: ManagerStrings.password,
                             controller: controller.password,
                             validator: (v) => Validator.passwordValidator(v),
                             functionVisibilityPassword: () =>
@@ -125,8 +136,12 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                       ],
                     ),
                     TextButton(
-                      onPressed: () => Navigator.pushNamed(
-                          context, Routes.forgetPasswordScreen),
+                      onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        Navigator.pushNamed(
+                            context, Routes.forgetPasswordScreen);
+                      },
                       child: Text(
                         ManagerStrings.didYouForgetYourPassword,
                         style: Theme.of(context).textTheme.labelLarge,
@@ -137,7 +152,11 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                 verticalSpace(ManagerHeights.h20),
                 CustomButton(
                   text: ManagerStrings.login,
-                  onPressed: () => controller.add(LoginProcess()),
+                  onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    controller.add(LoginProcess());
+                  },
                 ),
                 verticalSpace(ManagerHeights.h40),
                 Row(
@@ -157,7 +176,11 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                 CustomButton(
                   color: ManagerColors.whiteColor,
                   borderColor: ManagerColors.blackColor,
-                  onPressed: () => controller.add(LoginByGoogle()),
+                  onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    controller.add(LoginByGoogle());
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -181,9 +204,8 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                         style: Theme.of(context).textTheme.labelMedium,
                         recognizer: controller.createAccount
                           ..onTap = () {
-                            disposeLogin();
-                            Navigator.pushNamed(
-                                context, Routes.createAccountScreen);
+                            ScaffoldMessenger.of(context).clearSnackBars();
+                            Navigator.pushNamed(context, Routes.registerScreen);
                           },
                       ),
                     ],
