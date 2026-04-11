@@ -7,31 +7,51 @@ import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/core/validator/validator.dart';
 import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_drop_down_list.dart';
+import 'package:wafir_mobile/core/widgets/custom_loading.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
-import 'package:wafir_mobile/features/create_account/presentation/controller/create_account_bloc.dart';
+import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
+import 'package:wafir_mobile/features/auth/presentation/controller/register_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
-class CreateAccountScreen extends StatelessWidget {
-  const CreateAccountScreen({super.key});
+class RegisterScreen extends StatelessWidget with CustomToastMassage {
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var controller = context.read<CreateAccountBloc>();
+    var controller = context.read<RegisterBloc>();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(ManagerStrings.createAccount),
         leading: IconButton(
           onPressed: () {
-            initLogin();
             disposeCreateAccount();
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
-      body: SingleChildScrollView(
+      body: BlocListener<RegisterBloc, RegisterState>(
+        listener: (_, state) {
+          if (state is RegisterLoading) {
+            context.customLoading();
+          } else if (state is RegisterSuccessfully) {
+            context.hideLoading();
+            Navigator.pushReplacementNamed(
+              context,
+              Routes.verifyOtpScreen,
+              arguments: [
+                controller.email.text,
+                Routes.homeScreen,
+              ],
+            );
+          } else if (state is RegisterFailure) {
+            context.hideLoading();
+            showToast(state.errorMessage);
+          }
+        },
+        child: SingleChildScrollView(
           padding: EdgeInsetsDirectional.only(
             start: ManagerWidths.w20,
             end: ManagerWidths.w20,
@@ -52,24 +72,31 @@ class CreateAccountScreen extends StatelessWidget {
               ),
               verticalSpace(ManagerHeights.h20),
               Form(
+                key: controller.formKey,
                 child: Column(
                   children: [
                     Row(
                       children: [
                         Expanded(
                             child: CustomTextField(
-                          controller: TextEditingController(),
-                          labelText: ManagerStrings.firstName,
+                          controller: controller.firstName,
+                          hintText: ManagerStrings.firstName,
                           keyboardType: TextInputType.name,
-                          prefixIcon: Icons.person_outline,
+                          prefixIcon: Icon(
+                            Icons.person_outline,
+                            size: ManagerIconsSizes.i24,
+                          ),
                           validator: (v) => Validator.nameValidate(v),
                         )),
                         horizontalSpace(ManagerWidths.w20),
                         Expanded(
                           child: CustomTextField(
-                            controller: TextEditingController(),
-                            prefixIcon: Icons.person_outline,
-                            labelText: ManagerStrings.lastName,
+                            controller: controller.lastName,
+                            prefixIcon: Icon(
+                              Icons.person_outline,
+                              size: ManagerIconsSizes.i24,
+                            ),
+                            hintText: ManagerStrings.lastName,
                             validator: (v) => Validator.nameValidate(v),
                             keyboardType: TextInputType.name,
                           ),
@@ -78,23 +105,41 @@ class CreateAccountScreen extends StatelessWidget {
                     ),
                     verticalSpace(ManagerHeights.h20),
                     CustomTextField(
-                      controller: TextEditingController(),
-                      labelText: ManagerStrings.email,
-                      prefixIcon: Icons.mail_outline,
+                      controller: controller.email,
+                      hintText: ManagerStrings.email,
+                      prefixIcon: Icon(
+                        Icons.mail_outline,
+                        size: ManagerIconsSizes.i24,
+                      ),
                       validator: (v) => Validator.emailValidator(v),
                     ),
                     verticalSpace(ManagerHeights.h20),
                     CustomTextField(
-                      controller: TextEditingController(),
-                      labelText: ManagerStrings.phoneNumber,
+                      controller: controller.phoneNumber,
+                      hintText: ManagerStrings.phoneNumber,
                       validator: (v) => Validator.phoneValidate(v),
-                      prefixIcon: Icons.phone,
+                      prefixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          horizontalSpace(ManagerWidths.w10),
+                          Icon(
+                            Icons.phone,
+                            size: ManagerIconsSizes.i24,
+                          ),
+                          horizontalSpace(ManagerWidths.w5),
+                          Text(
+                            '+869',
+                            style: Theme.of(context).textTheme.labelLarge,
+                          ),
+                        ],
+                      ),
                       keyboardType: TextInputType.phone,
                     ),
                     verticalSpace(ManagerHeights.h20),
-                    BlocBuilder<CreateAccountBloc, CreateAccountState>(
+                    BlocBuilder<RegisterBloc, RegisterState>(
                       builder: (context, state) {
                         return CustomDropDownList(
+                          validator: (v) => Validator.governorateValidator(v),
                           labelText: ManagerStrings.governorate,
                           items: AppConstants.omanLocations.keys.toList(),
                           selectedItem: state.selectedGovernorate,
@@ -105,7 +150,7 @@ class CreateAccountScreen extends StatelessWidget {
                       },
                     ),
                     verticalSpace(ManagerHeights.h20),
-                    BlocBuilder<CreateAccountBloc, CreateAccountState>(
+                    BlocBuilder<RegisterBloc, RegisterState>(
                       builder: (context, state) {
                         final selectedGovernorate = state.selectedGovernorate;
                         final cities = selectedGovernorate == null
@@ -113,8 +158,9 @@ class CreateAccountScreen extends StatelessWidget {
                             : AppConstants.omanLocations[selectedGovernorate] ??
                                 <String>[];
                         return CustomDropDownList(
-                          labelText: ManagerStrings.city,
+                          labelText: ManagerStrings.wilaya,
                           items: cities,
+                          validator: (v) => Validator.wilayaValidator(v),
                           selectedItem: state.selectedCity,
                           enabled: selectedGovernorate != null,
                           onChangedFunction: (value) {
@@ -125,9 +171,12 @@ class CreateAccountScreen extends StatelessWidget {
                     ),
                     verticalSpace(ManagerHeights.h20),
                     CustomTextField(
-                      controller: TextEditingController(),
+                      controller: controller.password,
                       labelText: ManagerStrings.password,
-                      prefixIcon: Icons.lock_outline,
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        size: ManagerIconsSizes.i24,
+                      ),
                       validator: (v) => Validator.passwordValidator(v),
                       keyboardType: TextInputType.visiblePassword,
                     ),
@@ -138,7 +187,7 @@ class CreateAccountScreen extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BlocBuilder<CreateAccountBloc, CreateAccountState>(
+                  BlocBuilder<RegisterBloc, RegisterState>(
                     builder: (context, state) {
                       return Padding(
                         padding: const EdgeInsets.only(top: 2),
@@ -189,28 +238,16 @@ class CreateAccountScreen extends StatelessWidget {
               verticalSpace(ManagerHeights.h20),
               CustomButton(
                   onPressed: () {
-                    controller.add(CreateAccountProcess());
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    controller.add(RegisterByEmailProcess());
                   },
                   text: ManagerStrings.create),
               verticalSpace(ManagerHeights.h50),
-              // RichText(
-              //   text: TextSpan(
-              //     style: Theme.of(context).textTheme.labelLarge,
-              //     text: ManagerStrings.doHaveAnAccount,
-              //     children: [
-              //       TextSpan(
-              //         text: ' ${ManagerStrings.login}',
-              //         style: Theme.of(context).textTheme.labelMedium,
-              //         recognizer: controller.login
-              //           ..onTap = () {
-              //             Navigator.pushNamed(context, Routes.loginScreen);
-              //           },
-              //       ),
-              //     ],
-              //   ),
-              // ),
             ],
-          )),
+          ),
+        ),
+      ),
     );
   }
 }
