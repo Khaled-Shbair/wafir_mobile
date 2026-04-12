@@ -51,6 +51,7 @@ dependencies:
   retrofit: ^4.9.2
   retrofit_generator: ^10.2.3
   google_sign_in: ^7.2.0
+  image_picker: ^1.2.1
 
 dev_dependencies:
   flutter_test:
