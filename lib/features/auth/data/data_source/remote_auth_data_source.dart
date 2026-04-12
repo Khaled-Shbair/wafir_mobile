@@ -51,6 +51,10 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
         SharedPreferencesKeys.userData,
         jsonEncode(response.data),
       );
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.token,
+        response.data?.token ?? '',
+      );
     }
     return response;
   }
@@ -63,6 +67,10 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       await _sharedPreferencesController.setData(
         SharedPreferencesKeys.userData,
         jsonEncode(response.data),
+      );
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.token,
+        response.data?.token ?? '',
       );
     }
     return response;
