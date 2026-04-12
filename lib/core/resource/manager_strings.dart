@@ -79,7 +79,7 @@ class ManagerStrings {
   // Setting
   static String profile = 'setting'.tr();
   static String setting = 'setting'.tr();
-  static String editProfile = 'edit_profile'.tr();
+  static String editProfile = 'profile'.tr();
   static String logout = 'logout'.tr();
   static String changePassword = 'change_password'.tr();
   static String info = 'info'.tr();
