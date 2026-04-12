@@ -22,6 +22,13 @@ import 'package:wafir_mobile/features/auth/domain/use_case/login_by_email_use_ca
 import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/verify_otp_bloc.dart';
+import 'package:wafir_mobile/features/profile/data/data_source/remote_profile_data_source.dart';
+import 'package:wafir_mobile/features/profile/data/repository_impl/profile_repository_impl.dart';
+import 'package:wafir_mobile/features/profile/domain/repository/profile_repository.dart';
+import 'package:wafir_mobile/features/profile/domain/use_case/edit_profile_use_case.dart';
+import 'package:wafir_mobile/features/profile/domain/use_case/get_profile_use_case.dart';
+import 'package:wafir_mobile/features/profile/presentation/controller/edit_profile_bloc.dart';
+import 'package:wafir_mobile/features/profile/presentation/controller/profile_bloc.dart';
 
 final instance = GetIt.instance;
 
@@ -52,7 +59,9 @@ Future<void> _intiInternetChecker() async {
 
 Future<void> _intiDio() async {
   if (!GetIt.I.isRegistered<DioFactory>()) {
-    instance.registerLazySingleton<DioFactory>(() => DioFactory());
+    instance.registerLazySingleton<DioFactory>(
+      () => DioFactory(instance<SharedPreferencesController>()),
+    );
   }
   if (!GetIt.I.isRegistered<AppApi>()) {
     Dio dio = await instance<DioFactory>().getDio();
@@ -185,7 +194,8 @@ void disposeForgetPassword() async {
 
 void initResetPassword() async {
   if (!GetIt.I.isRegistered<ResetPasswordBloc>()) {
-    instance.registerLazySingleton<ResetPasswordBloc>(() => ResetPasswordBloc());
+    instance
+        .registerLazySingleton<ResetPasswordBloc>(() => ResetPasswordBloc());
   }
 }
 
@@ -205,7 +215,6 @@ void disposeResetPassword() async {
 }
 
 void initVerifyOtp() async {
-  _initAuth();
   if (!GetIt.I.isRegistered<VerifyOtpUseCase>()) {
     instance.registerLazySingleton<VerifyOtpUseCase>(
       () => VerifyOtpUseCase(instance<AuthRepository>()),
@@ -227,6 +236,77 @@ void disposeVerifyOtp() async {
   }
 }
 
-void initEditProfile() async {}
+void initProfile() async {
+  if (!GetIt.I.isRegistered<RemoteProfileDataSource>()) {
+    instance.registerLazySingleton<RemoteProfileDataSource>(
+      () => RemoteProfileDataSourceImpl(instance<AppApi>()),
+    );
+  }
 
-void disposeEditProfile() async {}
+  if (!GetIt.I.isRegistered<ProfileRepository>()) {
+    instance.registerLazySingleton<ProfileRepository>(
+      () => ProfileRepositoryImpl(
+        instance<NetworkInfo>(),
+        instance<RemoteProfileDataSource>(),
+      ),
+    );
+  }
+}
+
+void initGetProfileData() async {
+  initProfile();
+
+  if (!GetIt.I.isRegistered<GetProfileUseCase>()) {
+    instance.registerLazySingleton<GetProfileUseCase>(
+      () => GetProfileUseCase(instance<ProfileRepository>()),
+    );
+  }
+
+  if (!GetIt.I.isRegistered<ProfileBloc>()) {
+    instance.registerLazySingleton<ProfileBloc>(
+      () => ProfileBloc(instance<GetProfileUseCase>()),
+    );
+  }
+}
+
+void initEditProfile() async {
+  if (!GetIt.I.isRegistered<EditProfileUseCase>()) {
+    instance.registerLazySingleton<EditProfileUseCase>(
+      () => EditProfileUseCase(instance<ProfileRepository>()),
+    );
+  }
+
+  if (!GetIt.I.isRegistered<EditProfileBloc>()) {
+    instance.registerLazySingleton<EditProfileBloc>(
+      () => EditProfileBloc(instance<EditProfileUseCase>()),
+    );
+  }
+}
+
+void disposeProfile() async {
+  if (GetIt.I.isRegistered<ProfileRepository>()) {
+    instance.unregister<ProfileRepository>();
+  }
+
+  if (GetIt.I.isRegistered<RemoteProfileDataSource>()) {
+    instance.unregister<RemoteProfileDataSource>();
+  }
+}
+
+void disposeGetProfileData() async {
+  if (GetIt.I.isRegistered<GetProfileUseCase>()) {
+    instance.unregister<GetProfileUseCase>();
+  }
+  if (GetIt.I.isRegistered<ProfileBloc>()) {
+    instance.unregister<ProfileBloc>();
+  }
+}
+
+void disposeEditProfile() async {
+  if (GetIt.I.isRegistered<EditProfileUseCase>()) {
+    instance.unregister<EditProfileUseCase>();
+  }
+  if (GetIt.I.isRegistered<EditProfileBloc>()) {
+    instance.unregister<EditProfileBloc>();
+  }
+}
