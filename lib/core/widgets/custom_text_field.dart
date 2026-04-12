@@ -16,6 +16,7 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
     this.prefixText,
     this.textInputAction,
+    this.readOnly = false,
   });
 
   final String? labelText;
@@ -30,6 +31,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final TextInputAction? textInputAction;
   final String? prefixText;
+  final bool readOnly;
 
   @override
   Widget build(BuildContext context) {
@@ -39,6 +41,7 @@ class CustomTextField extends StatelessWidget {
       keyboardType: keyboardType ?? TextInputType.emailAddress,
       validator: validator,
       textInputAction: textInputAction,
+      readOnly: readOnly,
       style: Theme.of(context).textTheme.labelLarge,
       obscureText: obscureText,
       decoration: InputDecoration(
@@ -48,7 +51,7 @@ class CustomTextField extends StatelessWidget {
         // prefixText: prefixText,
 
         prefixIconColor: Theme.of(context).inputDecorationTheme.prefixIconColor,
-        prefixIcon:prefixIcon ,
+        prefixIcon: prefixIcon,
         hintText: hintText,
         iconColor: Theme.of(context).inputDecorationTheme.iconColor,
         suffixIcon: isPassword
