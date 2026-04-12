@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/constants/app_constants.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_assets.dart';
@@ -10,20 +11,17 @@ import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_drop_down_list.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
+import 'package:wafir_mobile/features/profile/domain/model/profile_data_model.dart';
+import 'package:wafir_mobile/features/profile/presentation/controller/edit_profile_bloc.dart';
 
-class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({super.key});
+class EditProfileScreen extends StatelessWidget {
+  const EditProfileScreen({required this.profileData, super.key});
 
-  @override
-  State<EditProfileScreen> createState() => _EditProfileScreenState();
-}
-
-class _EditProfileScreenState extends State<EditProfileScreen> {
-  String? _selectedGovernorate;
-  String? _selectedCity;
+  final ProfileDataModel profileData;
 
   @override
   Widget build(BuildContext context) {
+    var controller = instance<EditProfileBloc>();
     return Scaffold(
       appBar: AppBar(
         title: Text(ManagerStrings.editProfile),
@@ -57,19 +55,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     color: ManagerColors.blackColor,
                   ),
                   child: ClipOval(
-                    child: Image.asset(
-                      ManagerAssets.personImage,
-                      fit: BoxFit.fitWidth,
-                    ),
+                    child: controller.selectedImage != null
+                        ? Image.file(
+                            controller.selectedImage!,
+                            fit: BoxFit.cover,
+                          )
+                        : profileData.avatarUrl.isNotEmpty
+                            ? Image.network(
+                                profileData.avatarUrl,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.asset(
+                                ManagerAssets.personImage,
+                                fit: BoxFit.fitWidth,
+                              ),
                   ),
                 ),
-                CircleAvatar(
-                  radius: ManagerRadius.r15,
-                  backgroundColor: ManagerColors.primaryColor,
-                  child: Icon(
-                    Icons.edit,
-                    color: Colors.white,
-                    size: ManagerIconsSizes.i20,
+                GestureDetector(
+                  onTap: () => controller.add(ChangeImage()),
+                  child: CircleAvatar(
+                    radius: ManagerRadius.r15,
+                    backgroundColor: ManagerColors.primaryColor,
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                      size: ManagerIconsSizes.i20,
+                    ),
                   ),
                 ),
               ],
@@ -80,7 +91,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Flexible(
                   child: CustomTextField(
                     labelText: ManagerStrings.firstName,
-                    controller: TextEditingController(),
+                    controller: controller.firstName,
                     validator: (v) => Validator.nameValidate(v),
                     prefixIcon: Icon(
                       Icons.person_outline,
@@ -93,7 +104,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Flexible(
                   child: CustomTextField(
                     labelText: ManagerStrings.lastName,
-                    controller: TextEditingController(),
+                    controller: controller.lastName,
                     validator: (v) => Validator.nameValidate(v),
                     prefixIcon: Icon(
                       Icons.person_outline,
@@ -107,7 +118,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             verticalSpace(ManagerHeights.h20),
             CustomTextField(
               labelText: ManagerStrings.email,
-              controller: TextEditingController(),
+              controller: controller.email,
+              readOnly: true,
               validator: (v) => Validator.emailValidator(v),
               prefixIcon: Icon(
                 Icons.mail_outline,
@@ -118,7 +130,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             verticalSpace(ManagerHeights.h20),
             CustomTextField(
               labelText: ManagerStrings.phoneNumber,
-              controller: TextEditingController(),
+              controller: controller.phoneNumber,
               validator: (v) => Validator.phoneValidate(v),
               prefixIcon: Icon(
                 Icons.phone_outlined,
@@ -127,22 +139,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               keyboardType: TextInputType.phone,
             ),
             verticalSpace(ManagerHeights.h20),
-            CustomDropDownList(
-              labelText: ManagerStrings.governorate,
-              items: AppConstants.omanLocations.keys.toList(),
-              selectedItem: _selectedGovernorate,
-              onChangedFunction: (value) {
-                setState(() {
-                  _selectedGovernorate = value;
-                  // reset city when governorate changes
-                  _selectedCity = null;
-                });
+            BlocBuilder<EditProfileBloc, EditProfileState>(
+              builder: (context, state) {
+                return CustomDropDownList(
+                  labelText: ManagerStrings.governorate,
+                  items: AppConstants.omanLocations.keys.toList(),
+                  selectedItem: state.governorate,
+                  onChangedFunction: (value) => controller.add(
+                    GovernorateChanged(value),
+                  ),
+                );
               },
             ),
             verticalSpace(ManagerHeights.h20),
-            Builder(
-              builder: (context) {
-                final selectedGovernorate = _selectedGovernorate;
+            BlocBuilder<EditProfileBloc, EditProfileState>(
+              builder: (context, state) {
+                final selectedGovernorate = state.governorate;
                 final cities = selectedGovernorate == null
                     ? <String>[]
                     : AppConstants.omanLocations[selectedGovernorate] ??
@@ -150,13 +162,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 return CustomDropDownList(
                   labelText: ManagerStrings.wilaya,
                   items: cities,
-                  selectedItem: _selectedCity,
+                  selectedItem: state.wilaya,
                   enabled: selectedGovernorate != null,
-                  onChangedFunction: (value) {
-                    setState(() {
-                      _selectedCity = value;
-                    });
-                  },
+                  onChangedFunction: (value) =>
+                      controller.add(WilayaChanged(value)),
                 );
               },
             ),
@@ -164,7 +173,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             CustomButton(
               text: ManagerStrings.save,
               onPressed: () {
-                // TODO: save profile with selected governorate & city
+                FocusManager.instance.primaryFocus?.unfocus();
+                ScaffoldMessenger.of(context).clearSnackBars();
+                controller.add(EditProfileProcess(profileData.id));
               },
             ),
           ],
