@@ -16,8 +16,9 @@ import 'package:wafir_mobile/features/auth/presentation/view/screens/login_scree
 import 'package:wafir_mobile/features/on_boarding/presentation/view/screens/on_boarding_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/forget_password_screen.dart';
+import 'package:wafir_mobile/features/profile/domain/model/profile_data_model.dart';
+import 'package:wafir_mobile/features/profile/presentation/view/screens/edit_profile_screen.dart';
 import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
-import 'package:wafir_mobile/features/edit_profile/presentation/view/screens/edit_profile_screen.dart';
 import 'package:wafir_mobile/features/store_profile/presentation/view/screens/store_profile.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
 import 'package:wafir_mobile/routes/routes.dart';
@@ -87,9 +88,10 @@ class RouteGenerator {
           builder: (_) => StoreProfileScreen(),
         );
       case Routes.editProfileScreen:
+        initEditProfile();
+        ProfileDataModel profileData = setting.arguments as ProfileDataModel;
         return MaterialPageRoute(
-          builder: (_) => const EditProfileScreen(),
-        );
+            builder: (_) => EditProfileScreen(profileData: profileData));
       case Routes.offersScreen:
         return MaterialPageRoute(
           builder: (_) => const OffersScreen(),
