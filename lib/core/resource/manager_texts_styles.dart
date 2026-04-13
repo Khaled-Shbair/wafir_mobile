@@ -24,6 +24,11 @@ class ManagerTextsStyles {
     fontWeight: ManagerFontWeight.bold,
     color: ManagerColors.blackColor,
   );
+  static TextStyle font14BlackBold = _mainTextStyle(
+    fontSize: ManagerFontsSizes.f14,
+    fontWeight: ManagerFontWeight.extraBold,
+    color: ManagerColors.blackColor,
+  );
   static TextStyle font24whiteBold = _mainTextStyle(
     fontSize: ManagerFontsSizes.f26,
     fontWeight: ManagerFontWeight.bold,
@@ -48,6 +53,11 @@ class ManagerTextsStyles {
     fontSize: ManagerFontsSizes.f14,
     fontWeight: ManagerFontWeight.regular,
     color: ManagerColors.greyColor,
+  );
+  static TextStyle font11BlackRegular = _mainTextStyle(
+    fontSize: ManagerFontsSizes.f11,
+    fontWeight: ManagerFontWeight.regular,
+    color: ManagerColors.blackColor,
   );
   static TextStyle font16PrimaryBold = _mainTextStyle(
     fontSize: ManagerFontsSizes.f16,

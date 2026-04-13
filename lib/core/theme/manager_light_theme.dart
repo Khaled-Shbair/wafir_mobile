@@ -83,8 +83,9 @@ ThemeData managerLightTheme() {
       headlineLarge: ManagerTextsStyles.font22BlackBold,
 
       ///[email setting screen]
-      ///[lable of bottom nav item]
-      labelSmall: ManagerTextsStyles.font14GreyRegular,
+      // labelSmall: ManagerTextsStyles.font14GreyRegular,
+      labelSmall: ManagerTextsStyles.font11BlackRegular,
+titleMedium:  ManagerTextsStyles.font14BlackBold,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
 
