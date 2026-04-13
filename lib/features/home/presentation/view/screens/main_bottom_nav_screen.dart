@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
-import 'package:wafir_mobile/features/offers/presentation/view/screens/home_screen.dart';
+import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
 import 'package:wafir_mobile/features/favorite/presentation/view/screens/favorites_screen.dart';
-import 'package:wafir_mobile/features/offers/presentation/view/widgets/custom_bottom_nav_item.dart';
+import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_bottom_nav_item.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
 import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
 
@@ -27,7 +27,6 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: HomeScreen.lightBg,
       body: IndexedStack(
         index: _currentIndex,
         children: _pages,
