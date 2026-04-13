@@ -55,4 +55,9 @@ class ManagerTextsStyles {
     color: ManagerColors.primaryColor,
   );
 
+  static TextStyle font11PrimaryBold = _mainTextStyle(
+    fontSize: ManagerFontsSizes.f11,
+    fontWeight: ManagerFontWeight.bold,
+    color: ManagerColors.primaryColor,
+  );
 }

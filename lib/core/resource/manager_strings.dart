@@ -77,8 +77,7 @@ class ManagerStrings {
   static String pleaseEnterYourName = 'please_enter_your_name'.tr();
 
   // Setting
-  static String profile = 'setting'.tr();
-  static String setting = 'setting'.tr();
+  static String settings = 'settings'.tr();
   static String editProfile = 'profile'.tr();
   static String logout = 'logout'.tr();
   static String changePassword = 'change_password'.tr();
@@ -124,4 +123,7 @@ class ManagerStrings {
   static String pleaseSelectWilaya = 'please_select_wilaya'.tr();
   static String pleaseAcceptTermsAndConditions =
       'please_accept_terms_and_conditions'.tr();
+
+  static String home = 'home'.tr();
+  static String offers = 'offers'.tr();
 }

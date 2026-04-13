@@ -11,4 +11,5 @@ class ManagerColors {
   static Color  failureColor = Colors.red;
   static Color  disabledColor = Colors.grey.shade400;
   static Color  greyColor = Colors.grey;
+  static Color  unSelectedColor = const Color(0xFF94A3B8);
 }

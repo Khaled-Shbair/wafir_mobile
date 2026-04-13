@@ -16,6 +16,7 @@ class ManagerWidths {
 
 class ManagerHeights {
   static const double infinity = double.infinity;
+  static double h3 = SizeUtil.setHeight(3);
   static double h5 = SizeUtil.setHeight(5);
   static double h7 = SizeUtil.setHeight(7);
   static double h10 = SizeUtil.setHeight(10);
@@ -24,6 +25,7 @@ class ManagerHeights {
   static double h25 = SizeUtil.setHeight(25);
   static double h35 = SizeUtil.setHeight(35);
   static double h50 = SizeUtil.setHeight(50);
+  static double h55 = SizeUtil.setHeight(55);
   static double h70 = SizeUtil.setHeight(70);
   static double h20 = SizeUtil.setHeight(20);
   static double h30 = SizeUtil.setHeight(30);

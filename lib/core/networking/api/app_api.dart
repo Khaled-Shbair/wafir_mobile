@@ -8,6 +8,7 @@ import 'package:wafir_mobile/features/auth/data/response/reset_otp_response.dart
 import 'package:wafir_mobile/features/auth/data/response/reset_password_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/verify_otp_response.dart';
 import 'package:wafir_mobile/features/profile/data/response/profile_response.dart';
+import 'package:wafir_mobile/features/sectors/data/response/get_sector_details_response.dart';
 
 part 'app_api.g.dart';
 
@@ -70,7 +71,12 @@ abstract class AppApi {
   @GET(ApiConstants.profile)
   Future<ProfileResponse> getProfile();
 
-  @PATCH("${ApiConstants.editProfile}/{id}")
+  @GET("${ApiConstants.sectors}{id}")
+  Future<GetSectorDetailsResponse> getSectorDetails(
+    @Path("id") int id,
+  );
+
+  @PATCH("${ApiConstants.editProfile}{id}")
   Future<ProfileResponse> editProfile(
     @Path(ApiKeys.id) int id,
     @Body() Map<String, dynamic> data,

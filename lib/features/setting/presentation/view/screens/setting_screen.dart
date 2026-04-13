@@ -45,7 +45,7 @@ class SettingScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(ManagerStrings.profile),
+        title: Text(ManagerStrings.settings),
       ),
       body: ListView(
         padding: EdgeInsetsDirectional.only(

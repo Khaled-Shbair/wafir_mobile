@@ -37,6 +37,7 @@ ThemeData managerLightTheme() {
       onSecondary: Colors.red,
       onError: Colors.red,
     ),
+    unselectedWidgetColor: ManagerColors.unSelectedColor,
     disabledColor: ManagerColors.transparentColor,
     inputDecorationTheme: InputDecorationThemeData(
       hintStyle: TextStyle(
@@ -82,7 +83,21 @@ ThemeData managerLightTheme() {
       headlineLarge: ManagerTextsStyles.font22BlackBold,
 
       ///[email setting screen]
+      ///[lable of bottom nav item]
       labelSmall: ManagerTextsStyles.font14GreyRegular,
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+
+      backgroundColor: ManagerColors.whiteColor,
+      selectedItemColor: ManagerColors.primaryColor,
+      unselectedItemColor: ManagerColors.unSelectedColor,
+      selectedLabelStyle: ManagerTextsStyles.font11PrimaryBold,
+      unselectedLabelStyle: ManagerTextsStyles.font11PrimaryBold
+          .copyWith(color: ManagerColors.unSelectedColor),
+      selectedIconTheme: IconThemeData(
+        size: ManagerIconsSizes.i24,
+      ),
+
     ),
     dropdownMenuTheme: DropdownMenuThemeData(
       textStyle: TextStyle(
@@ -98,7 +113,7 @@ ThemeData managerLightTheme() {
           fontWeight: ManagerFontWeight.bold,
           color: ManagerColors.blackColor,
         ),
-        labelStyle:  TextStyle(
+        labelStyle: TextStyle(
           fontFamily: ManagerFontFamily.tajawal,
           fontSize: 10,
           fontWeight: ManagerFontWeight.bold,
