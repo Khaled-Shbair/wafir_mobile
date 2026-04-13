@@ -16,6 +16,7 @@ class ApiConstants {
   static const String profile = '${baseUrl}auth/me';
   static const String editProfile = '${baseUrl}users/';
   static const String sectors = '${baseUrl}sectors/';
+  static const String home = '${baseUrl}home';
 }
 
 class ApiKeys {
@@ -71,4 +72,33 @@ class ApiKeys {
   static const String count = 'count';
   static const String vendors = 'vendors';
 
+  // Home / offers keys
+  static const String title = 'title';
+  static const String imageUrl = 'image_url';
+  static const String discountPercentage = 'discount_percentage';
+  static const String redemptionType = 'redemption_type';
+  static const String discountCode = 'discount_code';
+  static const String barcodeImageUrl = 'barcode_image_url';
+  static const String whatsappNumber = 'whatsapp_number';
+  static const String whatsappMessageTemplate = 'whatsapp_message_template';
+  static const String validUntil = 'valid_until';
+  static const String businessName = 'business_name';
+  static const String sectorName = 'sector_name';
+  static const String city = 'city';
+  static const String totalClaims = 'total_claims';
+  static const String distanceKm = 'distance_km';
+
+  // Home cursors keys
+  static const String offersNextCursor = 'offers_next_cursor';
+  static const String hotelsNextCursor = 'hotels_next_cursor';
+  static const String recommendedNextCursor = 'recommended_next_cursor';
+  static const String storesNextCursor = 'stores_next_cursor';
+  static const String offers = 'offers';
+  static const String sectors = 'sectors';
+  static const String bestHotels = 'best_hotels';
+  static const String recommended = 'recommended';
+  static const String stores = 'stores';
+  static const String store = 'store';
+  static const String cursors = 'cursors';
+  static const String logoUrl = 'logo_url';
 }
