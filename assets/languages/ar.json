@@ -63,7 +63,7 @@
   "otp_verification_failed": "فشل التحقق من الرمز. الرجاء المحاولة مرة أخرى.",
   "please_enter_otp": "الرجاء إدخال رمز التحقق",
   "profile": "الملف الشخصي",
-  "setting": "الإعدادات",
+  "settings": "الإعدادات",
   "edit_profile": "تعديل الملف الشخصي",
   "logout": "تسجيل الخروج",
   "change_password": "تغير كلمة المرور",
@@ -84,5 +84,7 @@
   "activate_now": "تفعيل",
   "please_select_governorate": "يرجي تحديد المحافظة",
   "please_select_wilaya": "يرجي تحديد الولاية",
-  "please_accept_terms_and_conditions": "يرجي قبول سياسة الخصوصية وشروط الاستخدام"
+  "please_accept_terms_and_conditions": "يرجي قبول سياسة الخصوصية وشروط الاستخدام",
+  "home": "الرئيسية",
+  "offers": "العروض"
 }

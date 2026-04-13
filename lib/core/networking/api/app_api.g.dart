@@ -293,6 +293,33 @@ class _AppApi implements AppApi {
   }
 
   @override
+  Future<GetSectorDetailsResponse> getSectorDetails(int id) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<GetSectorDetailsResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            'https://discount-platform.onrender.com/api/sectors/${id}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late GetSectorDetailsResponse _value;
+    try {
+      _value = GetSectorDetailsResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<ProfileResponse> editProfile(int id, Map<String, dynamic> data) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -303,7 +330,7 @@ class _AppApi implements AppApi {
       Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/users//${id}',
+            'https://discount-platform.onrender.com/api/users/${id}',
             queryParameters: queryParameters,
             data: _data,
           )

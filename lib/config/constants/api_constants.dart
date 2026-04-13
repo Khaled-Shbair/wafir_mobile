@@ -15,6 +15,7 @@ class ApiConstants {
   static const String forgotPassword = '${baseUrl}auth/forgot-password';
   static const String profile = '${baseUrl}auth/me';
   static const String editProfile = '${baseUrl}users/';
+  static const String sectors = '${baseUrl}sectors/';
 }
 
 class ApiKeys {
@@ -60,5 +61,14 @@ class ApiKeys {
   static const String otpAttempts  = 'otp_attempts';
   static const String lastOtpSentAt  = 'last_otp_sent_at';
   static const String otpHash  = 'otp_hash';
+
+  // Sector keys
+  static const String name = 'name';
+  static const String iconUrl = 'icon_url';
+  static const String isActive = 'is_active';
+  static const String isComingSoon = 'is_coming_soon';
+  static const String meta = 'meta';
+  static const String count = 'count';
+  static const String vendors = 'vendors';
 
 }

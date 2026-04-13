@@ -29,6 +29,14 @@ import 'package:wafir_mobile/features/profile/domain/use_case/edit_profile_use_c
 import 'package:wafir_mobile/features/profile/domain/use_case/get_profile_use_case.dart';
 import 'package:wafir_mobile/features/profile/presentation/controller/edit_profile_bloc.dart';
 import 'package:wafir_mobile/features/profile/presentation/controller/profile_bloc.dart';
+import 'package:wafir_mobile/features/offers/data/data_source/remote_offers_data_source.dart';
+import 'package:wafir_mobile/features/offers/data/repository_impl/offers_repository_impl.dart';
+import 'package:wafir_mobile/features/offers/domain/repository/offers_repository.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/home_bloc.dart';
+import 'package:wafir_mobile/features/sectors/data/data_source/remote_sectors_data_source.dart';
+import 'package:wafir_mobile/features/sectors/data/repository_impl/sectors_repository_impl.dart';
+import 'package:wafir_mobile/features/sectors/domain/repository/sectors_repository.dart';
+import 'package:wafir_mobile/features/sectors/domain/use_case/get_sector_details_use_case.dart';
 
 final instance = GetIt.instance;
 
@@ -69,6 +77,9 @@ Future<void> _intiDio() async {
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//Auth
 void _initAuth() async {
   if (!GetIt.I.isRegistered<GoogleAuthService>()) {
     instance
@@ -199,12 +210,6 @@ void initResetPassword() async {
   }
 }
 
-void disposeCreateAccount() async {
-  if (GetIt.I.isRegistered<RegisterBloc>()) {
-    instance.unregister<RegisterBloc>();
-  }
-}
-
 void disposeResetPassword() async {
   if (GetIt.I.isRegistered<ResetPasswordUseCase>()) {
     instance.unregister<ResetPasswordUseCase>();
@@ -236,6 +241,9 @@ void disposeVerifyOtp() async {
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//Profile
 void initProfile() async {
   if (!GetIt.I.isRegistered<RemoteProfileDataSource>()) {
     instance.registerLazySingleton<RemoteProfileDataSource>(
@@ -250,6 +258,16 @@ void initProfile() async {
         instance<RemoteProfileDataSource>(),
       ),
     );
+  }
+}
+
+void disposeProfile() async {
+  if (GetIt.I.isRegistered<ProfileRepository>()) {
+    instance.unregister<ProfileRepository>();
+  }
+
+  if (GetIt.I.isRegistered<RemoteProfileDataSource>()) {
+    instance.unregister<RemoteProfileDataSource>();
   }
 }
 
@@ -269,6 +287,15 @@ void initGetProfileData() async {
   }
 }
 
+void disposeGetProfileData() async {
+  if (GetIt.I.isRegistered<GetProfileUseCase>()) {
+    instance.unregister<GetProfileUseCase>();
+  }
+  if (GetIt.I.isRegistered<ProfileBloc>()) {
+    instance.unregister<ProfileBloc>();
+  }
+}
+
 void initEditProfile() async {
   if (!GetIt.I.isRegistered<EditProfileUseCase>()) {
     instance.registerLazySingleton<EditProfileUseCase>(
@@ -283,25 +310,6 @@ void initEditProfile() async {
   }
 }
 
-void disposeProfile() async {
-  if (GetIt.I.isRegistered<ProfileRepository>()) {
-    instance.unregister<ProfileRepository>();
-  }
-
-  if (GetIt.I.isRegistered<RemoteProfileDataSource>()) {
-    instance.unregister<RemoteProfileDataSource>();
-  }
-}
-
-void disposeGetProfileData() async {
-  if (GetIt.I.isRegistered<GetProfileUseCase>()) {
-    instance.unregister<GetProfileUseCase>();
-  }
-  if (GetIt.I.isRegistered<ProfileBloc>()) {
-    instance.unregister<ProfileBloc>();
-  }
-}
-
 void disposeEditProfile() async {
   if (GetIt.I.isRegistered<EditProfileUseCase>()) {
     instance.unregister<EditProfileUseCase>();
@@ -310,3 +318,86 @@ void disposeEditProfile() async {
     instance.unregister<EditProfileBloc>();
   }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//Offers
+void initOffers() async {
+  if (!GetIt.I.isRegistered<RemoteOffersDataSource>()) {
+    instance.registerLazySingleton<RemoteOffersDataSource>(
+      () => RemoteOffersDataSourceImpl(instance<AppApi>()),
+    );
+  }
+
+  if (!GetIt.I.isRegistered<OffersRepository>()) {
+    instance.registerLazySingleton<OffersRepository>(
+      () => OffersRepositoryImpl(
+        instance<NetworkInfo>(),
+        instance<RemoteOffersDataSource>(),
+      ),
+    );
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+void initHome() async {
+  initOffers();
+
+  if (!GetIt.I.isRegistered<HomeBloc>()) {
+    // instance.registerLazySingleton<HomeBloc>(
+    //   () => HomeBloc(instance<GetAllSectorsUseCase>()),);
+  }
+}
+
+void disposeHome() async {
+  if (GetIt.I.isRegistered<HomeBloc>()) {
+    instance.unregister<HomeBloc>();
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// Sectors
+void initSectors() async {
+  if (!GetIt.I.isRegistered<RemoteSectorsDataSource>()) {
+    instance.registerLazySingleton<RemoteSectorsDataSource>(
+      () => RemoteSectorsDataSourceImpl(instance<AppApi>()),
+    );
+  }
+
+  if (!GetIt.I.isRegistered<SectorsRepository>()) {
+    instance.registerLazySingleton<SectorsRepository>(
+      () => SectorsRepositoryImpl(
+        instance<NetworkInfo>(),
+        instance<RemoteSectorsDataSource>(),
+      ),
+    );
+  }
+}
+
+void disposeSectors() async {
+  if (GetIt.I.isRegistered<SectorsRepository>()) {
+    instance.unregister<SectorsRepository>();
+  }
+  if (GetIt.I.isRegistered<RemoteSectorsDataSource>()) {
+    instance.unregister<RemoteSectorsDataSource>();
+  }
+}
+
+void initSectorDetails() async {
+  initSectors();
+  if (!GetIt.I.isRegistered<GetSectorDetailsUseCase>()) {
+    instance.registerLazySingleton<GetSectorDetailsUseCase>(
+      () => GetSectorDetailsUseCase(instance<SectorsRepository>()),
+    );
+  }
+}
+
+void disposeSectorDetails() async {
+  if (GetIt.I.isRegistered<GetSectorDetailsUseCase>()) {
+    instance.unregister<GetSectorDetailsUseCase>();
+  }
+}
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////

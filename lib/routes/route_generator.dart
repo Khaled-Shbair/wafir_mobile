@@ -10,22 +10,28 @@ import 'package:wafir_mobile/features/auth/presentation/view/screens/verify_otp_
 import 'package:wafir_mobile/features/auth/presentation/view/screens/reset_password_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/register_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/register_screen.dart';
-import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
+import 'package:wafir_mobile/features/offers/presentation/view/screens/home_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/login_screen.dart';
+import 'package:wafir_mobile/features/offers/presentation/view/screens/main_bottom_nav_screen.dart';
 import 'package:wafir_mobile/features/on_boarding/presentation/view/screens/on_boarding_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/forget_password_screen.dart';
 import 'package:wafir_mobile/features/profile/domain/model/profile_data_model.dart';
 import 'package:wafir_mobile/features/profile/presentation/view/screens/edit_profile_screen.dart';
+import 'package:wafir_mobile/features/sectors/presentation/view/screens/sector_details.dart';
 import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
-import 'package:wafir_mobile/features/store_profile/presentation/view/screens/store_profile.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/home_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings setting) {
     switch (setting.name) {
+      // onBoarding routes
+      case Routes.onBoardingScreen:
+        return MaterialPageRoute(builder: (_) => const OnBoardingScreen());
+      // auth routes
       case Routes.loginScreen:
         initLogin();
         return MaterialPageRoute(
@@ -42,8 +48,7 @@ class RouteGenerator {
             child: RegisterScreen(),
           ),
         );
-      case Routes.onBoardingScreen:
-        return MaterialPageRoute(builder: (_) => const OnBoardingScreen());
+
       case Routes.resetPasswordScreen:
         initResetPassword();
         String token = setting.arguments as String;
@@ -75,17 +80,31 @@ class RouteGenerator {
             child: const ForgetPasswordScreen(),
           ),
         );
+      // Sectors routes
+
+      // Offers routes
+
+      //Home routes
+      case Routes.homeScreen:
+        initHome();
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<HomeBloc>(
+            create: (context) => instance<HomeBloc>(),
+            child: const HomeScreen(),
+          ),
+        );
+      case Routes.mainScreen:
+        return MaterialPageRoute(
+          builder: (_) => const MainBottomNavScreen(),
+        );
       case Routes.settingScreen:
         return MaterialPageRoute(
           builder: (_) => SettingScreen(),
         );
-      case Routes.homeScreen:
-        return MaterialPageRoute(
-          builder: (_) => HomeScreen(),
-        );
+
       case Routes.storeProfileScreen:
         return MaterialPageRoute(
-          builder: (_) => StoreProfileScreen(),
+          builder: (_) => SectorDetailsScreen(),
         );
       case Routes.editProfileScreen:
         initEditProfile();

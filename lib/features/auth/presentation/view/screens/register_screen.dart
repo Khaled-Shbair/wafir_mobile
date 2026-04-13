@@ -26,7 +26,7 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
         title: Text(ManagerStrings.createAccount),
         leading: IconButton(
           onPressed: () {
-            disposeCreateAccount();
+            disposeRegister();
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios),
