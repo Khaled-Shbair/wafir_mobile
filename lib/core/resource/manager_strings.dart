@@ -126,4 +126,5 @@ class ManagerStrings {
 
   static String home = 'home'.tr();
   static String offers = 'offers'.tr();
+  static String viewAll = 'view_all'.tr();
 }
