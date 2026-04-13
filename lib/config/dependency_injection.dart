@@ -32,7 +32,11 @@ import 'package:wafir_mobile/features/profile/presentation/controller/profile_bl
 import 'package:wafir_mobile/features/offers/data/data_source/remote_offers_data_source.dart';
 import 'package:wafir_mobile/features/offers/data/repository_impl/offers_repository_impl.dart';
 import 'package:wafir_mobile/features/offers/domain/repository/offers_repository.dart';
-import 'package:wafir_mobile/features/offers/presentation/controller/home_bloc.dart';
+import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
+import 'package:wafir_mobile/features/home/data/data_source/remote_home_data_source.dart';
+import 'package:wafir_mobile/features/home/data/repository_impl/home_repository_impl.dart';
+import 'package:wafir_mobile/features/home/domain/repository/home_repository.dart';
+import 'package:wafir_mobile/features/home/domain/use_case/get_home_data_use_case.dart';
 import 'package:wafir_mobile/features/sectors/data/data_source/remote_sectors_data_source.dart';
 import 'package:wafir_mobile/features/sectors/data/repository_impl/sectors_repository_impl.dart';
 import 'package:wafir_mobile/features/sectors/domain/repository/sectors_repository.dart';
@@ -344,15 +348,46 @@ void initOffers() async {
 void initHome() async {
   initOffers();
 
+  if (!GetIt.I.isRegistered<RemoteHomeDataSource>()) {
+    instance.registerLazySingleton<RemoteHomeDataSource>(
+      () => RemoteHomeDataSourceImpl(instance<AppApi>()),
+    );
+  }
+
+  if (!GetIt.I.isRegistered<HomeRepository>()) {
+    instance.registerLazySingleton<HomeRepository>(
+      () => HomeRepositoryImpl(
+        instance<NetworkInfo>(),
+        instance<RemoteHomeDataSource>(),
+      ),
+    );
+  }
+
+  if (!GetIt.I.isRegistered<GetHomeDataUseCase>()) {
+    instance.registerLazySingleton<GetHomeDataUseCase>(
+      () => GetHomeDataUseCase(instance<HomeRepository>()),
+    );
+  }
+
   if (!GetIt.I.isRegistered<HomeBloc>()) {
-    // instance.registerLazySingleton<HomeBloc>(
-    //   () => HomeBloc(instance<GetAllSectorsUseCase>()),);
+    instance.registerLazySingleton<HomeBloc>(
+      () => HomeBloc(instance<GetHomeDataUseCase>()),
+    );
   }
 }
 
 void disposeHome() async {
   if (GetIt.I.isRegistered<HomeBloc>()) {
     instance.unregister<HomeBloc>();
+  }
+  if (GetIt.I.isRegistered<GetHomeDataUseCase>()) {
+    instance.unregister<GetHomeDataUseCase>();
+  }
+  if (GetIt.I.isRegistered<HomeRepository>()) {
+    instance.unregister<HomeRepository>();
+  }
+  if (GetIt.I.isRegistered<RemoteHomeDataSource>()) {
+    instance.unregister<RemoteHomeDataSource>();
   }
 }
 
