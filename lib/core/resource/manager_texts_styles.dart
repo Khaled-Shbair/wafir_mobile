@@ -54,9 +54,9 @@ class ManagerTextsStyles {
     fontWeight: ManagerFontWeight.regular,
     color: ManagerColors.greyColor,
   );
-  static TextStyle font11BlackRegular = _mainTextStyle(
-    fontSize: ManagerFontsSizes.f11,
-    fontWeight: ManagerFontWeight.regular,
+  static TextStyle font12BlackBold = _mainTextStyle(
+    fontSize: ManagerFontsSizes.f12,
+    fontWeight: ManagerFontWeight.bold,
     color: ManagerColors.blackColor,
   );
   static TextStyle font16PrimaryBold = _mainTextStyle(
