@@ -7,7 +7,7 @@ import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/features/home/domain/model/home_models.dart';
-import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_offer_time_and_location_widget.dart';
+import 'package:wafir_mobile/core/widgets/custom_offer_time_and_location_widget.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class CustomOfferCard extends StatelessWidget {
