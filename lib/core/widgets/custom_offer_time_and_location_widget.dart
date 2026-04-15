@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 
@@ -28,17 +29,17 @@ class CustomOfferTimeAndLocationWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(ManagerRadius.r20),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: ManagerIconsSizes.i14,
-              color: textColor),
+          Icon(icon, size: ManagerIconsSizes.i14, color: textColor),
           horizontalSpace(ManagerWidths.w2),
           Text(
             text,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: textColor,
-            ),
+                  color: textColor,
+                  fontSize: ManagerFontsSizes.f10,
+                ),
           ),
         ],
       ),
