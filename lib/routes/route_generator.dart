@@ -10,6 +10,7 @@ import 'package:wafir_mobile/features/auth/presentation/view/screens/verify_otp_
 import 'package:wafir_mobile/features/auth/presentation/view/screens/reset_password_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/register_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/register_screen.dart';
+import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/login_screen.dart';
@@ -22,6 +23,7 @@ import 'package:wafir_mobile/features/profile/presentation/view/screens/edit_pro
 import 'package:wafir_mobile/features/sectors/presentation/view/screens/sector_details.dart';
 import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
@@ -94,10 +96,31 @@ class RouteGenerator {
           ),
         );
       case Routes.mainScreen:
-        initHome();
+        // initHome();
         return MaterialPageRoute(
-          builder: (_) => BlocProvider<HomeBloc>(
-            create: (context) => instance<HomeBloc>()..add(GetHomeData()),
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              // ..add(GetHomeData())
+              BlocProvider<HomeBloc>(
+                create: (_) {
+                  initHome();
+                  return instance<HomeBloc>();
+                },
+              ),
+              BlocProvider<FavoriteBloc>(
+                create: (_) {
+                  initFavorite();
+                  return instance<FavoriteBloc>();
+                },
+              ),
+              BlocProvider<OffersBloc>(
+                create: (_) {
+                  initOffers();
+                  return instance<OffersBloc>();
+                },
+              ),
+
+            ],
             child: const MainBottomNavScreen(),
           ),
         );
@@ -105,6 +128,7 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => SettingScreen(),
         );
+
 
       case Routes.storeProfileScreen:
         return MaterialPageRoute(
@@ -116,8 +140,12 @@ class RouteGenerator {
         return MaterialPageRoute(
             builder: (_) => EditProfileScreen(profileData: profileData));
       case Routes.offersScreen:
+        initOffers();
         return MaterialPageRoute(
-          builder: (_) => const OffersScreen(),
+          builder: (_) => BlocProvider<OffersBloc>(
+            create: (_) => instance<OffersBloc>()..add(GetAllOffersEvent()),
+            child: const OffersScreen(),
+          ),
         );
 
       default:
