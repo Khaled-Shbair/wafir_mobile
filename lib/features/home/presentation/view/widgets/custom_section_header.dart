@@ -6,12 +6,12 @@ import 'package:wafir_mobile/core/resource/manager_strings.dart';
 class CustomSectionHeader extends StatelessWidget {
   const CustomSectionHeader({
     required this.title,
-    required this.viewAllButton,
+    this.viewAllButton,
     super.key,
   });
 
   final String title;
-  final Function() viewAllButton;
+  final Function()? viewAllButton;
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +26,17 @@ class CustomSectionHeader extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.labelLarge?.copyWith(
                   fontWeight: ManagerFontWeight.bold,
-                  fontSize: ManagerFontsSizes.f17,
+                  fontSize: ManagerFontsSizes.f18,
                 ),
           ),
-          TextButton(
-            onPressed: viewAllButton,
-            child: Text(
-              ManagerStrings.viewAll,
-              style: Theme.of(context).textTheme.labelSmall,
+          if (viewAllButton != null)
+            TextButton(
+              onPressed: viewAllButton,
+              child: Text(
+                ManagerStrings.viewAll,
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
             ),
-          ),
         ],
       ),
     );
