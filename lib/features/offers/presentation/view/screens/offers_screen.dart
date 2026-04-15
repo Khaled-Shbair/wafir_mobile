@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/constants/app_constants.dart';
-import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/core/validator/validator.dart';
+import 'package:wafir_mobile/core/widgets/custom_offer_item_widget.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
 import 'package:wafir_mobile/core/widgets/custom_drop_down_list.dart';
-import 'package:wafir_mobile/features/offers/presentation/model/offer_item_model.dart';
-import 'package:wafir_mobile/features/offers/presentation/view/widgets/custom_offer_card_widget.dart';
+import 'package:wafir_mobile/features/favorite/domain/model/favorite_offers_model.dart';
+import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
+import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_section_header.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
+import 'package:wafir_mobile/features/offers/presentation/view/widgets/custom_sort_chip_widget.dart';
 
 class OffersScreen extends StatefulWidget {
   const OffersScreen({super.key});
@@ -18,9 +22,6 @@ class OffersScreen extends StatefulWidget {
 }
 
 class _OffersScreenState extends State<OffersScreen> {
-  static const Color primary = Color(0xFF006D77);
-  static const Color bgChip = Color(0xFFE8F1F2);
-
   final TextEditingController _searchController = TextEditingController();
 
   // Filter values
@@ -37,6 +38,12 @@ class _OffersScreenState extends State<OffersScreen> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    context.read<OffersBloc>().add(GetAllOffersEvent());
+  }
+
+  @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
@@ -44,45 +51,10 @@ class _OffersScreenState extends State<OffersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final offers = [
-      const OfferItemModel(
-        title: 'بيتزا أنابولي',
-        description: 'خصم خاص على جميع أنواع البيتزا.',
-        footer: '٢.٥ كم',
-        footerIcon: Icons.location_on,
-        badge: 'خصم ٣٠٪',
-        logoText: 'AN',
-        logoColor: Color(0xFF0B2530),
-        imageUrl:
-            'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=1200&auto=format&fit=crop',
-      ),
-      const OfferItemModel(
-        title: 'مطعم اللقمة الذهبية',
-        description: 'خصم حصري على كافة الوجبات العائلية.',
-        footer: '٣ أيام',
-        footerIcon: Icons.access_time_filled,
-        badge: 'خصم ٥٠٪',
-        logoText: 'LG',
-        logoColor: Color(0xFF3B271C),
-        imageUrl:
-            'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=1200&auto=format&fit=crop',
-      ),
-      const OfferItemModel(
-        title: 'هيلثي بايت',
-        description: 'عرض خاص على السلطات المختارة.',
-        footer: 'عرض مميز',
-        footerIcon: Icons.stars_rounded,
-        badge: '1+1 مجاناً',
-        logoText: 'HB',
-        logoColor: Color(0xFF92A354),
-        imageUrl:
-            'https://images.unsplash.com/photo-1546793665-c74683f339c1?q=80&w=1200&auto=format&fit=crop',
-      ),
-    ];
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('العروض'),
+        title: Text(ManagerStrings.offers),
+        automaticallyImplyLeading: false,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsetsDirectional.only(
@@ -93,43 +65,76 @@ class _OffersScreenState extends State<OffersScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 18),
             CustomTextField(
               controller: _searchController,
               hintText: ManagerStrings.searchOnStoreOrOffer,
               prefixIcon: Icon(
-
                 Icons.search,
                 size: ManagerIconsSizes.i24,
               ),
               validator: (value) => Validator.searchValidate(value),
             ),
-            const SizedBox(height: 18),
+            verticalSpace(ManagerHeights.h18),
             _buildFilterRow(),
-            const SizedBox(height: 18),
+            verticalSpace(ManagerHeights.h18),
             _buildSortRow(),
-            const SizedBox(height: 24),
-            Text(
-              ManagerStrings.availableOffers,
-              style: const TextStyle(
-                color: Color(0xFF06111A),
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
+            verticalSpace(ManagerHeights.h25),
+            CustomSectionHeader(title: ManagerStrings.availableOffers),
             verticalSpace(ManagerHeights.h15),
-            GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: offers.length,
-              shrinkWrap: true,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: ManagerWidths.w15,
-                mainAxisSpacing: ManagerWidths.w15,
-                childAspectRatio: 0.60,
-              ),
-              itemBuilder: (context, index) {
-                return CustomOfferCardWidget(item: offers[index]);
+            BlocBuilder<OffersBloc, OffersState>(
+              builder: (context, state) {
+                if (state is OffersLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (state is OffersFailure) {
+                  return Center(
+                    child: Text(state.message),
+                  );
+                } else if (state is OffersLoaded) {
+                  final items = state.offers.items;
+
+                  return GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: items.length,
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: ManagerWidths.w15,
+                      mainAxisSpacing: ManagerWidths.w15,
+                      childAspectRatio: 0.60,
+                    ),
+                    itemBuilder: (context, index) {
+                      return CustomOfferItemWidget(
+                        item: FavoriteOfferItemModel(
+                          offerId: items[index].id,
+                          title: items[index].title,
+                          description: items[index].description,
+                          imageUrl: items[index].imageUrl,
+                          discountPercentage: items[index].discountPercentage,
+                          validUntil: items[index].validUntil,
+                          businessName: items[index].vendor?.businessName ?? '',
+                          discountCode: items[index].discountCode,
+                          id: items[index].id,
+                          logoUrl: items[index].vendor?.logoUrl ?? '',
+                          status: items[index].status,
+                          userId: items[index].vendorId,
+                        ),
+                        addOrRemoveFavoriteOfferFunction: () {
+                          context.read<FavoriteBloc>().add(
+                                ToggleFavoriteOfferEvent(
+                                  offerId: items[index].id,
+                                ),
+                              );
+                        },
+                      );
+                    },
+                  );
+                } else {
+                  return const Center(
+                    child: Text('لا توجد عروض متاحة حالياً'),
+                  );
+                }
               },
             ),
           ],
@@ -145,11 +150,11 @@ class _OffersScreenState extends State<OffersScreen> {
         children: [
           Expanded(
             child: SizedBox(
-              height: 40,
+              height: ManagerHeights.h45,
               child: CustomDropDownList(
                 selectedItem: _selectedCategory,
                 items: _categories,
-                hintText: 'الفئة',
+                hintText: ManagerStrings.category,
                 onChangedFunction: (value) {
                   setState(() => _selectedCategory = value);
                 },
@@ -157,14 +162,14 @@ class _OffersScreenState extends State<OffersScreen> {
               ),
             ),
           ),
-          const SizedBox(width: 12),
+          horizontalSpace(ManagerWidths.w10),
           Expanded(
             child: SizedBox(
-              height: 40,
+              height: ManagerHeights.h45,
               child: CustomDropDownList(
                 selectedItem: _selectedCity,
                 items: AppConstants.omanLocations.keys.toList(),
-                hintText: 'المحافظة',
+                hintText: ManagerStrings.governorate,
                 onChangedFunction: (value) {
                   setState(() => _selectedCity = value);
                 },
@@ -181,78 +186,26 @@ class _OffersScreenState extends State<OffersScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 22),
       child: Row(
-        children: const [
+        children: [
           Expanded(
-            child: SortChip(
-              label: 'الأحدث',
+            child: CustomSortChipWidget(
+              label: ManagerStrings.latest,
               active: true,
               icon: Icons.auto_awesome,
             ),
           ),
-          SizedBox(width: 12),
+          horizontalSpace(ManagerWidths.w10),
           Expanded(
-            child: SortChip(
-              label: 'أعلى خصم',
+            child: CustomSortChipWidget(
+              label: ManagerStrings.highestDiscount,
               icon: Icons.trending_up_rounded,
             ),
           ),
-          SizedBox(width: 12),
+          horizontalSpace(ManagerWidths.w10),
           Expanded(
-            child: SortChip(
-              label: 'الأقرب',
+            child: CustomSortChipWidget(
+              label: ManagerStrings.closest,
               icon: Icons.location_on,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SortChip extends StatelessWidget {
-  final String label;
-  final bool active;
-  final IconData icon;
-
-  const SortChip({
-    super.key,
-    required this.label,
-    required this.icon,
-    this.active = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsetsDirectional.only(
-        top: ManagerHeights.h5,
-        bottom: ManagerHeights.h5,
-      ),
-      decoration: BoxDecoration(
-        color: active ? ManagerColors.primaryColor : _OffersScreenState.bgChip,
-        borderRadius: BorderRadius.circular(30),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color:
-                active ? ManagerColors.whiteColor : _OffersScreenState.primary,
-            size: 14,
-          ),
-          const SizedBox(width: 5),
-          Flexible(
-            child: Text(
-              label,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: active
-                    ? ManagerColors.whiteColor
-                    : _OffersScreenState.primary,
-                fontSize: 12,
-                fontWeight: FontWeight.w700,
-              ),
             ),
           ),
         ],
