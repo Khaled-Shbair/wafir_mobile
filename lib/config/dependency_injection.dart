@@ -32,6 +32,8 @@ import 'package:wafir_mobile/features/profile/presentation/controller/profile_bl
 import 'package:wafir_mobile/features/offers/data/data_source/remote_offers_data_source.dart';
 import 'package:wafir_mobile/features/offers/data/repository_impl/offers_repository_impl.dart';
 import 'package:wafir_mobile/features/offers/domain/repository/offers_repository.dart';
+import 'package:wafir_mobile/features/offers/domain/use_case/get_all_offers_use_case.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
 import 'package:wafir_mobile/features/home/data/data_source/remote_home_data_source.dart';
 import 'package:wafir_mobile/features/home/data/repository_impl/home_repository_impl.dart';
@@ -41,6 +43,12 @@ import 'package:wafir_mobile/features/sectors/data/data_source/remote_sectors_da
 import 'package:wafir_mobile/features/sectors/data/repository_impl/sectors_repository_impl.dart';
 import 'package:wafir_mobile/features/sectors/domain/repository/sectors_repository.dart';
 import 'package:wafir_mobile/features/sectors/domain/use_case/get_sector_details_use_case.dart';
+import 'package:wafir_mobile/features/favorite/data/data_source/remote_favorite_data_source.dart';
+import 'package:wafir_mobile/features/favorite/data/repository_impl/favorite_repository_impl.dart';
+import 'package:wafir_mobile/features/favorite/domain/repository/favorite_repository.dart';
+import 'package:wafir_mobile/features/favorite/domain/use_case/get_all_favorite_offers_use_case.dart';
+import 'package:wafir_mobile/features/favorite/domain/use_case/toggle_favorite_offer_use_case.dart';
+import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
 
 final instance = GetIt.instance;
 
@@ -341,6 +349,33 @@ void initOffers() async {
       ),
     );
   }
+
+  if (!GetIt.I.isRegistered<GetAllOffersUseCase>()) {
+    instance.registerLazySingleton<GetAllOffersUseCase>(
+      () => GetAllOffersUseCase(instance<OffersRepository>()),
+    );
+  }
+
+  if (!GetIt.I.isRegistered<OffersBloc>()) {
+    instance.registerLazySingleton<OffersBloc>(
+      () => OffersBloc(instance<GetAllOffersUseCase>()),
+    );
+  }
+}
+
+void disposeOffers() async {
+  if (GetIt.I.isRegistered<OffersBloc>()) {
+    instance.unregister<OffersBloc>();
+  }
+  if (GetIt.I.isRegistered<GetAllOffersUseCase>()) {
+    instance.unregister<GetAllOffersUseCase>();
+  }
+  if (GetIt.I.isRegistered<OffersRepository>()) {
+    instance.unregister<OffersRepository>();
+  }
+  if (GetIt.I.isRegistered<RemoteOffersDataSource>()) {
+    instance.unregister<RemoteOffersDataSource>();
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -432,6 +467,62 @@ void initSectorDetails() async {
 void disposeSectorDetails() async {
   if (GetIt.I.isRegistered<GetSectorDetailsUseCase>()) {
     instance.unregister<GetSectorDetailsUseCase>();
+  }
+}
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+//favorite
+
+void initFavorite() async {
+  if (!GetIt.I.isRegistered<RemoteFavoriteDataSource>()) {
+    instance.registerLazySingleton<RemoteFavoriteDataSource>(
+      () => RemoteFavoriteDataSourceImpl(instance<AppApi>()),
+    );
+  }
+
+  if (!GetIt.I.isRegistered<FavoriteRepository>()) {
+    instance.registerLazySingleton<FavoriteRepository>(
+      () => FavoriteRepositoryImpl(
+        instance<NetworkInfo>(),
+        instance<RemoteFavoriteDataSource>(),
+      ),
+    );
+  }
+  if (!GetIt.I.isRegistered<ToggleFavoriteOfferUseCase>()) {
+    instance.registerLazySingleton<ToggleFavoriteOfferUseCase>(
+      () => ToggleFavoriteOfferUseCase(instance<FavoriteRepository>()),
+    );
+  }
+  if (!GetIt.I.isRegistered<GetAllFavoriteOffersUseCase>()) {
+    instance.registerLazySingleton<GetAllFavoriteOffersUseCase>(
+      () => GetAllFavoriteOffersUseCase(instance<FavoriteRepository>()),
+    );
+  }
+  if (!GetIt.I.isRegistered<FavoriteBloc>()) {
+    instance.registerLazySingleton<FavoriteBloc>(
+      () => FavoriteBloc(
+        instance<GetAllFavoriteOffersUseCase>(),
+        instance<ToggleFavoriteOfferUseCase>(),
+      ),
+    );
+  }
+}
+
+void disposeFavorite() async {
+  if (GetIt.I.isRegistered<RemoteFavoriteDataSource>()) {
+    instance.unregister<RemoteFavoriteDataSource>();
+  }
+  if (GetIt.I.isRegistered<FavoriteRepository>()) {
+    instance.unregister<FavoriteRepository>();
+  }
+  if (GetIt.I.isRegistered<GetAllFavoriteOffersUseCase>()) {
+    instance.unregister<GetAllFavoriteOffersUseCase>();
+  }
+  if (GetIt.I.isRegistered<ToggleFavoriteOfferUseCase>()) {
+    instance.unregister<ToggleFavoriteOfferUseCase>();
+  }
+  if (GetIt.I.isRegistered<FavoriteBloc>()) {
+    instance.unregister<FavoriteBloc>();
   }
 }
 ///////////////////////////////////////////////////////////////////////////////
