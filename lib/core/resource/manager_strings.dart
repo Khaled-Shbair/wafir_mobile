@@ -126,4 +126,10 @@ class ManagerStrings {
 
   static String home = 'home'.tr();
   static String offers = 'offers'.tr();
+  static String viewAll = 'view_all'.tr();
+  static String details = 'details'.tr();
+  static String category = 'category'.tr();
+  static String latest = 'latest'.tr();
+  static String highestDiscount = 'highest_discount'.tr();
+  static String closest = 'closest'.tr();
 }

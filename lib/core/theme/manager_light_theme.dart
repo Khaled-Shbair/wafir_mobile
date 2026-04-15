@@ -83,11 +83,12 @@ ThemeData managerLightTheme() {
       headlineLarge: ManagerTextsStyles.font22BlackBold,
 
       ///[email setting screen]
-      ///[lable of bottom nav item]
-      labelSmall: ManagerTextsStyles.font14GreyRegular,
+      // labelSmall: ManagerTextsStyles.font14GreyRegular,
+      labelSmall: ManagerTextsStyles.font12BlackBold,
+      titleMedium: ManagerTextsStyles.font14BlackBold,
+    titleSmall: ManagerTextsStyles.font12BlackBold,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-
       backgroundColor: ManagerColors.whiteColor,
       selectedItemColor: ManagerColors.primaryColor,
       unselectedItemColor: ManagerColors.unSelectedColor,
@@ -97,7 +98,6 @@ ThemeData managerLightTheme() {
       selectedIconTheme: IconThemeData(
         size: ManagerIconsSizes.i24,
       ),
-
     ),
     dropdownMenuTheme: DropdownMenuThemeData(
       textStyle: TextStyle(

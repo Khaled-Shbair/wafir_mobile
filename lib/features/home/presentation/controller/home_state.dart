@@ -8,9 +8,9 @@ class HomeInitial extends HomeState {}
 class HomeLoading extends HomeState {}
 
 class HomeLoadedSuccessfully extends HomeState {
-  final List<SectorModel> sectors;
+  final HomeModel home;
 
-  HomeLoadedSuccessfully({required this.sectors});
+  HomeLoadedSuccessfully({required this.home});
 }
 
 class HomeLoadedFailure extends HomeState {

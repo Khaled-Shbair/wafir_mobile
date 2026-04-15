@@ -16,6 +16,10 @@ class ApiConstants {
   static const String profile = '${baseUrl}auth/me';
   static const String editProfile = '${baseUrl}users/';
   static const String sectors = '${baseUrl}sectors/';
+  static const String home = '${baseUrl}home';
+  static const String getAllFavoriteOffers = '${baseUrl}favorites/offers/my';
+  static const String addOrDeleteFavoriteOffer = '${baseUrl}favorites/offers/';
+  static const String getAllOffers = '${baseUrl}offers/active';
 }
 
 class ApiKeys {
@@ -71,4 +75,84 @@ class ApiKeys {
   static const String count = 'count';
   static const String vendors = 'vendors';
 
+  // Home / offers keys
+  static const String title = 'title';
+  static const String imageUrl = 'image_url';
+  static const String discountPercentage = 'discount_percentage';
+  static const String redemptionType = 'redemption_type';
+  static const String discountCode = 'discount_code';
+  static const String barcodeImageUrl = 'barcode_image_url';
+  static const String whatsappNumber = 'whatsapp_number';
+  static const String whatsappMessageTemplate = 'whatsapp_message_template';
+  static const String validUntil = 'valid_until';
+  static const String businessName = 'business_name';
+  static const String sectorName = 'sector_name';
+  static const String city = 'city';
+  static const String totalClaims = 'total_claims';
+  static const String distanceKm = 'distance_km';
+
+  // Home cursors keys
+  static const String offersNextCursor = 'offers_next_cursor';
+  static const String hotelsNextCursor = 'hotels_next_cursor';
+  static const String recommendedNextCursor = 'recommended_next_cursor';
+  static const String storesNextCursor = 'stores_next_cursor';
+  static const String offers = 'offers';
+  static const String sectors = 'sectors';
+  static const String bestHotels = 'best_hotels';
+  static const String recommended = 'recommended';
+  static const String stores = 'stores';
+  static const String store = 'store';
+  static const String cursors = 'cursors';
+  static const String logoUrl = 'logo_url';
+  
+  // Favorite offers & vendor/offer details keys
+  static const String userId = 'user_id';
+  static const String offerId = 'offer_id';
+  static const String offer = 'offer';
+  static const String parentOfferId = 'parent_offer_id';
+  static const String favorite = 'favorite';
+  static const String sector = 'sector';
+  static const String vendorId = 'vendor_id';
+  static const String vendor = 'vendor';
+  static const String description = 'description';
+  static const String licenseNumber = 'license_number';
+  static const String isFavorited = 'is_favorited';
+  static const String codeMode = 'code_mode';
+  static const String codePrefix = 'code_prefix';
+  static const String minPurchaseAmount = 'min_purchase_amount';
+  static const String validFrom = 'valid_from';
+  static const String totalViews = 'total_views';
+  static const String maxTotalClaims = 'max_total_claims';
+  static const String maxClaimsPerUser = 'max_claims_per_user';
+  static const String termsAndConditions = 'terms_and_conditions';
+  static const String appliesToAllBranches = 'applies_to_all_branches';
+  static const String offerBranches = 'offer_branches';
+  static const String sectorId = 'sector_id';
+  static const String workingHours = 'working_hours';
+  static const String maxOffersAllowed = 'max_offers_allowed';
+  static const String monthlyClaimsLimit = 'monthly_claims_limit';
+  static const String planId = 'plan_id';
+  static const String adminNotes = 'admin_notes';
+  static const String websiteUrl = 'website_url';
+  static const String instagramUrl = 'instagram_url';
+  static const String facebookUrl = 'facebook_url';
+  static const String tiktokUrl = 'tiktok_url';
+  static const String snapchatUrl = 'snapchat_url';
+
+  // Offers active list extra keys
+  static const String branches = 'branches';
+  static const String address = 'address';
+  static const String latitude = 'latitude';
+  static const String longitude = 'longitude';
+  static const String isMain = 'is_main';
+  static const String effectiveStatus = 'effective_status';
+  static const String lifecycleActions = 'lifecycle_actions';
+  static const String isClaimable = 'is_claimable';
+  static const String canEditFull = 'can_edit_full';
+  static const String canEditLimited = 'can_edit_limited';
+  static const String canDisable = 'can_disable';
+  static const String canReactivate = 'can_reactivate';
+  static const String canDelete = 'can_delete';
+  static const String canRenew = 'can_renew';
+  static const String canClaim = 'can_claim';
 }

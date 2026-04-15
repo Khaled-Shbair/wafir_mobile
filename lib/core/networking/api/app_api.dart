@@ -8,7 +8,11 @@ import 'package:wafir_mobile/features/auth/data/response/reset_otp_response.dart
 import 'package:wafir_mobile/features/auth/data/response/reset_password_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/verify_otp_response.dart';
 import 'package:wafir_mobile/features/profile/data/response/profile_response.dart';
+import 'package:wafir_mobile/features/home/data/response/home_response.dart';
 import 'package:wafir_mobile/features/sectors/data/response/get_sector_details_response.dart';
+import 'package:wafir_mobile/features/favorite/data/response/favorite_offers_response.dart';
+import 'package:wafir_mobile/features/favorite/data/response/favorite_toggle_response.dart';
+import 'package:wafir_mobile/features/offers/data/response/offers_response.dart';
 
 part 'app_api.g.dart';
 
@@ -71,6 +75,9 @@ abstract class AppApi {
   @GET(ApiConstants.profile)
   Future<ProfileResponse> getProfile();
 
+  @GET(ApiConstants.home)
+  Future<HomeResponse> getHomeData();
+
   @GET("${ApiConstants.sectors}{id}")
   Future<GetSectorDetailsResponse> getSectorDetails(
     @Path("id") int id,
@@ -81,4 +88,15 @@ abstract class AppApi {
     @Path(ApiKeys.id) int id,
     @Body() Map<String, dynamic> data,
   );
+
+  @GET(ApiConstants.getAllFavoriteOffers)
+  Future<FavoriteOffersResponse> getAllFavoriteOffers();
+
+  @POST("${ApiConstants.addOrDeleteFavoriteOffer}{id}/toggle")
+  Future<FavoriteToggleResponse> toggleFavoriteOffer(
+    @Path(ApiKeys.id) int offerId,
+  );
+
+  @GET(ApiConstants.getAllOffers)
+  Future<OffersResponse> getAllOffers();
 }
