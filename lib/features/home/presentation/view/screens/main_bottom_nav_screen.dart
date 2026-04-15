@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
+import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
+import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
 import 'package:wafir_mobile/features/favorite/presentation/view/screens/favorites_screen.dart';
 import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_bottom_nav_item.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
 import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
 
@@ -50,25 +54,36 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen> {
               icon: Icons.home_rounded,
               label: ManagerStrings.home,
               active: _currentIndex == 0,
-              onTap: () => _onItemTapped(0),
+              onTap: () {
+                context.read<HomeBloc>().add(GetHomeData());
+                _onItemTapped(0);
+              },
             ),
             CustomBottomNavItem(
               icon: Icons.local_offer_outlined,
               label: ManagerStrings.offers,
               active: _currentIndex == 1,
-              onTap: () => _onItemTapped(1),
+              onTap: () {
+                context.read<OffersBloc>().add(GetAllOffersEvent());
+                _onItemTapped(1);
+              },
             ),
             CustomBottomNavItem(
               icon: Icons.favorite_border_rounded,
               label: ManagerStrings.favorite,
               active: _currentIndex == 2,
-              onTap: () => _onItemTapped(2),
+              onTap: () {
+                context.read<FavoriteBloc>().add(GetFavoriteOffers());
+                _onItemTapped(2);
+              },
             ),
             CustomBottomNavItem(
               icon: Icons.settings_outlined,
               label: ManagerStrings.settings,
               active: _currentIndex == 3,
-              onTap: () => _onItemTapped(3),
+              onTap: () {
+                _onItemTapped(3);
+              },
             ),
           ],
         ),
