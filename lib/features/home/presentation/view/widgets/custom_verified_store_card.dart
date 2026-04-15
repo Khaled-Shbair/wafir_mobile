@@ -6,8 +6,10 @@ import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/features/home/domain/model/home_models.dart';
 
 class CustomVerifiedStoreCard extends StatelessWidget {
-  const CustomVerifiedStoreCard(this.store,{super.key});
-final HomeStoreModel store;
+  const CustomVerifiedStoreCard(this.store, {super.key});
+
+  final HomeStoreModel store;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,9 +32,10 @@ final HomeStoreModel store;
               color: Color(0xFFEAF3F4),
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: CachedNetworkImageProvider(store.logoUrl),
+                image: store.logoUrl.isNotEmpty
+                    ? CachedNetworkImageProvider(store.logoUrl)
+                    : const AssetImage('assets/images/icons/info.png'),
                 fit: BoxFit.fill,
-
               ),
             ),
           ),
@@ -42,8 +45,8 @@ final HomeStoreModel store;
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontSize: ManagerFontsSizes.f12,
-            ),
+                  fontSize: ManagerFontsSizes.f12,
+                ),
           ),
         ],
       ),
