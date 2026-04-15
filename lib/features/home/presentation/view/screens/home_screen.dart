@@ -92,7 +92,7 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
             );
           }
           return Center(
-            child: Text('No Data'),
+            child: Text('لا يوجد بيانات لعرضها'),
           );
         },
       ),
