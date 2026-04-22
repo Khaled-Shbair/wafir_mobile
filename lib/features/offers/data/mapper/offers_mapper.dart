@@ -1,58 +1,38 @@
 import 'package:wafir_mobile/core/extensions/extensions.dart';
-import 'package:wafir_mobile/features/offers/data/response/offers_response.dart';
-import 'package:wafir_mobile/features/offers/domain/model/offers_model.dart';
+import 'package:wafir_mobile/core/model/offers_model.dart';
+import 'package:wafir_mobile/features/offers/data/response/get_offers_response.dart';
+import 'package:wafir_mobile/features/offers/data/response/offer_item_data_response.dart';
+import 'package:wafir_mobile/features/offers/data/response/offer_vendor_branch_response.dart';
+import 'package:wafir_mobile/features/offers/domain/model/offer_vendor_branch_model.dart';
 
-extension OffersResponseMapper on OffersResponse {
+extension OffersResponseMapper on GetOffersResponse {
   OffersModel toDomain() {
     return OffersModel(
-      items: data.map((e) => e.toDomain()).toList(),
+      items: data?.map((e) => e.toDomain()).toList() ?? [],
+      totalCount: meta?.count.onNull() ?? 0,
     );
   }
 }
 
-extension OfferItemResponseMapper on OfferItemResponse {
-  OfferDomainItemModel toDomain() {
-    return OfferDomainItemModel(
+extension OfferItemResponseMapper on OfferItemDataResponse {
+  OfferItemModel toDomain() {
+    return OfferItemModel(
+      governorate: governorate.onNull(),
+      wilaya: wilaya.onNull(),
+      minimumPurchase: minPurchaseAmount.onNull(),
+      discountCode: 'discountCode',
       id: id.onNull(),
-      vendorId: vendorId.onNull(),
-      parentOfferId: parentOfferId.onNull(),
-      vendor: vendor?.toDomain(),
+      isFavorite: isFavorited.onNull(),
+      validFrom: validFrom.onNull(),
+      offerId: id.onNull(),
+      validUntil: validUntil.onNull(),
       title: title.onNull(),
       description: description.onNull(),
       imageUrl: imageUrl.onNull(),
       discountPercentage: discountPercentage.onNull(),
-      discountCode: discountCode.onNull(),
-      status: status.onNull(),
-      validUntil: validUntil.onNull(),
-      offerBranches: offerBranches.onNull(),
-    );
-  }
-}
-
-extension OfferVendorResponseMapper on OfferVendorResponse {
-  OfferVendorModel toDomain() {
-    return OfferVendorModel(
-      id: id.onNull(),
-      sectorId: sectorId.onNull(),
-      sector: sector?.toDomain(),
-      businessName: businessName.onNull(),
-      description: description.onNull(),
-      logoUrl: logoUrl.onNull(),
-      websiteUrl: websiteUrl.onNull(),
-      status: status.onNull(),
-      branches: (branches ?? const <OfferVendorBranchResponse>[])
-          .map((e) => e.toDomain())
-          .toList(),
-    );
-  }
-}
-
-extension OfferSectorResponseMapper on OfferSectorResponse {
-  OfferSectorModel toDomain() {
-    return OfferSectorModel(
-      id: id.onNull(),
-      name: name.onNull(),
-      iconUrl: iconUrl.onNull(),
+      businessName: vendor?.businessName.onNull() ?? '',
+      logoUrl: vendor?.logoUrl.onNull() ?? '',
+      branches: branches?.map((e) => e.toDomain()).toList() ?? [],
     );
   }
 }
@@ -61,14 +41,11 @@ extension OfferVendorBranchResponseMapper on OfferVendorBranchResponse {
   OfferVendorBranchModel toDomain() {
     return OfferVendorBranchModel(
       id: id.onNull(),
-      name: name.onNull(),
-      city: city.onNull(),
+      wilaya: wilaya.onNull(),
+      governorate: governorate.onNull(),
       address: address.onNull(),
-      latitude: latitude.onNull(),
-      longitude: longitude.onNull(),
       phoneNumber: phoneNumber.onNull(),
       isMain: isMain.onNull(),
-      status: status.onNull(),
     );
   }
 }

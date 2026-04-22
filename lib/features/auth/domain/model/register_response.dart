@@ -4,7 +4,7 @@ class RegisterModel {
   final int statusCode;
   final String timestamp;
   final String path;
-  final List data;
+  final String token;
 
   RegisterModel({
     required this.message,
@@ -12,6 +12,6 @@ class RegisterModel {
     required this.statusCode,
     required this.timestamp,
     required this.path,
-    required this.data,
+    required this.token,
   });
 }

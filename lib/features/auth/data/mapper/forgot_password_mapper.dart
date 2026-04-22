@@ -6,10 +6,7 @@ extension ForgotPasswordMapper on ForgotPasswordResponse {
   ForgotPasswordModel toDomain() {
     return ForgotPasswordModel(
       message: message.onNull(),
-      path: path.onNull(),
-      statusCode: statusCode.onNull(),
       success: success.onNull(),
-      timestamp: timestamp.onNull(),
     );
   }
 }

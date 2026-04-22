@@ -15,24 +15,31 @@ class ApiConstants {
   static const String forgotPassword = '${baseUrl}auth/forgot-password';
   static const String profile = '${baseUrl}auth/me';
   static const String editProfile = '${baseUrl}users/';
-  static const String sectors = '${baseUrl}sectors/';
+  static const String sectors = '${baseUrl}vendors/';
   static const String home = '${baseUrl}home';
   static const String getAllFavoriteOffers = '${baseUrl}favorites/offers/my';
   static const String addOrDeleteFavoriteOffer = '${baseUrl}favorites/offers/';
   static const String getAllOffers = '${baseUrl}offers/active';
+  static const String getVendorDetails = '${baseUrl}vendors/public/';
+  static const String getAllVendor = '${baseUrl}vendors/public';
 }
 
 class ApiKeys {
   static const String contentType = 'Content-Type';
+  static const String xClientPlatform = 'x-client-platform';
   static const String authorization = 'Authorization';
   static const String message = 'message';
-
+  static const String mobile = 'mobile';
+  static const String page = 'page';
+  static const String take = 'take';
+  static const String query = 'q';
   // Login / generic response keys
   static const String success = 'success';
   static const String statusCode = 'statusCode';
   static const String timestamp = 'timestamp';
   static const String path = 'path';
   static const String data = 'data';
+  static const String text = 'text';
 
   // Auth / user keys
   static const String user = 'user';
@@ -102,6 +109,7 @@ class ApiKeys {
   static const String recommended = 'recommended';
   static const String stores = 'stores';
   static const String store = 'store';
+  static const String isFavorited = 'is_favorited';
   static const String cursors = 'cursors';
   static const String logoUrl = 'logo_url';
   
@@ -116,7 +124,6 @@ class ApiKeys {
   static const String vendor = 'vendor';
   static const String description = 'description';
   static const String licenseNumber = 'license_number';
-  static const String isFavorited = 'is_favorited';
   static const String codeMode = 'code_mode';
   static const String codePrefix = 'code_prefix';
   static const String minPurchaseAmount = 'min_purchase_amount';
@@ -148,6 +155,7 @@ class ApiKeys {
   static const String effectiveStatus = 'effective_status';
   static const String lifecycleActions = 'lifecycle_actions';
   static const String isClaimable = 'is_claimable';
+  static const String activeOffersCount = 'active_offers_count';
   static const String canEditFull = 'can_edit_full';
   static const String canEditLimited = 'can_edit_limited';
   static const String canDisable = 'can_disable';

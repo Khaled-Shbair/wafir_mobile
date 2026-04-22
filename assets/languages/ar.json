@@ -57,7 +57,9 @@
   "otp_title": "رمز التحقق",
   "otp_description": "أدخل رمز التحقق الذي تم إرساله إلى بريدك الإلكتروني أو رقم هاتفك.",
   "otp_code_label": "رمز التحقق (OTP)",
-  "otp_verify_button": "تأكيد",
+  "confirm": "تأكيد",
+  "cancel": "إلغاء",
+  "are_you_sure_you_want_to_logout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
   "otp_resend_button": "إعادة إرسال الرمز",
   "otp_verification_success": "تم التحقق من الرمز بنجاح.",
   "otp_verification_failed": "فشل التحقق من الرمز. الرجاء المحاولة مرة أخرى.",
@@ -92,5 +94,20 @@
   "latest": "الأحدث",
   "highest_discount": "أعلى خصم",
   "closest": "الأقرب",
-  "view_all": "عرض الكل"
+  "please_enter_your_phone_number": "يرجي إدخال رقم الهاتف",
+  "phone_number_must_be_nine_digits_long": "رقم الهاتف يجب أن يكون مكون من 9 أرقام",
+  "view_all": "عرض الكل",
+  "frequently_asked_questions": "الأسئلة الشائعة",
+  "coupon_code": "رمز القسيمة",
+  "copy": "نسخ",
+  "copy": "احصل على عرض",
+  "description": "الوصف",
+  "branches": "الفروع",
+  "offer_name": "اسم العرض",
+  "offer_started": "بداية العرض",
+  "offer_finished": "نهاية العرض",
+  "minimum_purchase": "الحد الأدنى للشراء",
+
+  "offer_details": "تفاصيل العرض",
+  "current_price": "السعر الحالي"
 }

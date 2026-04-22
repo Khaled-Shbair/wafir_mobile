@@ -7,7 +7,7 @@ class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
     this.text,
-    required this.onPressed,
+     this.onPressed,
     this.height,
     this.width,
     this.color,
@@ -21,7 +21,7 @@ class CustomButton extends StatelessWidget {
   final String? text;
   final double? height;
   final double? width;
-  final Function() onPressed;
+  final Function()? onPressed;
   final Color? color;
   final double? fontSize;
   final FontWeight? fontWeight;
@@ -34,6 +34,8 @@ class CustomButton extends StatelessWidget {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: color ?? ManagerColors.primaryColor,
+        disabledBackgroundColor: color,
+        // overlayColor: ManagerColors.transparentColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(ManagerRadius.r10),
         ),

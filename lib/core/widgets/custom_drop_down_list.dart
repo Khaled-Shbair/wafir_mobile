@@ -26,16 +26,21 @@ class CustomDropDownList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FocusManager.instance.primaryFocus?.unfocus();
+    ScaffoldMessenger.of(context).clearSnackBars();
     return DropdownSearch<String>(
-
       validator: validator,
       enabled: enabled,
-      autoValidateMode: AutovalidateMode.onUnfocus,
+      autoValidateMode: AutovalidateMode.onUserInteraction,
       items: (filter, loadProps) => items,
       itemAsString: (item) => item,
       compareFn: (item, selectedItem) => item == selectedItem,
       selectedItem: selectedItem,
-      onChanged: (String? selectedReason) => onChangedFunction(selectedReason),
+      onChanged: (String? selectedReason) {
+        FocusManager.instance.primaryFocus?.unfocus();
+        ScaffoldMessenger.of(context).clearSnackBars();
+        onChangedFunction(selectedReason);
+      },
       suffixProps: DropdownSuffixProps(
         dropdownButtonProps: DropdownButtonProps(
           splashColor: Theme.of(context).disabledColor,

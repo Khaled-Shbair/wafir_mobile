@@ -48,12 +48,16 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     var response = await _appApi.loginByEmail(request.email, request.password);
     if (response.success == true) {
       await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.userData,
-        jsonEncode(response.data),
+        SharedPreferencesKeys.email,
+        response.data?.user?.email,
       );
       await _sharedPreferencesController.setData(
         SharedPreferencesKeys.token,
         response.data?.token ?? '',
+      );
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.name,
+        '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
       );
     }
     return response;
@@ -65,12 +69,16 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     var response = await _appApi.loginByGoogle(token ?? '');
     if (response.success == true) {
       await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.userData,
-        jsonEncode(response.data),
+        SharedPreferencesKeys.email,
+        response.data?.user?.email,
       );
       await _sharedPreferencesController.setData(
         SharedPreferencesKeys.token,
         response.data?.token ?? '',
+      );
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.name,
+        '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
       );
     }
     return response;
@@ -88,6 +96,10 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       request.governorate,
       request.city,
     );
+    if (response.success == true) {
+      _sharedPreferencesController.setData(
+          SharedPreferencesKeys.token, response.data?.verificationToken);
+    }
     return response;
   }
 
@@ -107,11 +119,16 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
 
   @override
   Future<VerifyOtpResponse> verifyOtp(VerifyOtpRequest request) async {
-    return await _appApi.verifyOtp(
+    var response = await _appApi.verifyOtp(
       request.email,
       request.otp,
       ApiKeys.registrationType,
     );
+    if (response.success == true) {
+      _sharedPreferencesController.setData(
+          SharedPreferencesKeys.token, response.data?.token);
+    }
+    return response;
   }
 
   @override

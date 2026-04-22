@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
-import 'package:wafir_mobile/features/favorite/domain/model/favorite_offers_model.dart';
+import 'package:wafir_mobile/core/model/offers_model.dart';
 import 'package:wafir_mobile/features/favorite/domain/use_case/get_all_favorite_offers_use_case.dart';
 import 'package:wafir_mobile/features/favorite/domain/use_case/toggle_favorite_offer_use_case.dart';
 
@@ -26,7 +26,14 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     emit(FavoriteLoading());
     (await _getAllFavoriteOffersUseCase.execute()).fold(
       (f) => emit(FavoriteFailure(message: f.message)),
-      (r) => emit(FavoriteLoaded(favorites: r)),
+      (r) => emit(
+        FavoriteLoaded(
+          favorites: r,
+          message: event.message,
+          toggledOfferId: event.offerId,
+          isFavorited: true, // يتم تعيينه عند إضافة المفضلة
+        ),
+      ),
     );
   }
 
@@ -46,8 +53,18 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
         }
       },
       (r) {
-        // add or remove offerId from the current list of favorites in the state
-        add(GetFavoriteOffers());
+        // Emit state with toggled offerId and isFavorited status
+        if (previousState is FavoriteLoaded) {
+          emit(FavoriteLoaded(
+            favorites: previousState.favorites,
+            message: r.message,
+            toggledOfferId: event.offerId,
+            isFavorited: r.isFavorited,
+          ));
+        } else {
+          // Fetch all favorites to update the list
+          add(GetFavoriteOffers(message: r.message, offerId: event.offerId));
+        }
       },
     );
   }

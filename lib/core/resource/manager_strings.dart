@@ -10,7 +10,14 @@ class ManagerStrings {
   static String subTitleOnBoardingOne = 'sub_title_on_boarding_one'.tr();
   static String subTitleOnBoardingTwo = 'sub_title_on_boarding_two'.tr();
   static String subTitleOnBoardingThree = 'sub_title_on_boarding_three'.tr();
+  static String frequentlyAskedQuestions = 'frequently_asked_questions'.tr();
+  static String copy = 'copy'.tr();
+  static String description = 'description'.tr();
   static String login = 'login'.tr();
+  static String currentPrice = 'current_price'.tr();
+  static String couponCode = 'coupon_code'.tr();
+  static String phoneNumberMustBeNineDigitsLong =
+      'phone_number_must_be_nine_digits_long'.tr();
   static String loginAsGuest = 'login_as_guest'.tr();
   static String next = 'next'.tr();
   static String previous = 'previous'.tr();
@@ -69,7 +76,8 @@ class ManagerStrings {
   static String otpTitle = 'otp_title'.tr();
   static String otpDescription = 'otp_description'.tr();
   static String otpCodeLabel = 'otp_code_label'.tr();
-  static String otpVerifyButton = 'otp_verify_button'.tr();
+  static String confirm = 'confirm'.tr();
+  static String cancel = 'cancel'.tr();
   static String otpResendButton = 'otp_resend_button'.tr();
   static String otpVerificationSuccess = 'otp_verification_success'.tr();
   static String otpVerificationFailed = 'otp_verification_failed'.tr();
@@ -78,7 +86,7 @@ class ManagerStrings {
 
   // Setting
   static String settings = 'settings'.tr();
-  static String editProfile = 'profile'.tr();
+  static String editProfile = 'edit_profile'.tr();
   static String logout = 'logout'.tr();
   static String changePassword = 'change_password'.tr();
   static String info = 'info'.tr();
@@ -86,6 +94,8 @@ class ManagerStrings {
   static String contactUs = 'contact_us'.tr();
   static String notifications = 'notifications'.tr();
   static String save = 'save'.tr();
+  static String areYouSureYouWantToLogout =
+      'are_you_sure_you_want_to_logout'.tr();
 
   // Store details
   static String storeDetailsTitle = 'store_details_title'.tr();
@@ -104,7 +114,14 @@ class ManagerStrings {
   static String offerDescription = 'offer_description'.tr();
   static String offerPrice = 'offer_price'.tr();
   static String offerOldPrice = 'offer_old_price'.tr();
+  static String branches = 'branches'.tr();
+  static String offerStarted = 'offer_started'.tr();
+  static String offerName = 'offer_name'.tr();
+  static String offerFinished = 'offer_finished'.tr();
+  static String minimumPurchase = 'minimum_purchase'.tr();
+
   static String offerDetailsButton = 'offer_details_button'.tr();
+  static String offerDetails = 'offer_details'.tr();
   static String showMore = 'show_more'.tr();
   static String aboutStore = 'about_store'.tr();
   static String availableOffers = 'available_offers'.tr();
@@ -116,6 +133,8 @@ class ManagerStrings {
   static String pleaseEnterYourPassword = 'please_enter_your_password'.tr();
   static String pleaseEnterYourPasswordCorrectly =
       'please_enter_your_password_correctly'.tr();
+  static String pleaseEnterYourPhoneNumber =
+      'please_enter_your_phone_number'.tr();
   static String yourAccountIsNotYetActivated =
       'your_account_is_not_yet_activated'.tr();
   static String activateNow = 'activate_now'.tr();

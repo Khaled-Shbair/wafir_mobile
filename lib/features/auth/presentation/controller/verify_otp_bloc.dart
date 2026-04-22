@@ -19,10 +19,14 @@ class VerifyOtpBloc extends Bloc<VerifyOtpEvent, VerifyOtpState> {
   final TextEditingController c2 = TextEditingController();
   final TextEditingController c3 = TextEditingController();
   final TextEditingController c4 = TextEditingController();
+  final TextEditingController c5 = TextEditingController();
+  final TextEditingController c6 = TextEditingController();
   FocusNode f1 = FocusNode();
   FocusNode f2 = FocusNode();
   FocusNode f3 = FocusNode();
   FocusNode f4 = FocusNode();
+  FocusNode f5 = FocusNode();
+  FocusNode f6 = FocusNode();
   final formKey = GlobalKey<FormState>();
   final VerifyOtpUseCase _useCase;
 
@@ -32,7 +36,7 @@ class VerifyOtpBloc extends Bloc<VerifyOtpEvent, VerifyOtpState> {
       (await _useCase.execute(
         VerifyOtpUseCaseInput(
           email: event.email,
-          otp: c1.text + c2.text + c3.text + c4.text,
+          otp: c1.text + c2.text + c3.text + c4.text + c5.text + c6.text,
         ),
       )
         ..fold(
@@ -55,10 +59,14 @@ class VerifyOtpBloc extends Bloc<VerifyOtpEvent, VerifyOtpState> {
     c2.dispose();
     c3.dispose();
     c4.dispose();
+    c5.dispose();
+    c6.dispose();
     f1.dispose();
     f2.dispose();
     f3.dispose();
     f4.dispose();
+    f5.dispose();
+    f6.dispose();
     return super.close();
   }
 }

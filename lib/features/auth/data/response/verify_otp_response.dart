@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
+import 'package:wafir_mobile/features/auth/data/response/user_response.dart';
 
 part 'verify_otp_response.g.dart';
 
@@ -15,10 +16,13 @@ class VerifyOtpResponse {
   final String? timestamp;
   @JsonKey(name: ApiKeys.path)
   final String? path;
+  @JsonKey(name: ApiKeys.data)
+  final VerifyOtpDataResponse? data;
 
   VerifyOtpResponse({
     this.message,
     this.success,
+    this.data,
     this.statusCode,
     this.timestamp,
     this.path,
@@ -29,3 +33,22 @@ class VerifyOtpResponse {
 
   Map<String, dynamic> toJson() => _$VerifyOtpResponseToJson(this);
 }
+
+@JsonSerializable()
+class VerifyOtpDataResponse {
+  @JsonKey(name: ApiKeys.user)
+  final UserResponse? user;
+  @JsonKey(name: ApiKeys.token)
+  final String? token;
+
+  VerifyOtpDataResponse({
+    this.user,
+    this.token,
+  });
+
+  factory VerifyOtpDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$VerifyOtpDataResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VerifyOtpDataResponseToJson(this);
+}
+

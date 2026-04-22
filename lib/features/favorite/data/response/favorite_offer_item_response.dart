@@ -9,6 +9,8 @@ part 'favorite_offer_item_response.g.dart';
 class FavoriteOfferItemResponse {
   @JsonKey(name: ApiKeys.id)
   final int? id;
+  @JsonKey(name: ApiKeys.isFavorited)
+  final bool? isFavorited;
   @JsonKey(name: ApiKeys.userId)
   final int? userId;
   @JsonKey(name: ApiKeys.offerId)
@@ -22,6 +24,7 @@ class FavoriteOfferItemResponse {
     this.id,
     this.userId,
     this.offerId,
+    this.isFavorited,
     this.offer,
     this.createdAt,
   });
@@ -31,4 +34,3 @@ class FavoriteOfferItemResponse {
 
   Map<String, dynamic> toJson() => _$FavoriteOfferItemResponseToJson(this);
 }
-

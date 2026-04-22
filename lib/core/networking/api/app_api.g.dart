@@ -320,25 +320,52 @@ class _AppApi implements AppApi {
   }
 
   @override
-  Future<GetSectorDetailsResponse> getSectorDetails(int id) async {
+  Future<GetVendorDetailsResponse> getVendorDetails(int id) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<GetSectorDetailsResponse>(
+    final _options = _setStreamType<GetVendorDetailsResponse>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/sectors/${id}',
+            'https://discount-platform.onrender.com/api/vendors/public/${id}',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late GetSectorDetailsResponse _value;
+    late GetVendorDetailsResponse _value;
     try {
-      _value = GetSectorDetailsResponse.fromJson(_result.data!);
+      _value = GetVendorDetailsResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<GetVendorsPublicResponse> getPublicVendors() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<GetVendorsPublicResponse>(
+      Options(method: 'GET', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            'https://discount-platform.onrender.com/api/vendors/public',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late GetVendorsPublicResponse _value;
+    try {
+      _value = GetVendorsPublicResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
@@ -429,12 +456,21 @@ class _AppApi implements AppApi {
   }
 
   @override
-  Future<OffersResponse> getAllOffers() async {
+  Future<GetOffersResponse> getAllOffers(
+    int? page,
+    int? take,
+    String? query,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'take': take,
+      r'q': query,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<OffersResponse>(
+    final _options = _setStreamType<GetOffersResponse>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -445,9 +481,9 @@ class _AppApi implements AppApi {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late OffersResponse _value;
+    late GetOffersResponse _value;
     try {
-      _value = OffersResponse.fromJson(_result.data!);
+      _value = GetOffersResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

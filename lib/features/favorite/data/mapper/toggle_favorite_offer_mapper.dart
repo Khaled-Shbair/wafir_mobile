@@ -7,6 +7,8 @@ extension ToggleFavoriteOfferMapper on FavoriteToggleResponse {
     return ToggleFavoriteOfferModel(
       message: message.onNull(),
       success: success.onNull(),
+      isFavorited: data?.isFavorited ?? false,
     );
+
   }
 }

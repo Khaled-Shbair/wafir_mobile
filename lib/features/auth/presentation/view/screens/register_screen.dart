@@ -43,7 +43,7 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
               Routes.verifyOtpScreen,
               arguments: [
                 controller.email.text,
-                Routes.homeScreen,
+                Routes.mainScreen,
               ],
             );
           } else if (state is RegisterFailure) {
@@ -144,7 +144,9 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
                           items: AppConstants.omanLocations.keys.toList(),
                           selectedItem: state.selectedGovernorate,
                           onChangedFunction: (value) {
-                            controller.add(GovernorateChanged(value));
+                            if (value != null) {
+                              controller.add(GovernorateChanged(value));
+                            }
                           },
                         );
                       },
@@ -164,7 +166,9 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
                           selectedItem: state.selectedCity,
                           enabled: selectedGovernorate != null,
                           onChangedFunction: (value) {
-                            controller.add(CityChanged(value));
+                            if (value != null) {
+                              controller.add(CityChanged(value));
+                            }
                           },
                         );
                       },

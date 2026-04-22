@@ -31,10 +31,10 @@ class Validator {
 
   static String? phoneValidate(String? phone) {
     if (phone == null || phone.isEmpty) {
-      return 'Invalid Phone Number';
+      return ManagerStrings.pleaseEnterYourPhoneNumber;
     }
     if (!RegExp(r'^\d{9}$').hasMatch(phone)) {
-      return 'Phone number must be 10 digits long.';
+      return ManagerStrings.phoneNumberMustBeNineDigitsLong;
     }
     return null;
   }
@@ -48,7 +48,6 @@ class Validator {
       return ManagerStrings.pleaseEnterYourPasswordCorrectly;
     }
     if (confirmPassword != null) {
-      // Validate confirm password when provided
       if (confirmPassword.isEmpty) {
         return ManagerStrings.pleaseEnterYourPassword;
       }

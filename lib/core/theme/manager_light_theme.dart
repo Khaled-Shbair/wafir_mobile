@@ -6,7 +6,7 @@ import 'package:wafir_mobile/core/resource/manager_texts_styles.dart';
 
 ThemeData managerLightTheme() {
   return ThemeData.light(useMaterial3: true).copyWith(
-    scaffoldBackgroundColor: ManagerColors.whiteColor,
+    scaffoldBackgroundColor: ManagerColors.backGroundColor,
     appBarTheme: AppBarTheme(
       backgroundColor: ManagerColors.whiteColor,
       surfaceTintColor: ManagerColors.transparentColor,

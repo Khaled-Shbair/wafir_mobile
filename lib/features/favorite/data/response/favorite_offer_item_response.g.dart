@@ -12,6 +12,7 @@ FavoriteOfferItemResponse _$FavoriteOfferItemResponseFromJson(
       id: (json['id'] as num?)?.toInt(),
       userId: (json['user_id'] as num?)?.toInt(),
       offerId: (json['offer_id'] as num?)?.toInt(),
+      isFavorited: json['is_favorited'] as bool?,
       offer: json['offer'] == null
           ? null
           : FavoriteOfferResponse.fromJson(
@@ -23,6 +24,7 @@ Map<String, dynamic> _$FavoriteOfferItemResponseToJson(
         FavoriteOfferItemResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
+      'is_favorited': instance.isFavorited,
       'user_id': instance.userId,
       'offer_id': instance.offerId,
       'offer': instance.offer,

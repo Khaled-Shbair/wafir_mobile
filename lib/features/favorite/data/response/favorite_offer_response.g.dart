@@ -37,7 +37,10 @@ FavoriteOfferResponse _$FavoriteOfferResponseFromJson(
       maxClaimsPerUser: (json['max_claims_per_user'] as num?)?.toInt(),
       termsAndConditions: json['terms_and_conditions'] as String?,
       appliesToAllBranches: json['applies_to_all_branches'] as bool?,
-      offerBranches: json['offer_branches'] as List<dynamic>?,
+      offerBranches: (json['offer_branches'] as List<dynamic>?)
+          ?.map((e) =>
+              OfferVendorBranchResponse.fromJson(e as Map<String, dynamic>))
+          .toList(),
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
     );

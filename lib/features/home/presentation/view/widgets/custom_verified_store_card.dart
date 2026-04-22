@@ -45,7 +45,7 @@ class CustomVerifiedStoreCard extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontSize: ManagerFontsSizes.f12,
+                  fontSize: ManagerFontsSizes.f11,
                 ),
           ),
         ],

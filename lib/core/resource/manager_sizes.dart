@@ -2,8 +2,13 @@ import 'package:wafir_mobile/core/size_util/size_util.dart';
 
 class ManagerWidths {
   static const double infinity = double.infinity;
+  static  double w3 = SizeUtil.setWidth(3);
   static  double w10 = SizeUtil.setWidth(10);
+  static  double w12 = SizeUtil.setWidth(12);
+  static  double w7 = SizeUtil.setWidth(7);
   static  double w180 = SizeUtil.setWidth(180);
+  static  double w18 = SizeUtil.setWidth(18);
+  static  double w16 = SizeUtil.setWidth(16);
   static  double w20 = SizeUtil.setWidth(20);
   static  double w35 = SizeUtil.setWidth(35);
   static  double w2 = SizeUtil.setWidth(2);
@@ -13,8 +18,10 @@ class ManagerWidths {
   static  double w30 = SizeUtil.setWidth(30);
   static  double w45 = SizeUtil.setWidth(45);
   static  double w55 = SizeUtil.setWidth(55);
+  static  double w50 = SizeUtil.setWidth(50);
   static  double w120 = SizeUtil.setWidth(120);
   static  double w100 = SizeUtil.setWidth(100);
+  static  double w40 = SizeUtil.setWidth(40);
   static  double w250 = SizeUtil.setWidth(250);
 
 }
@@ -22,6 +29,9 @@ class ManagerWidths {
 class ManagerHeights {
   static const double infinity = double.infinity;
   static double h3 = SizeUtil.setHeight(3);
+  static double h8 = SizeUtil.setHeight(8);
+  static double h24 = SizeUtil.setHeight(24);
+  static double h12= SizeUtil.setHeight(12);
   static double h5 = SizeUtil.setHeight(5);
   static double h7 = SizeUtil.setHeight(7);
   static double h10 = SizeUtil.setHeight(10);
@@ -44,6 +54,7 @@ class ManagerHeights {
   static double h300 = SizeUtil.setHeight(300);
   static double h320 = SizeUtil.setHeight(320);
   static double h350 = SizeUtil.setHeight(350);
+  static double h355 = SizeUtil.setHeight(355);
 
 }
 
@@ -53,10 +64,12 @@ class ManagerRadius {
   static double r20 = SizeUtil.setRadius(20);
   static double r22 = SizeUtil.setRadius(22);
   static double r10 = SizeUtil.setRadius(10);
+  static double r32 = SizeUtil.setRadius(32);
   static double r5 = SizeUtil.setRadius(5);
 }
 class ManagerIconsSizes {
   static double i14 = SizeUtil.setIconSize(14);
+  static double i12 = SizeUtil.setIconSize(12);
   static double i18 = SizeUtil.setIconSize(18);
   static double i20 = SizeUtil.setIconSize(20);
   static double i24 = SizeUtil.setIconSize(24);

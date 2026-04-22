@@ -21,6 +21,14 @@ UserResponse _$UserResponseFromJson(Map<String, dynamic> json) => UserResponse(
       avatarPublicId: json['avatar_public_id'] as String?,
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
+      passwordResetToken: json['password_reset_token'] as String?,
+      passwordResetExpires: json['password_reset_expires'] as String?,
+      otpHash: json['otp_hash'] as String?,
+      otpExpires: json['otp_expires'] as String?,
+      isVerified: json['is_verified'] as bool?,
+      otpType: json['otp_type'] as String?,
+      otpAttempts: (json['otp_attempts'] as num?)?.toInt(),
+      lastOtpSentAt: json['last_otp_sent_at'] as String?,
     );
 
 Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
@@ -39,4 +47,12 @@ Map<String, dynamic> _$UserResponseToJson(UserResponse instance) =>
       'avatar_public_id': instance.avatarPublicId,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
+      'password_reset_token': instance.passwordResetToken,
+      'password_reset_expires': instance.passwordResetExpires,
+      'otp_hash': instance.otpHash,
+      'otp_expires': instance.otpExpires,
+      'is_verified': instance.isVerified,
+      'otp_type': instance.otpType,
+      'otp_attempts': instance.otpAttempts,
+      'last_otp_sent_at': instance.lastOtpSentAt,
     };

@@ -16,7 +16,7 @@ class RegisterResponse {
   @JsonKey(name: ApiKeys.path)
   final String? path;
   @JsonKey(name: ApiKeys.data)
-  final List? data;
+  final RegisterDataResponse? data;
 
   RegisterResponse({
     this.message,
@@ -31,4 +31,19 @@ class RegisterResponse {
       _$RegisterResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$RegisterResponseToJson(this);
+}
+
+@JsonSerializable()
+class RegisterDataResponse {
+  @JsonKey(name: ApiKeys.token)
+  final String? verificationToken;
+
+  RegisterDataResponse({
+    this.verificationToken,
+  });
+
+  factory RegisterDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$RegisterDataResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$RegisterDataResponseToJson(this);
 }

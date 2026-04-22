@@ -1,9 +1,9 @@
 part of 'register_bloc.dart';
 
-@immutable
 sealed class RegisterEvent {}
 
 class RegisterByEmailProcess extends RegisterEvent {}
+
 class RegisterByGoogleProcess extends RegisterEvent {}
 
 class AcceptedCreate extends RegisterEvent {
@@ -13,14 +13,13 @@ class AcceptedCreate extends RegisterEvent {
 }
 
 class GovernorateChanged extends RegisterEvent {
-  final String? governorate;
+  final String governorate;
 
   GovernorateChanged(this.governorate);
 }
 
 class CityChanged extends RegisterEvent {
-  final String? city;
+  final String city;
 
   CityChanged(this.city);
 }
-

@@ -39,16 +39,20 @@ import 'package:wafir_mobile/features/home/data/data_source/remote_home_data_sou
 import 'package:wafir_mobile/features/home/data/repository_impl/home_repository_impl.dart';
 import 'package:wafir_mobile/features/home/domain/repository/home_repository.dart';
 import 'package:wafir_mobile/features/home/domain/use_case/get_home_data_use_case.dart';
-import 'package:wafir_mobile/features/sectors/data/data_source/remote_sectors_data_source.dart';
-import 'package:wafir_mobile/features/sectors/data/repository_impl/sectors_repository_impl.dart';
-import 'package:wafir_mobile/features/sectors/domain/repository/sectors_repository.dart';
-import 'package:wafir_mobile/features/sectors/domain/use_case/get_sector_details_use_case.dart';
+import 'package:wafir_mobile/features/vendors/data/data_source/remote_vendors_data_source.dart';
+import 'package:wafir_mobile/features/vendors/data/repository_impl/vendors_repository_impl.dart';
+import 'package:wafir_mobile/features/vendors/domain/repository/vendors_repository.dart';
+import 'package:wafir_mobile/features/vendors/domain/use_case/get_public_vendors_use_case.dart';
+import 'package:wafir_mobile/features/vendors/domain/use_case/get_vendor_details_use_case.dart';
 import 'package:wafir_mobile/features/favorite/data/data_source/remote_favorite_data_source.dart';
 import 'package:wafir_mobile/features/favorite/data/repository_impl/favorite_repository_impl.dart';
 import 'package:wafir_mobile/features/favorite/domain/repository/favorite_repository.dart';
 import 'package:wafir_mobile/features/favorite/domain/use_case/get_all_favorite_offers_use_case.dart';
 import 'package:wafir_mobile/features/favorite/domain/use_case/toggle_favorite_offer_use_case.dart';
 import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
+import 'package:wafir_mobile/features/vendors/presentation/controller/vendor_details_bloc.dart';
+import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bloc.dart';
+import 'package:wafir_mobile/features/home/presentation/controller/navigation_cubit.dart';
 
 final instance = GetIt.instance;
 
@@ -429,44 +433,75 @@ void disposeHome() async {
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 // Sectors
-void initSectors() async {
-  if (!GetIt.I.isRegistered<RemoteSectorsDataSource>()) {
-    instance.registerLazySingleton<RemoteSectorsDataSource>(
-      () => RemoteSectorsDataSourceImpl(instance<AppApi>()),
+void initVendors() async {
+  if (!GetIt.I.isRegistered<RemoteVendorsDataSource>()) {
+    instance.registerLazySingleton<RemoteVendorsDataSource>(
+      () => RemoteVendorsDataSourceImpl(instance<AppApi>()),
     );
   }
 
-  if (!GetIt.I.isRegistered<SectorsRepository>()) {
-    instance.registerLazySingleton<SectorsRepository>(
-      () => SectorsRepositoryImpl(
+  if (!GetIt.I.isRegistered<VendorsRepository>()) {
+    instance.registerLazySingleton<VendorsRepository>(
+      () => VendorsRepositoryImpl(
         instance<NetworkInfo>(),
-        instance<RemoteSectorsDataSource>(),
+        instance<RemoteVendorsDataSource>(),
       ),
     );
   }
 }
 
-void disposeSectors() async {
-  if (GetIt.I.isRegistered<SectorsRepository>()) {
-    instance.unregister<SectorsRepository>();
+void disposeVendors() async {
+  if (GetIt.I.isRegistered<RemoteVendorsDataSource>()) {
+    instance.unregister<RemoteVendorsDataSource>();
   }
-  if (GetIt.I.isRegistered<RemoteSectorsDataSource>()) {
-    instance.unregister<RemoteSectorsDataSource>();
+  if (GetIt.I.isRegistered<VendorsRepository>()) {
+    instance.unregister<VendorsRepository>();
   }
 }
 
-void initSectorDetails() async {
-  initSectors();
-  if (!GetIt.I.isRegistered<GetSectorDetailsUseCase>()) {
-    instance.registerLazySingleton<GetSectorDetailsUseCase>(
-      () => GetSectorDetailsUseCase(instance<SectorsRepository>()),
+void initPublicVendors() async {
+  initVendors();
+  if (!GetIt.I.isRegistered<GetPublicVendorsUseCase>()) {
+    instance.registerLazySingleton<GetPublicVendorsUseCase>(
+      () => GetPublicVendorsUseCase(instance<VendorsRepository>()),
+    );
+  }
+  if (!GetIt.I.isRegistered<VendorsBloc>()) {
+    instance.registerLazySingleton<VendorsBloc>(
+      () => VendorsBloc(instance<GetPublicVendorsUseCase>()),
     );
   }
 }
 
-void disposeSectorDetails() async {
-  if (GetIt.I.isRegistered<GetSectorDetailsUseCase>()) {
-    instance.unregister<GetSectorDetailsUseCase>();
+void disposePublicVendors() async {
+  if (GetIt.I.isRegistered<VendorsBloc>()) {
+    instance.unregister<VendorsBloc>();
+  }
+  if (GetIt.I.isRegistered<GetPublicVendorsUseCase>()) {
+    instance.unregister<GetPublicVendorsUseCase>();
+  }
+}
+
+void initVendorDetails() async {
+  initVendors();
+  if (!GetIt.I.isRegistered<GetVendorDetailsUseCase>()) {
+    instance.registerLazySingleton<GetVendorDetailsUseCase>(
+      () => GetVendorDetailsUseCase(instance<VendorsRepository>()),
+    );
+  }
+  if (!GetIt.I.isRegistered<VendorDetailsBloc>()) {
+    instance.registerLazySingleton<VendorDetailsBloc>(
+      () => VendorDetailsBloc(instance<GetVendorDetailsUseCase>()),
+    );
+  }
+}
+
+void disposeVendorDetails() async {
+  if (GetIt.I.isRegistered<VendorDetailsBloc>()) {
+    instance.unregister<VendorDetailsBloc>();
+  }
+  if (GetIt.I.isRegistered<GetVendorDetailsUseCase>()) {
+    instance.unregister<GetVendorDetailsUseCase>();
   }
 }
 ///////////////////////////////////////////////////////////////////////////////
@@ -526,4 +561,11 @@ void disposeFavorite() async {
   }
 }
 ///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+// Navigation (Bottom Tabs)
+void initNavigation() {
+  if (!GetIt.I.isRegistered<NavigationCubit>()) {
+    instance.registerLazySingleton<NavigationCubit>(
+      () => NavigationCubit(),
+    );
+  }
+}

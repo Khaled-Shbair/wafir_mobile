@@ -34,6 +34,23 @@ class UserResponse {
   @JsonKey(name: ApiKeys.updatedAt)
   final String? updatedAt;
 
+  @JsonKey(name: ApiKeys.passwordResetToken)
+  final String? passwordResetToken;
+  @JsonKey(name: ApiKeys.passwordResetExpires)
+  final String? passwordResetExpires;
+  @JsonKey(name: ApiKeys.otpHash)
+  final String? otpHash;
+  @JsonKey(name: ApiKeys.otpExpires)
+  final String? otpExpires;
+  @JsonKey(name: ApiKeys.isVerified)
+  final bool? isVerified;
+  @JsonKey(name: ApiKeys.otpType)
+  final String? otpType;
+  @JsonKey(name: ApiKeys.otpAttempts)
+  final int? otpAttempts;
+  @JsonKey(name: ApiKeys.lastOtpSentAt)
+  final String? lastOtpSentAt;
+
   UserResponse({
     this.id,
     this.firstName,
@@ -49,6 +66,14 @@ class UserResponse {
     this.avatarPublicId,
     this.createdAt,
     this.updatedAt,
+    this.passwordResetToken,
+    this.passwordResetExpires,
+    this.otpHash,
+    this.otpExpires,
+    this.isVerified,
+    this.otpType,
+    this.otpAttempts,
+    this.lastOtpSentAt,
   });
 
   factory UserResponse.fromJson(Map<String, dynamic> json) =>

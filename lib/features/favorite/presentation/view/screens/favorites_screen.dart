@@ -38,26 +38,22 @@ class FavoritesScreen extends StatelessWidget {
               );
             }
             return GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsetsDirectional.only(
+                start: ManagerWidths.w15,
+                end: ManagerWidths.w15,
+                bottom: ManagerHeights.h15,
+              ),
               itemCount: items.length,
-              shrinkWrap: true,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: ManagerWidths.w15,
                 mainAxisSpacing: ManagerWidths.w15,
-                childAspectRatio: 0.60,
+                childAspectRatio: 3 / 5.2,
+
+
               ),
               itemBuilder: (context, index) {
-                return CustomOfferItemWidget(
-                  item: items[index],
-                  addOrRemoveFavoriteOfferFunction: () {
-                    context.read<FavoriteBloc>().add(
-                          ToggleFavoriteOfferEvent(
-                            offerId: items[index].id,
-                          ),
-                        );
-                  },
-                );
+                return CustomOfferItemWidget(item: items[index]);
               },
             );
           } else if (state is FavoriteFailure) {

@@ -49,6 +49,7 @@ class DioFactory {
 
     return {
       ApiKeys.contentType: ApiConstants.applicationJson,
+      ApiKeys.xClientPlatform: ApiKeys.mobile,
       if (token.isNotEmpty)
         ApiKeys.authorization: '${ApiConstants.bearer} $token',
     };

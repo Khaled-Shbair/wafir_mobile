@@ -1,24 +1,27 @@
-class AppConstants{
- static String getRemainingDays(String validUntil) {
-    final now = DateTime.now();
-    final endDate = DateTime.parse(validUntil);
-
-    final difference = endDate.difference(now).inDays;
-
-    if (difference <= 0) {
-      return "انتهى";
-    } else if (difference == 1) {
-      return "يوم واحد";
-    } else if (difference == 2) {
-      return "يومين";
-    } else if (difference <= 10) {
-      return "$difference أيام";
-    } else {
-      return "$difference يوم";
-    }
-  }
+class AppConstants {
   static const double deviceHeight = 812;
   static const double deviceWidth = 375;
+  static const String baseUrl = 'https://api.example.com';
+  static const String privacyPolicy =
+      'https://discount-platform-three.vercel.app/privacy-policy';
+  static const String faq = 'https://discount-platform-three.vercel.app/faq';
+  static const String termsOfUse =
+      'https://discount-platform-three.vercel.app/terms-of-use';
+
+  // قائمة الفئات
+  static const List<String> categories = [
+    'الكل',
+    'المطاعم',
+    'المقاهي',
+    'الفنادق',
+    'السياحة',
+    'الملابس',
+    'الإلكترونيات',
+    'الصحة والجمال',
+    'الرياضة',
+    'التعليم',
+  ];
+
   static final Map<String, List<String>> omanLocations = {
     'محافظة مسقط': [
       'مسقط',
@@ -89,4 +92,69 @@ class AppConstants{
     ],
   };
 
+  static String getRemainingDays(String startDate, String endDate) {
+    final now = DateTime.now();
+    final start = DateTime.parse(startDate);
+    final end = DateTime.parse(endDate);
+
+    // إذا كان العرض قد بدأ بالفعل (الآن أكبر من تاريخ البداية)
+    if (now.isAfter(start)) {
+      final difference = end.difference(now);
+      final differenceInDays = difference.inDays;
+      final differenceInHours = difference.inHours;
+
+      // تحقق إذا كان العرض انتهى
+      if (differenceInDays < 0 ||
+          (differenceInDays == 0 && differenceInHours < 0)) {
+        return "انتهى";
+      }
+
+      // إذا بقي أيام
+      if (differenceInDays > 0) {
+        if (differenceInDays == 1) {
+          return "ينتهي بعد يوم";
+        } else if (differenceInDays == 2) {
+          return "ينتهي بعد يومين";
+        } else {
+          return "ينتهي بعد $differenceInDays ايام";
+        }
+      }
+      // إذا بقيت ساعات فقط
+      else if (differenceInDays == 0 && differenceInHours > 0) {
+        if (differenceInHours == 1) {
+          return "ينتهي بعد ساعة";
+        } else if (differenceInHours == 2) {
+          return "ينتهي بعد ساعتين";
+        } else {
+          return "ينتهي بعد $differenceInHours ساعة";
+        }
+      }
+    }
+    // إذا كان العرض لم يبدأ بعد
+    else {
+      final difference = start.difference(now);
+      final differenceInDays = difference.inDays;
+      final differenceInHours = difference.inHours;
+
+      if (differenceInDays > 0) {
+        if (differenceInDays == 1) {
+          return "يبدا بعد يوم";
+        } else if (differenceInDays == 2) {
+          return "يبدا بعد يومين";
+        } else {
+          return "يبدا بعد $differenceInDays ايام";
+        }
+      } else if (differenceInDays == 0 && differenceInHours > 0) {
+        if (differenceInHours == 1) {
+          return "يبدا بعد ساعة";
+        } else if (differenceInHours == 2) {
+          return "يبدا بعد ساعتين";
+        } else {
+          return "يبدا بعد $differenceInHours ساعة";
+        }
+      }
+    }
+
+    return "انتهى";
+  }
 }

@@ -13,7 +13,9 @@ RegisterResponse _$RegisterResponseFromJson(Map<String, dynamic> json) =>
       statusCode: (json['statusCode'] as num?)?.toInt(),
       timestamp: json['timestamp'] as String?,
       path: json['path'] as String?,
-      data: json['data'] as List<dynamic>?,
+      data: json['data'] == null
+          ? null
+          : RegisterDataResponse.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$RegisterResponseToJson(RegisterResponse instance) =>
@@ -24,4 +26,16 @@ Map<String, dynamic> _$RegisterResponseToJson(RegisterResponse instance) =>
       'timestamp': instance.timestamp,
       'path': instance.path,
       'data': instance.data,
+    };
+
+RegisterDataResponse _$RegisterDataResponseFromJson(
+        Map<String, dynamic> json) =>
+    RegisterDataResponse(
+      verificationToken: json['token'] as String?,
+    );
+
+Map<String, dynamic> _$RegisterDataResponseToJson(
+        RegisterDataResponse instance) =>
+    <String, dynamic>{
+      'token': instance.verificationToken,
     };

@@ -9,6 +9,7 @@ part of 'forgot_password_response.dart';
 ForgotPasswordResponse _$ForgotPasswordResponseFromJson(
         Map<String, dynamic> json) =>
     ForgotPasswordResponse(
+      data: json['data'],
       message: json['message'] as String?,
       success: json['success'] as bool?,
       statusCode: (json['statusCode'] as num?)?.toInt(),
@@ -24,4 +25,5 @@ Map<String, dynamic> _$ForgotPasswordResponseToJson(
       'statusCode': instance.statusCode,
       'timestamp': instance.timestamp,
       'path': instance.path,
+      'data': instance.data,
     };

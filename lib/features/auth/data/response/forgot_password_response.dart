@@ -15,8 +15,11 @@ class ForgotPasswordResponse {
   final String? timestamp;
   @JsonKey(name: ApiKeys.path)
   final String? path;
+  @JsonKey(name: ApiKeys.data)
+  final dynamic data;
 
   ForgotPasswordResponse({
+    this.data,
     this.message,
     this.success,
     this.statusCode,

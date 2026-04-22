@@ -21,7 +21,7 @@ class CustomOfferTimeAndLocationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsetsDirectional.symmetric(
-        horizontal: ManagerWidths.w5,
+        horizontal: ManagerWidths.w3,
         vertical: ManagerHeights.h3,
       ),
       decoration: BoxDecoration(
@@ -32,13 +32,13 @@ class CustomOfferTimeAndLocationWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: ManagerIconsSizes.i14, color: textColor),
+          Icon(icon, size: ManagerIconsSizes.i12, color: textColor),
           horizontalSpace(ManagerWidths.w2),
           Text(
-            text,
+            text.isNotEmpty ? text : 'عمان',
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: textColor,
-                  fontSize: ManagerFontsSizes.f10,
+                  fontSize: ManagerFontsSizes.f9,
                 ),
           ),
         ],

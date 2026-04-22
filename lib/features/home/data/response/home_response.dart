@@ -26,6 +26,9 @@ class HomeResponse {
     this.path,
     this.message,
     this.data,
+
+
+
   });
 
   factory HomeResponse.fromJson(Map<String, dynamic> json) =>

@@ -53,73 +53,104 @@ class VerifyOtpScreen extends StatelessWidget with CustomToastMassage {
                 style: Theme.of(context).textTheme.labelMedium,
               ),
               verticalSpace(ManagerHeights.h30),
-              Padding(
-                padding: EdgeInsetsDirectional.symmetric(
-                  horizontal: ManagerWidths.w20,
-                ),
-                child: Row(
-                  children: [
-                    Flexible(
-                      child: CustomOtpFiled(
-                        controller: controller.c1,
-                        focusNode: controller.f1,
-                        onChanged: (value) {
-                          if (value.isNotEmpty) {
-                            controller.f2.requestFocus();
-                          }
-                        },
+              SizedBox(
+                height: ManagerHeights.h60,
+                child: Padding(
+                  padding: EdgeInsetsDirectional.symmetric(
+                    horizontal: ManagerWidths.w20,
+                  ),
+                  child: Row(
+                    children: [
+                      Flexible(
+                        child: CustomOtpFiled(
+                          controller: controller.c1,
+                          focusNode: controller.f1,
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              controller.f2.requestFocus();
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                    horizontalSpace(ManagerWidths.w10),
-                    Flexible(
-                      child: CustomOtpFiled(
-                        controller: controller.c2,
-                        focusNode: controller.f2,
-                        onChanged: (value) {
-                          if (value.isNotEmpty) {
-                            controller.f3.requestFocus();
-                          } else {
-                            controller.f1.requestFocus();
-                          }
-                        },
+                      horizontalSpace(ManagerWidths.w10),
+                      Flexible(
+                        child: CustomOtpFiled(
+                          controller: controller.c2,
+                          focusNode: controller.f2,
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              controller.f3.requestFocus();
+                            } else {
+                              controller.f1.requestFocus();
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                    horizontalSpace(ManagerWidths.w10),
-                    Flexible(
-                      child: CustomOtpFiled(
-                        controller: controller.c3,
-                        focusNode: controller.f3,
-                        onChanged: (value) {
-                          if (value.isNotEmpty) {
-                            controller.f4.requestFocus();
-                          } else {
-                            controller.f2.requestFocus();
-                          }
-                        },
+                      horizontalSpace(ManagerWidths.w10),
+                      Flexible(
+                        child: CustomOtpFiled(
+                          controller: controller.c3,
+                          focusNode: controller.f3,
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              controller.f4.requestFocus();
+                            } else {
+                              controller.f2.requestFocus();
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                    horizontalSpace(ManagerWidths.w10),
-                    Flexible(
-                      child: CustomOtpFiled(
-                        controller: controller.c4,
-                        focusNode: controller.f4,
-                        onChanged: (value) {
-                          if (value.isEmpty) {
-                            controller.f3.requestFocus();
-                          }
-                        },
+                      horizontalSpace(ManagerWidths.w10),
+                      Flexible(
+                        child: CustomOtpFiled(
+                          controller: controller.c4,
+                          focusNode: controller.f4,
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              controller.f5.requestFocus();
+                            } else {
+                              controller.f3.requestFocus();
+                            }
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                      horizontalSpace(ManagerWidths.w10),
+                      Flexible(
+                        child: CustomOtpFiled(
+                          controller: controller.c5,
+                          focusNode: controller.f5,
+                          onChanged: (value) {
+                            if (value.isNotEmpty) {
+                              controller.f6.requestFocus();
+                            } else {
+                              controller.f4.requestFocus();
+                            }
+                          },
+                        ),
+                      ),
+                      horizontalSpace(ManagerWidths.w10),
+                      Flexible(
+                        child: CustomOtpFiled(
+                          controller: controller.c6,
+                          focusNode: controller.f6,
+                          onChanged: (value) {
+                            if (value.isEmpty) {
+                              controller.f5.requestFocus();
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               verticalSpace(ManagerHeights.h30),
               CustomButton(
-                text: ManagerStrings.otpVerifyButton,
+                text: ManagerStrings.confirm,
                 onPressed: () {
                   FocusManager.instance.primaryFocus?.unfocus();
-                  controller.add(
-                      VerifyOtpProcess(email: 'khaled.shbair12@gmail.com'));
+                  ScaffoldMessenger.of(context).clearSnackBars();
+                  controller.add(VerifyOtpProcess(email: email));
                 },
               ),
             ],

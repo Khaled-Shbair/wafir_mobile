@@ -5,7 +5,7 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     this.labelText,
-    required this.validator,
+    this.validator,
     required this.controller,
     this.prefixIcon,
     this.keyboardType,
@@ -15,7 +15,9 @@ class CustomTextField extends StatelessWidget {
     this.maxLength,
     this.hintText,
     this.prefixText,
+    this.suffix,
     this.textInputAction,
+    this.onFieldSubmitted,
     this.readOnly = false,
   });
 
@@ -24,6 +26,7 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final Function()? functionVisibilityPassword;
+  final Function(String?)? onFieldSubmitted;
   final Widget? prefixIcon;
   final bool obscureText;
   final TextInputType? keyboardType;
@@ -32,12 +35,15 @@ class CustomTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final String? prefixText;
   final bool readOnly;
+   final Widget? suffix;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       maxLength: maxLength,
+
       controller: controller,
+      onFieldSubmitted: onFieldSubmitted,
       keyboardType: keyboardType ?? TextInputType.emailAddress,
       validator: validator,
       textInputAction: textInputAction,
@@ -48,8 +54,6 @@ class CustomTextField extends StatelessWidget {
         contentPadding: EdgeInsetsDirectional.zero,
         labelText: labelText,
         counter: SizedBox.shrink(),
-        // prefixText: prefixText,
-
         prefixIconColor: Theme.of(context).inputDecorationTheme.prefixIconColor,
         prefixIcon: prefixIcon,
         hintText: hintText,
@@ -63,7 +67,8 @@ class CustomTextField extends StatelessWidget {
                     : Icons.visibility_off_outlined),
                 style: IconButton.styleFrom(iconSize: ManagerIconsSizes.i24),
               )
-            : null,
+            : suffix,
+
         labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
         border: Theme.of(context).inputDecorationTheme.border,
         focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,

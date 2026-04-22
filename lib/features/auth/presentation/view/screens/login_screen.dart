@@ -28,7 +28,7 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
         } else if (state is LoginSuccessfully) {
           context.hideLoading();
           Navigator.pushNamedAndRemoveUntil(
-              context, Routes.homeScreen, (route) => false);
+              context, Routes.mainScreen, (route) => false);
         } else if (state is LoginFailure) {
           context.hideLoading();
           if (state.errorMessage.contains('غير مفعل')) {
@@ -179,7 +179,9 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                   onPressed: () {
                     FocusManager.instance.primaryFocus?.unfocus();
                     ScaffoldMessenger.of(context).clearSnackBars();
-                    controller.add(LoginByGoogle());
+                    //TODO: implement login by google
+                    // controller.add(LoginByGoogle());
+                    showToast('سيتم تنفيذ تسجيل الدخول عبر جوجل قريباً');
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,

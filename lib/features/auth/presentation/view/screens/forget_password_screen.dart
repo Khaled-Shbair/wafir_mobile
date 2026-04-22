@@ -8,10 +8,11 @@ import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_loading.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
+import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
-class ForgetPasswordScreen extends StatelessWidget {
+class ForgetPasswordScreen extends StatelessWidget with CustomToastMassage {
   const ForgetPasswordScreen({super.key});
 
   @override
@@ -26,11 +27,14 @@ class ForgetPasswordScreen extends StatelessWidget {
           context.hideLoading();
           Navigator.of(context).pushReplacementNamed(
             Routes.verifyOtpScreen,
-            arguments: state.email,
+            arguments: [
+              state.email,
+              Routes.loginScreen,
+            ],
           );
         } else if (state is ForgetPasswordFailure) {
           context.hideLoading();
-          Navigator.of(context).pushReplacementNamed(Routes.verifyOtpScreen);
+          showToast(state.message);
         }
       },
       child: Scaffold(
@@ -65,7 +69,7 @@ class ForgetPasswordScreen extends StatelessWidget {
               Form(
                 key: controller.formKey,
                 child: CustomTextField(
-                  labelText: ManagerStrings.email,
+                  hintText: ManagerStrings.email,
                   controller: controller.emailController,
                   keyboardType: TextInputType.emailAddress,
                   prefixIcon: Icon(

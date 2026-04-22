@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
+import 'package:wafir_mobile/features/offers/data/response/offer_vendor_branch_response.dart';
 
 import 'favorite_vendor_response.dart';
 
@@ -58,7 +59,7 @@ class FavoriteOfferResponse {
   @JsonKey(name: ApiKeys.appliesToAllBranches)
   final bool? appliesToAllBranches;
   @JsonKey(name: ApiKeys.offerBranches)
-  final List<dynamic>? offerBranches;
+  final List<OfferVendorBranchResponse>? offerBranches;
   @JsonKey(name: ApiKeys.createdAt)
   final String? createdAt;
   @JsonKey(name: ApiKeys.updatedAt)

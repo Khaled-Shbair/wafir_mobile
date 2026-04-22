@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wafir_mobile/core/size_util/size_util.dart';
 
 class ManagerFontsSizes {
-  static double f8= SizeUtil.setFontSize(5);
+  static double f8=  SizeUtil.setFontSize(8);
+  static double f9=  SizeUtil.setFontSize(9);
   static double f10= SizeUtil.setFontSize(10);
   static double f11= SizeUtil.setFontSize(11);
   static double f12= SizeUtil.setFontSize(12);

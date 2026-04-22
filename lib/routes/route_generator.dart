@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
+import 'package:wafir_mobile/core/model/offers_model.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
@@ -15,16 +16,18 @@ import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen
 import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/login_screen.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/main_bottom_nav_screen.dart';
+import 'package:wafir_mobile/features/offers/presentation/view/screens/offer_details_screen.dart';
 import 'package:wafir_mobile/features/on_boarding/presentation/view/screens/on_boarding_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/forget_password_screen.dart';
-import 'package:wafir_mobile/features/profile/domain/model/profile_data_model.dart';
-import 'package:wafir_mobile/features/profile/presentation/view/screens/edit_profile_screen.dart';
-import 'package:wafir_mobile/features/sectors/presentation/view/screens/sector_details.dart';
 import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
+import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.dart';
+import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendor_details_screen.dart';
+import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendors_screen.dart';
+import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class RouteGenerator {
@@ -50,7 +53,11 @@ class RouteGenerator {
             child: RegisterScreen(),
           ),
         );
-
+      case Routes.offerDetailsScreen:
+        final offerData = setting.arguments as OfferItemModel;
+        return MaterialPageRoute(
+          builder: (_) => OfferDetailsScreen(offer: offerData),
+        );
       case Routes.resetPasswordScreen:
         initResetPassword();
         String token = setting.arguments as String;
@@ -96,7 +103,6 @@ class RouteGenerator {
           ),
         );
       case Routes.mainScreen:
-        // initHome();
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
@@ -104,7 +110,7 @@ class RouteGenerator {
               BlocProvider<HomeBloc>(
                 create: (_) {
                   initHome();
-                  return instance<HomeBloc>();
+                  return instance<HomeBloc>()..add(GetHomeData());
                 },
               ),
               BlocProvider<FavoriteBloc>(
@@ -119,7 +125,6 @@ class RouteGenerator {
                   return instance<OffersBloc>();
                 },
               ),
-
             ],
             child: const MainBottomNavScreen(),
           ),
@@ -129,16 +134,26 @@ class RouteGenerator {
           builder: (_) => SettingScreen(),
         );
 
-
-      case Routes.storeProfileScreen:
+      case Routes.vendorsScreen:
+        initPublicVendors();
         return MaterialPageRoute(
-          builder: (_) => SectorDetailsScreen(),
+          builder: (_) => BlocProvider<VendorsBloc>(
+            create: (_) =>
+                instance<VendorsBloc>()..add(GetPublicVendorsEvent()),
+            child: const VendorsScreen(),
+          ),
         );
-      case Routes.editProfileScreen:
-        initEditProfile();
-        ProfileDataModel profileData = setting.arguments as ProfileDataModel;
+
+      case Routes.vendorDetailsScreen:
+        final vendor = setting.arguments as VendorPublicItemModel;
         return MaterialPageRoute(
-            builder: (_) => EditProfileScreen(profileData: profileData));
+          builder: (_) => VendorDetailsScreen(vendor: vendor),
+        );
+      // case Routes.editProfileScreen:
+      //   initEditProfile();
+      //   ProfileDataModel profileData = setting.arguments as ProfileDataModel;
+      // return MaterialPageRoute(
+      //     builder: (_) => EditProfileScreen(profileData: ProfileDataModel()));
       case Routes.offersScreen:
         initOffers();
         return MaterialPageRoute(

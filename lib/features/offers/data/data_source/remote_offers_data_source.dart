@@ -1,8 +1,9 @@
 import 'package:wafir_mobile/core/networking/api/app_api.dart';
-import 'package:wafir_mobile/features/offers/data/response/offers_response.dart';
+import 'package:wafir_mobile/features/offers/data/request/get_all_offers_request.dart';
+import 'package:wafir_mobile/features/offers/data/response/get_offers_response.dart';
 
 abstract class RemoteOffersDataSource {
-  Future<OffersResponse> getAllOffers();
+  Future<GetOffersResponse> getAllOffers(GetAllOffersRequest request);
 }
 
 class RemoteOffersDataSourceImpl implements RemoteOffersDataSource {
@@ -11,7 +12,11 @@ class RemoteOffersDataSourceImpl implements RemoteOffersDataSource {
   RemoteOffersDataSourceImpl(this._appApi);
 
   @override
-  Future<OffersResponse> getAllOffers() {
-    return _appApi.getAllOffers();
+  Future<GetOffersResponse> getAllOffers(GetAllOffersRequest request) {
+    return _appApi.getAllOffers(
+      request.page,
+      request.pageSize,
+      request.searchQuery,
+    );
   }
 }

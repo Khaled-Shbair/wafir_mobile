@@ -90,7 +90,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   void _registerByGoogleProcess(
       RegisterByGoogleProcess event, Emitter emit) async {
-    if (formKey.currentState!.validate()) {
+    if (formKey.currentState!.validate() && state.isAccepted == true) {
       emit(RegisterLoading());
       (await _registerByGoogleUseCase.execute()
         ..fold(
@@ -112,6 +112,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
             );
           },
         ));
+    } else {
+      emit(RegisterFailure(
+        errorMessage: ManagerStrings.pleaseAcceptTermsAndConditions,
+        isAccepted: state.isAccepted,
+        selectedGovernorate: state.selectedGovernorate,
+        selectedCity: state.selectedCity,
+      ));
     }
   }
 
