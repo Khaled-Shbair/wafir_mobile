@@ -4,6 +4,7 @@ import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/features/home/domain/model/home_models.dart';
+import 'package:wafir_mobile/features/vendors/presentation/model/vendors_screen_args.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class CustomVentorItem extends StatelessWidget {
@@ -32,6 +33,10 @@ class CustomVentorItem extends StatelessWidget {
                 ? () {
                     Navigator.of(context).pushNamed(
                       Routes.vendorsScreen,
+                      arguments: VendorsScreenArgs(
+                        selectedCategoryId: item.id,
+                        selectedCategoryName: item.name,
+                      ),
                     );
                   }
                 : null,
@@ -85,4 +90,3 @@ class CustomVentorItem extends StatelessWidget {
     );
   }
 }
-

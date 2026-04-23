@@ -24,6 +24,7 @@ extension VendorPublicMapper on VendorPublicResponse {
       businessName: businessName.onNull(),
       description: description.onNull(),
       logoUrl: logoUrl.onNull(),
+      sectorId: sector?.id ?? 0,
       sectorName: sector?.name ?? '',
       sectorIconUrl: sector?.iconUrl ?? '',
       activeOffersCount: activeOffersCount.onNull(),

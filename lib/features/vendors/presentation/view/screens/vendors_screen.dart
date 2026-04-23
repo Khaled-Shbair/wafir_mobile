@@ -1,10 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wafir_mobile/config/constants/app_constants.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
+import 'package:wafir_mobile/core/resource/manager_strings.dart';
+import 'package:wafir_mobile/core/widgets/custom_search_filter_bottom_sheet.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
+import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
+import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_section_header.dart';
 import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.dart';
 import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
@@ -14,6 +19,8 @@ class VendorsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bloc = context.read<VendorsBloc>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('المتاجر'),
@@ -27,24 +34,96 @@ class VendorsScreen extends StatelessWidget {
               ),
             );
           }
+
           if (state is VendorsFailure) {
             return Center(child: Text(state.message));
           }
+
           if (state is VendorsLoaded) {
-            return ListView.separated(
+            return SingleChildScrollView(
               padding: EdgeInsetsDirectional.only(
                 start: ManagerWidths.w15,
                 end: ManagerWidths.w15,
                 top: ManagerHeights.h15,
                 bottom: ManagerHeights.h15,
               ),
-              itemCount: state.vendors.length,
-              separatorBuilder: (_, __) => verticalSpace(ManagerHeights.h10),
-              itemBuilder: (context, index) {
-                return _VendorListCard(vendor: state.vendors[index]);
-              },
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomTextField(
+                    textInputAction: TextInputAction.search,
+                    controller: bloc.search,
+                    onFieldSubmitted: (_) => bloc.add(GetPublicVendorsEvent()),
+                    hintText: ManagerStrings.searchOnStoreOrOffer,
+                    prefixIcon: Icon(
+                      Icons.search,
+                      size: ManagerIconsSizes.i24,
+                    ),
+                    suffix: IconButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(ManagerRadius.r20),
+                            ),
+                          ),
+                          builder: (context) => CustomSearchFilterBottomSheet(
+                            categories: AppConstants.categories,
+                            selectedCategory: state.selectedCategory,
+                            selectedGovernorate: state.selectedGovernorate,
+                            selectedWilaya: state.selectedWilaya,
+                            onApply: (selection) {
+                              bloc.add(
+                                CategoryChangedVendorsEvent(selection.category),
+                              );
+                              bloc.add(
+                                GovernorateChangedVendorsEvent(
+                                  selection.governorate,
+                                ),
+                              );
+                              bloc.add(
+                                WilayaChangedVendorsEvent(selection.wilaya),
+                              );
+                              bloc.add(GetPublicVendorsEvent());
+                            },
+                          ),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.filter_list_outlined,
+                        size: ManagerIconsSizes.i24,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                  verticalSpace(ManagerHeights.h20),
+                  const CustomSectionHeader(title: 'المتاجر المتاحة'),
+                  verticalSpace(ManagerHeights.h15),
+                  if (state.vendors.isEmpty)
+                    Center(
+                      child: Text(
+                        'لا توجد متاجر متاحة حالياً',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                    )
+                  else
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: state.vendors.length,
+                      separatorBuilder: (_, __) =>
+                          verticalSpace(ManagerHeights.h10),
+                      itemBuilder: (context, index) {
+                        return _VendorListCard(vendor: state.vendors[index]);
+                      },
+                    ),
+                ],
+              ),
             );
           }
+
           return const SizedBox.shrink();
         },
       ),
@@ -114,8 +193,8 @@ class _VendorListCard extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style:
-                              Theme.of(context).textTheme.bodySmall?.copyWith(
-                                    fontSize: ManagerFontsSizes.f12,
+                              Theme.of(context).textTheme.labelSmall?.copyWith(
+                                    fontWeight: ManagerFontWeight.regular,
                                   ),
                         ),
                       ),
@@ -141,7 +220,8 @@ class _VendorListCard extends StatelessWidget {
   }
 
   VendorPublicBranchModel? _primaryBranch(
-      List<VendorPublicBranchModel> branches) {
+    List<VendorPublicBranchModel> branches,
+  ) {
     if (branches.isEmpty) return null;
     return branches.firstWhere(
       (branch) => branch.isMain,

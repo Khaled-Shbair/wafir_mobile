@@ -20,10 +20,12 @@ class VendorDetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xffF8F9FB),
       appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back_ios),
+        ),
         title: const Text('تفاصيل المتجر'),
       ),
       body: SingleChildScrollView(
@@ -38,58 +40,32 @@ class VendorDetailsScreen extends StatelessWidget {
           children: [
             _buildHeader(context, mainBranch),
             verticalSpace(ManagerHeights.h15),
-            _buildStatsSection(),
+            _buildStatsSection(context),
             verticalSpace(ManagerHeights.h15),
             _buildInfoCard(
+              context: context,
               title: 'عن المتجر',
               icon: Icons.info_outline,
               child: Text(
                 vendor.description.trim().isNotEmpty
                     ? vendor.description
                     : 'لا يوجد وصف متاح',
-                style: const TextStyle(
-                  height: 1.8,
-                  fontSize: 14,
-                  color: Colors.black87,
-                  fontFamily: ManagerFontFamily.tajawal,
-                ),
-              ),
-            ),
-            verticalSpace(ManagerHeights.h15),
-            _buildInfoCard(
-              title: 'القطاع',
-              icon: Icons.category_outlined,
-              child: Row(
-                children: [
-                  _buildSectorIcon(),
-                  horizontalSpace(ManagerWidths.w10),
-                  Expanded(
-                    child: Text(
-                      vendor.sectorName.trim().isNotEmpty
-                          ? vendor.sectorName
-                          : 'غير محدد',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: ManagerFontFamily.tajawal,
-                      ),
-                    ),
-                  ),
-                ],
+                style: Theme.of(context).textTheme.labelLarge,
               ),
             ),
             verticalSpace(ManagerHeights.h15),
             _buildInfoCard(
               title: 'الفروع',
+              context: context,
               icon: Icons.account_tree_outlined,
               child: vendor.branches.isEmpty
-                  ? const Text(
+                  ? Text(
                       'لا يوجد فروع متاحة',
-                      style: TextStyle(fontFamily: ManagerFontFamily.tajawal),
+                      style: Theme.of(context).textTheme.labelLarge,
                     )
                   : Column(
                       children: vendor.branches
-                          .map((branch) => _buildBranchTile(branch))
+                          .map((branch) => _buildBranchTile(branch, context))
                           .toList(),
                     ),
             ),
@@ -104,16 +80,18 @@ class VendorDetailsScreen extends StatelessWidget {
     VendorPublicBranchModel? mainBranch,
   ) {
     final address = _formatBranchAddress(mainBranch);
-
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(18),
+      padding: EdgeInsetsDirectional.symmetric(
+        horizontal: ManagerWidths.w18,
+        vertical: ManagerHeights.h18,
+      ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        gradient: const LinearGradient(
-          colors: [Color(0xff1F2937), Color(0xff374151)],
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
+        borderRadius: BorderRadius.circular(ManagerRadius.r22),
+        gradient: LinearGradient(
+          colors: [ManagerColors.primaryColor, ManagerColors.blackColor],
+          begin: Alignment.bottomLeft,
+          end: Alignment.topRight,
         ),
         boxShadow: const [
           BoxShadow(
@@ -126,51 +104,49 @@ class VendorDetailsScreen extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            width: 92,
-            height: 92,
+            width: ManagerWidths.w100,
+            height: ManagerHeights.h100,
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(24),
-              image: vendor.logoUrl.trim().isNotEmpty
+              color: ManagerColors.whiteColor,
+              borderRadius: BorderRadius.circular(
+                ManagerRadius.r22,
+              ),
+              image: vendor.logoUrl.isNotEmpty
                   ? DecorationImage(
                       image: NetworkImage(vendor.logoUrl),
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fill,
                     )
                   : null,
             ),
             child: vendor.logoUrl.trim().isEmpty
-                ? const Icon(Icons.storefront, size: 40)
+                ? Icon(Icons.storefront, size: ManagerIconsSizes.i28)
                 : null,
           ),
-          const SizedBox(height: 14),
+          verticalSpace(ManagerHeights.h15),
           Text(
             vendor.businessName.trim().isNotEmpty
                 ? vendor.businessName
                 : 'اسم المتجر غير متوفر',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              fontFamily: ManagerFontFamily.tajawal,
-            ),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: ManagerFontsSizes.f22,
+                ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
+          verticalSpace(ManagerHeights.h8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.location_on_outlined,
-                  color: Colors.white70, size: 18),
-              const SizedBox(width: 4),
+              Icon(Icons.location_on_outlined,
+                  color: Colors.white70, size: ManagerIconsSizes.i18),
+              horizontalSpace(ManagerWidths.w5),
               Flexible(
                 child: Text(
                   address,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white70,
-                    fontSize: 14,
-                    fontFamily: ManagerFontFamily.tajawal,
-                  ),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontSize: ManagerFontsSizes.f14,
+                        color: Colors.white70,
+                      ),
                 ),
               ),
             ],
@@ -180,24 +156,27 @@ class VendorDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsSection() {
+  Widget _buildStatsSection(BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: _buildStatCard(
+            context: context,
             title: 'عدد الفروع',
             value: vendor.branches.length.toString(),
             icon: Icons.storefront_outlined,
           ),
         ),
-        const SizedBox(width: 12),
+        horizontalSpace(ManagerWidths.w12),
         Expanded(
           child: _buildStatCard(
+            context: context,
             title: 'العروض النشطة',
             value: vendor.activeOffersCount.toString(),
             icon: Icons.local_offer_outlined,
           ),
         ),
+        horizontalSpace(ManagerWidths.w12),
       ],
     );
   }
@@ -206,169 +185,133 @@ class VendorDetailsScreen extends StatelessWidget {
     required String title,
     required String value,
     required IconData icon,
+    required BuildContext context,
   }) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: EdgeInsetsDirectional.symmetric(
+        horizontal: ManagerWidths.w12,
+        vertical: ManagerHeights.h12,
+      ),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        color: ManagerColors.whiteColor,
+        borderRadius: BorderRadius.circular(ManagerRadius.r15),
         border: Border.all(color: const Color(0xffECECEC)),
       ),
       child: Column(
         children: [
           Container(
-            width: 46,
-            height: 46,
+            width: ManagerWidths.w45,
+            height: ManagerHeights.h45,
             decoration: BoxDecoration(
               color: const Color(0xffF3F4F6),
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(ManagerRadius.r15),
             ),
             child: Icon(icon, color: Colors.black87),
           ),
-          const SizedBox(height: 10),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.w800,
-              fontFamily: ManagerFontFamily.tajawal,
-            ),
-          ),
-          const SizedBox(height: 4),
+          verticalSpace(ManagerHeights.h10),
+          Text(value,
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith()),
+          verticalSpace(ManagerHeights.h5),
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 13,
-              color: Colors.black54,
-              fontFamily: ManagerFontFamily.tajawal,
-            ),
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSectorIcon() {
-    if (vendor.sectorIconUrl.trim().isEmpty) {
-      return Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: const Color(0xffF3F4F6),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Icon(Icons.category_outlined),
-      );
-    }
-
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10),
-      child: Image.network(
-        vendor.sectorIconUrl,
-        width: 40,
-        height: 40,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: const Color(0xffF3F4F6),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: const Icon(Icons.category_outlined),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildBranchTile(VendorPublicBranchModel branch) {
+  Widget _buildBranchTile(
+      VendorPublicBranchModel branch, BuildContext context) {
     final address = _formatBranchAddress(branch);
 
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: const Color(0xffF9FAFB),
-        borderRadius: BorderRadius.circular(14),
-        border: branch.isMain
-            ? Border.all(color: ManagerColors.primaryColor, width: 1.2)
-            : null,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(
-            branch.isMain ? Icons.star_rounded : Icons.location_on_outlined,
-            size: 18,
-            color: branch.isMain
-                ? ManagerColors.primaryColor
-                : ManagerColors.greyColor,
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        branch.name.trim().isNotEmpty ? branch.name : 'فرع',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: ManagerFontFamily.tajawal,
+        margin: EdgeInsets.only(bottom: ManagerHeights.h10),
+        padding: EdgeInsets.symmetric(
+          horizontal: ManagerWidths.w12,
+          vertical: ManagerHeights.h12,
+        ),
+        decoration: BoxDecoration(
+          color: const Color(0xffF9FAFB),
+          borderRadius: BorderRadius.circular(ManagerRadius.r10),
+          border: branch.isMain
+              ? Border.all(color: ManagerColors.primaryColor, width: 1.2)
+              : null,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              branch.isMain ? Icons.star_rounded : Icons.location_on_outlined,
+              size: ManagerIconsSizes.i18,
+              color: branch.isMain
+                  ? ManagerColors.primaryColor
+                  : ManagerColors.greyColor,
+            ),
+            horizontalSpace(ManagerWidths.w10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          branch.name.trim().isNotEmpty ? branch.name : 'فرع',
+                          style: Theme.of(context).textTheme.titleMedium,
                         ),
                       ),
-                    ),
-                    if (branch.isMain)
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
-                        decoration: BoxDecoration(
-                          color: ManagerColors.primaryColor,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: const Text(
-                          'الرئيسي',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontFamily: ManagerFontFamily.tajawal,
+                      if (branch.isMain)
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: ManagerWidths.w7,
+                            vertical: ManagerHeights.h3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: ManagerColors.primaryColor,
+                            borderRadius:
+                                BorderRadius.circular(ManagerRadius.r10),
+                          ),
+                          child: Text(
+                            'الرئيسي',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  color: ManagerColors.whiteColor,
+                                ),
                           ),
                         ),
-                      ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  address,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Colors.black54,
-                    fontFamily: ManagerFontFamily.tajawal,
+                    ],
                   ),
-                ),
-              ],
+                  verticalSpace(ManagerHeights.h5),
+                  Text(
+                    address,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          fontSize: ManagerFontsSizes.f14,
+                        ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ));
   }
 
   Widget _buildInfoCard({
     required String title,
     required IconData icon,
     required Widget child,
+    required BuildContext context,
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.symmetric(
+          horizontal: ManagerWidths.w15, vertical: ManagerHeights.h15),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(22),
+        color: ManagerColors.whiteColor,
+        borderRadius: BorderRadius.circular(ManagerRadius.r22),
         border: Border.all(color: const Color(0xffECECEC)),
         boxShadow: const [
           BoxShadow(
@@ -384,33 +327,32 @@ class VendorDetailsScreen extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 42,
-                height: 42,
+                width: ManagerWidths.w45,
+                height: ManagerHeights.h45,
                 decoration: BoxDecoration(
                   color: const Color(0xffF3F4F6),
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(ManagerRadius.r15),
                 ),
-                child: Icon(icon, color: Colors.black87),
+                child: Icon(icon, color: ManagerColors.blackColor),
               ),
-              const SizedBox(width: 10),
+              horizontalSpace(ManagerWidths.w10),
               Text(
                 title,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  fontFamily: ManagerFontFamily.tajawal,
-                ),
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontSize: ManagerFontsSizes.f18,
+                    ),
               ),
             ],
           ),
-          const SizedBox(height: 14),
+          verticalSpace(ManagerHeights.h12),
           child,
         ],
       ),
     );
   }
 
-  VendorPublicBranchModel? _getMainBranch(List<VendorPublicBranchModel> branches) {
+  VendorPublicBranchModel? _getMainBranch(
+      List<VendorPublicBranchModel> branches) {
     if (branches.isEmpty) return null;
     return branches.firstWhere(
       (branch) => branch.isMain,

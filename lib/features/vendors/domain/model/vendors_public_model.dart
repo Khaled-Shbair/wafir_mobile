@@ -13,6 +13,7 @@ class VendorPublicItemModel {
   final String businessName;
   final String description;
   final String logoUrl;
+  final int sectorId;
   final String sectorName;
   final String sectorIconUrl;
   final int activeOffersCount;
@@ -23,6 +24,7 @@ class VendorPublicItemModel {
     required this.businessName,
     required this.description,
     required this.logoUrl,
+    required this.sectorId,
     required this.sectorName,
     required this.sectorIconUrl,
     required this.activeOffersCount,
@@ -63,4 +65,3 @@ class VendorsPublicMetaModel {
     required this.take,
   });
 }
-

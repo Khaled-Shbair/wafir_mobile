@@ -19,6 +19,8 @@ class CustomTextField extends StatelessWidget {
     this.textInputAction,
     this.onFieldSubmitted,
     this.readOnly = false,
+    this.focusNode,
+    this.autofocus = false,
   });
 
   final String? labelText;
@@ -35,19 +37,22 @@ class CustomTextField extends StatelessWidget {
   final TextInputAction? textInputAction;
   final String? prefixText;
   final bool readOnly;
-   final Widget? suffix;
+  final Widget? suffix;
+  final FocusNode? focusNode;
+  final bool autofocus;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       maxLength: maxLength,
-
       controller: controller,
       onFieldSubmitted: onFieldSubmitted,
       keyboardType: keyboardType ?? TextInputType.emailAddress,
       validator: validator,
       textInputAction: textInputAction,
       readOnly: readOnly,
+      focusNode: focusNode,
+      autofocus: autofocus,
       style: Theme.of(context).textTheme.labelLarge,
       obscureText: obscureText,
       decoration: InputDecoration(

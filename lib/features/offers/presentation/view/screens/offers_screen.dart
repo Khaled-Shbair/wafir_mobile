@@ -6,17 +6,55 @@ import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/core/widgets/custom_offer_item_widget.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
+import 'package:wafir_mobile/features/home/presentation/controller/navigation_cubit.dart';
 import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_section_header.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/widgets/custom_filter_bottom_sheet.dart';
 
-class OffersScreen extends StatelessWidget {
+class OffersScreen extends StatefulWidget {
   const OffersScreen({super.key});
 
   @override
+  State<OffersScreen> createState() => _OffersScreenState();
+}
+
+class _OffersScreenState extends State<OffersScreen> {
+  late final FocusNode _searchFocusNode;
+
+  // Offers screen is also used as a standalone route, so NavigationCubit may not exist.
+  NavigationCubit? _tryGetNavigationCubit(BuildContext context) {
+    try {
+      return context.read<NavigationCubit>();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _searchFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _requestSearchFocus() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _searchFocusNode.requestFocus();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var controller = context.read<OffersBloc>();
-    return Scaffold(
+    final controller = context.read<OffersBloc>();
+    final navigationCubit = _tryGetNavigationCubit(context);
+
+    final scaffold = Scaffold(
       appBar: AppBar(
         title: Text(ManagerStrings.offers),
         automaticallyImplyLeading: false,
@@ -33,6 +71,7 @@ class OffersScreen extends StatelessWidget {
             CustomTextField(
               textInputAction: TextInputAction.search,
               controller: controller.search,
+              focusNode: _searchFocusNode,
               onFieldSubmitted: (v) {
                 if (v != null) {
                   FocusManager.instance.primaryFocus?.unfocus();
@@ -159,6 +198,24 @@ class OffersScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+
+    if (navigationCubit == null) {
+      return scaffold;
+    }
+
+    return BlocListener<NavigationCubit, NavigationState>(
+      bloc: navigationCubit,
+      listenWhen: (previous, current) {
+        return previous.offersSearchFocusRequestId !=
+            current.offersSearchFocusRequestId;
+      },
+      listener: (context, state) {
+        if (state.selectedIndex == 1) {
+          _requestSearchFocus();
+        }
+      },
+      child: scaffold,
     );
   }
 }

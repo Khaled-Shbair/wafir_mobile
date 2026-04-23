@@ -2,16 +2,21 @@ part of 'navigation_cubit.dart';
 
 class NavigationState {
   final int selectedIndex;
+  final int offersSearchFocusRequestId;
 
   const NavigationState({
     required this.selectedIndex,
+    this.offersSearchFocusRequestId = 0,
   });
 
   NavigationState copyWith({
     int? selectedIndex,
+    int? offersSearchFocusRequestId,
   }) {
     return NavigationState(
       selectedIndex: selectedIndex ?? this.selectedIndex,
+      offersSearchFocusRequestId:
+          offersSearchFocusRequestId ?? this.offersSearchFocusRequestId,
     );
   }
 
@@ -20,9 +25,9 @@ class NavigationState {
       identical(this, other) ||
       other is NavigationState &&
           runtimeType == other.runtimeType &&
-          selectedIndex == other.selectedIndex;
+          selectedIndex == other.selectedIndex &&
+          offersSearchFocusRequestId == other.offersSearchFocusRequestId;
 
   @override
-  int get hashCode => selectedIndex.hashCode;
+  int get hashCode => Object.hash(selectedIndex, offersSearchFocusRequestId);
 }
-

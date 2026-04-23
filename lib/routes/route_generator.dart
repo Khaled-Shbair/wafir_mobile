@@ -28,6 +28,7 @@ import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.
 import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendor_details_screen.dart';
 import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendors_screen.dart';
 import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bloc.dart';
+import 'package:wafir_mobile/features/vendors/presentation/model/vendors_screen_args.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class RouteGenerator {
@@ -53,6 +54,7 @@ class RouteGenerator {
             child: RegisterScreen(),
           ),
         );
+
       case Routes.offerDetailsScreen:
         final offerData = setting.arguments as OfferItemModel;
         return MaterialPageRoute(
@@ -136,10 +138,24 @@ class RouteGenerator {
 
       case Routes.vendorsScreen:
         initPublicVendors();
+        final VendorsScreenArgs? args = setting.arguments is VendorsScreenArgs
+            ? setting.arguments as VendorsScreenArgs
+            : null;
         return MaterialPageRoute(
           builder: (_) => BlocProvider<VendorsBloc>(
-            create: (_) =>
-                instance<VendorsBloc>()..add(GetPublicVendorsEvent()),
+            create: (_) {
+              final bloc = instance<VendorsBloc>();
+              if (args != null) {
+                bloc.add(
+                  ApplyInitialCategoryFilterEvent(
+                    categoryId: args.selectedCategoryId,
+                    categoryName: args.selectedCategoryName,
+                  ),
+                );
+              }
+              bloc.add(GetPublicVendorsEvent());
+              return bloc;
+            },
             child: const VendorsScreen(),
           ),
         );

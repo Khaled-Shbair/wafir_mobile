@@ -116,29 +116,35 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
   Widget _buildSearchBar(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: ManagerWidths.w15),
-      child: Container(
-        padding: EdgeInsetsDirectional.only(
-          start: ManagerWidths.w15,
-        ),
-        height: ManagerHeights.h50,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(ManagerRadius.r15),
-          border: Border.all(color: const Color(0xFFE2E8EA)),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.search, color: Color(0xFF7F8D92)),
-            horizontalSpace(ManagerWidths.w10),
-            Expanded(
-              child: Text(
-                ManagerStrings.searchOnStoreOrOffer,
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Color(0xFF7F8D92),
-                    ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(ManagerRadius.r15),
+        onTap: () {
+          context.read<NavigationCubit>().goToOffers(focusSearch: true);
+        },
+        child: Container(
+          padding: EdgeInsetsDirectional.only(
+            start: ManagerWidths.w15,
+          ),
+          height: ManagerHeights.h50,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(ManagerRadius.r15),
+            border: Border.all(color: const Color(0xFFE2E8EA)),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.search, color: Color(0xFF7F8D92)),
+              horizontalSpace(ManagerWidths.w10),
+              Expanded(
+                child: Text(
+                  ManagerStrings.searchOnStoreOrOffer,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                        color: const Color(0xFF7F8D92),
+                      ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
