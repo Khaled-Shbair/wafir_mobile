@@ -1,66 +1,42 @@
 part of 'edit_profile_bloc.dart';
 
-sealed class EditProfileState {
-  String? governorate;
-  String? wilaya;
+enum EditProfileStatus {
+  initial,
+  loadingProfile,
+  ready,
+  submitting,
+  success,
+  failure,
+}
 
-  EditProfileState({this.governorate, this.wilaya});
+class EditProfileState {
+  final EditProfileStatus status;
+  final String? governorate;
+  final String? wilaya;
+  final String? message;
+  final bool isProfileLoaded;
+
+  const EditProfileState({
+    this.status = EditProfileStatus.initial,
+    this.governorate,
+    this.wilaya,
+    this.message,
+    this.isProfileLoaded = false,
+  });
 
   EditProfileState copyWith({
+    EditProfileStatus? status,
     String? selectedGovernorate,
     String? selectedWilaya,
+    String? message,
+    bool? isProfileLoaded,
   }) {
-    final String? newSelectedGovernorate = selectedGovernorate ?? governorate;
-    final String? newSelectedWilaya = selectedWilaya ?? wilaya;
-
-    if (this is EditProfileInitial) {
-      return EditProfileInitial(
-        governorate: newSelectedGovernorate,
-        wilaya: newSelectedWilaya,
-      );
-    }
-
-    if (this is EditProfileLoading) {
-      return EditProfileLoading(
-        governorate: newSelectedGovernorate,
-        wilaya: newSelectedWilaya,
-      );
-    }
-
-    if (this is EditProfileSuccessfully) {
-      return EditProfileSuccessfully(
-        governorate: newSelectedGovernorate,
-        wilaya: newSelectedWilaya,
-      );
-    }
-
-    if (this is EditProfileFailure) {
-      final failure = this as EditProfileFailure;
-      return EditProfileFailure(
-        message: failure.message,
-        governorate: newSelectedGovernorate,
-        wilaya: newSelectedWilaya,
-      );
-    }
-
-    return this;
+    return EditProfileState(
+      status: status ?? this.status,
+      governorate: selectedGovernorate ?? governorate,
+      wilaya: selectedWilaya ?? wilaya,
+      message: message,
+      isProfileLoaded: isProfileLoaded ?? this.isProfileLoaded,
+    );
   }
-}
-
-class EditProfileInitial extends EditProfileState {
-  EditProfileInitial({super.governorate, super.wilaya});
-}
-
-class EditProfileLoading extends EditProfileState {
-  EditProfileLoading({super.governorate, super.wilaya});
-}
-
-class EditProfileSuccessfully extends EditProfileState {
-  EditProfileSuccessfully({super.governorate, super.wilaya});
-}
-
-class EditProfileFailure extends EditProfileState {
-  final String message;
-
-  EditProfileFailure({required this.message, super.governorate, super.wilaya});
 }

@@ -45,9 +45,8 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
           ResetPasswordUseCaseInput(
             password: newPassword.text,
             resetToken: event.resetToken,
-            passwordConfirm: confirmPassword.text,
           ),
-        )
+         )
           ..fold(
             (l) {
               emit(ResetPasswordFailure(message: l.message));

@@ -8,12 +8,10 @@ import 'package:wafir_mobile/features/auth/domain/repository/auth_repository.dar
 class ResetPasswordUseCaseInput {
   final String resetToken;
   final String password;
-  final String passwordConfirm;
 
   ResetPasswordUseCaseInput({
     required this.password,
     required this.resetToken,
-    required this.passwordConfirm,
   });
 }
 
@@ -30,7 +28,6 @@ class ResetPasswordUseCase
       ResetPasswordRequest(
         resetToken: input.resetToken,
         password: input.password,
-        passwordConfirm: input.passwordConfirm,
       ),
     );
   }

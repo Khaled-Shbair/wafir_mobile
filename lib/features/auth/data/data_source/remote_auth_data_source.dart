@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
 import 'package:wafir_mobile/core/networking/api/app_api.dart';
@@ -142,7 +141,6 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     return await _appApi.resetPassword(
       request.resetToken,
       request.password,
-      request.passwordConfirm,
     );
   }
 }

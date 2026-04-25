@@ -6,5 +6,6 @@ import 'package:wafir_mobile/features/profile/domain/model/profile_model.dart';
 abstract class ProfileRepository {
   Future<Either<Failure, ProfileModel>> getProfile();
 
-  Future<Either<Failure, ProfileModel>> editProfile(EditProfileRequest request);
+  Future<Either<Failure, ProfileModel>> editProfileData(EditProfileRequest request);
+  Future<Either<Failure, ProfileModel>> editProfileImage(EditProfileRequest request);
 }

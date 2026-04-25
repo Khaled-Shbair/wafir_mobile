@@ -35,11 +35,30 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, ProfileModel>> editProfile(
+  Future<Either<Failure, ProfileModel>> editProfileData(
       EditProfileRequest request) async {
     if (await _networkInfo.isConnected) {
       try {
         final response = await _dataSource.editProfile(request);
+        return Right(response.toDomain());
+      } catch (e) {
+        return Left(ErrorHandler.handle(e).failure);
+      }
+    } else {
+      return Left(
+        Failure(
+          message: ManagerStrings.noInternetConnection,
+          code: ResponseCode.NO_INTERNET_CONNECTION.value,
+        ),
+      );
+    }
+  }
+  @override
+  Future<Either<Failure, ProfileModel>> editProfileImage(
+      EditProfileRequest request) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final response = await _dataSource.editProfileImage(request);
         return Right(response.toDomain());
       } catch (e) {
         return Left(ErrorHandler.handle(e).failure);

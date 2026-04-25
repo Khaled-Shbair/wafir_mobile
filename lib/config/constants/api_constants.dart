@@ -8,8 +8,10 @@ class ApiConstants {
   static const String registerByGoogle = '${baseUrl}auth/register-by-google';
   static const String logout = '${baseUrl}auth/logout';
   static const String resendOtp = '${baseUrl}auth/resend-otp';
-  static const String resetPassword = '${baseUrl}auth/reset-password';
+  static const String resetPassword = '${baseUrl}user/me/password';
   static const String verifyOtp = '${baseUrl}auth/verify-otp';
+  static const String updateProfile = '${baseUrl}users/me';
+  static const String updateProfileAvatar = '${baseUrl}users/me/avatar';
   static const String login = '${baseUrl}auth/login';
   static const String loginByGoogle = '${baseUrl}auth/login';
   static const String forgotPassword = '${baseUrl}auth/forgot-password';
@@ -55,6 +57,7 @@ class ApiKeys {
   static const String status = 'status';
   static const String fcmToken = 'fcm_token';
   static const String avatarUrl = 'avatar_url';
+  static const String avatar = 'avatar';
   static const String avatarPublicId = 'avatar_public_id';
   static const String createdAt = 'created_at';
   static const String updatedAt = 'updated_at';

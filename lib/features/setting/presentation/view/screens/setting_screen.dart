@@ -12,7 +12,6 @@ import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_dialog.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
-import 'package:wafir_mobile/features/profile/domain/model/profile_data_model.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -188,7 +187,6 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
                           disposeProfile();
                           disposeEditProfile();
                           disposeFavorite();
-                          disposeGetProfileData();
                           instance<SharedPreferencesController>()
                               .removeData(SharedPreferencesKeys.token);
                           instance<SharedPreferencesController>()

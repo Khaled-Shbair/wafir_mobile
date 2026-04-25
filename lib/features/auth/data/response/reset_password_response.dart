@@ -15,12 +15,14 @@ class ResetPasswordResponse {
   final String? timestamp;
   @JsonKey(name: ApiKeys.path)
   final String? path;
-
+  @JsonKey(name: ApiKeys.data)
+  final dynamic data;
   ResetPasswordResponse({
     this.message,
     this.success,
     this.statusCode,
     this.timestamp,
+    this.data,
     this.path,
   });
 

@@ -24,11 +24,10 @@ import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
+import 'package:wafir_mobile/features/profile/presentation/controller/edit_profile_bloc.dart';
+import 'package:wafir_mobile/features/profile/presentation/view/screens/edit_profile_screen.dart';
 import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.dart';
 import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendor_details_screen.dart';
-import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendors_screen.dart';
-import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bloc.dart';
-import 'package:wafir_mobile/features/vendors/presentation/model/vendors_screen_args.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class RouteGenerator {
@@ -136,27 +135,12 @@ class RouteGenerator {
           builder: (_) => SettingScreen(),
         );
 
-      case Routes.vendorsScreen:
-        initPublicVendors();
-        final VendorsScreenArgs? args = setting.arguments is VendorsScreenArgs
-            ? setting.arguments as VendorsScreenArgs
-            : null;
+      case Routes.editProfileScreen:
+        initEditProfile();
         return MaterialPageRoute(
-          builder: (_) => BlocProvider<VendorsBloc>(
-            create: (_) {
-              final bloc = instance<VendorsBloc>();
-              if (args != null) {
-                bloc.add(
-                  ApplyInitialCategoryFilterEvent(
-                    categoryId: args.selectedCategoryId,
-                    categoryName: args.selectedCategoryName,
-                  ),
-                );
-              }
-              bloc.add(GetPublicVendorsEvent());
-              return bloc;
-            },
-            child: const VendorsScreen(),
+          builder: (_) => BlocProvider<EditProfileBloc>(
+            create: (_) => instance<EditProfileBloc>()..add(LoadEditProfileData()),
+            child: const EditProfileScreen(),
           ),
         );
 

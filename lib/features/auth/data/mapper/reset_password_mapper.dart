@@ -6,10 +6,7 @@ extension ResetPasswordMapper on ResetPasswordResponse {
   ResetPasswordModel toDomain() {
     return ResetPasswordModel(
       message: message.onNull(),
-      path: path.onNull(),
-      statusCode: statusCode.onNull(),
       success: success.onNull(),
-      timestamp: timestamp.onNull(),
     );
   }
 }

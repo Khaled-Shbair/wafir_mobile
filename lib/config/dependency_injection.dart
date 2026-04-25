@@ -28,7 +28,6 @@ import 'package:wafir_mobile/features/profile/domain/repository/profile_reposito
 import 'package:wafir_mobile/features/profile/domain/use_case/edit_profile_use_case.dart';
 import 'package:wafir_mobile/features/profile/domain/use_case/get_profile_use_case.dart';
 import 'package:wafir_mobile/features/profile/presentation/controller/edit_profile_bloc.dart';
-import 'package:wafir_mobile/features/profile/presentation/controller/profile_bloc.dart';
 import 'package:wafir_mobile/features/offers/data/data_source/remote_offers_data_source.dart';
 import 'package:wafir_mobile/features/offers/data/repository_impl/offers_repository_impl.dart';
 import 'package:wafir_mobile/features/offers/domain/repository/offers_repository.dart';
@@ -287,32 +286,14 @@ void disposeProfile() async {
   }
 }
 
-void initGetProfileData() async {
+void initEditProfile() async {
   initProfile();
-
   if (!GetIt.I.isRegistered<GetProfileUseCase>()) {
     instance.registerLazySingleton<GetProfileUseCase>(
       () => GetProfileUseCase(instance<ProfileRepository>()),
     );
   }
 
-  if (!GetIt.I.isRegistered<ProfileBloc>()) {
-    instance.registerLazySingleton<ProfileBloc>(
-      () => ProfileBloc(instance<GetProfileUseCase>()),
-    );
-  }
-}
-
-void disposeGetProfileData() async {
-  if (GetIt.I.isRegistered<GetProfileUseCase>()) {
-    instance.unregister<GetProfileUseCase>();
-  }
-  if (GetIt.I.isRegistered<ProfileBloc>()) {
-    instance.unregister<ProfileBloc>();
-  }
-}
-
-void initEditProfile() async {
   if (!GetIt.I.isRegistered<EditProfileUseCase>()) {
     instance.registerLazySingleton<EditProfileUseCase>(
       () => EditProfileUseCase(instance<ProfileRepository>()),
@@ -321,12 +302,18 @@ void initEditProfile() async {
 
   if (!GetIt.I.isRegistered<EditProfileBloc>()) {
     instance.registerLazySingleton<EditProfileBloc>(
-      () => EditProfileBloc(instance<EditProfileUseCase>()),
+      () => EditProfileBloc(
+        instance<EditProfileUseCase>(),
+        instance<GetProfileUseCase>(),
+      ),
     );
   }
 }
 
 void disposeEditProfile() async {
+  if (GetIt.I.isRegistered<GetProfileUseCase>()) {
+    instance.unregister<GetProfileUseCase>();
+  }
   if (GetIt.I.isRegistered<EditProfileUseCase>()) {
     instance.unregister<EditProfileUseCase>();
   }

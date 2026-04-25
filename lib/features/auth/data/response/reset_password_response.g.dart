@@ -13,6 +13,7 @@ ResetPasswordResponse _$ResetPasswordResponseFromJson(
       success: json['success'] as bool?,
       statusCode: (json['statusCode'] as num?)?.toInt(),
       timestamp: json['timestamp'] as String?,
+      data: json['data'],
       path: json['path'] as String?,
     );
 
@@ -24,4 +25,5 @@ Map<String, dynamic> _$ResetPasswordResponseToJson(
       'statusCode': instance.statusCode,
       'timestamp': instance.timestamp,
       'path': instance.path,
+      'data': instance.data,
     };

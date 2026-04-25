@@ -3,16 +3,10 @@ part of 'edit_profile_bloc.dart';
 @immutable
 sealed class EditProfileEvent {}
 
-class InitEditProfile extends EditProfileEvent {
-  final ProfileDataModel profileData;
-
-  InitEditProfile(this.profileData);
-}
+class LoadEditProfileData extends EditProfileEvent {}
 
 class EditProfileProcess extends EditProfileEvent {
-  final int id;
-
-  EditProfileProcess(this.id);
+  EditProfileProcess();
 }
 
 class ChangeImage extends EditProfileEvent {}

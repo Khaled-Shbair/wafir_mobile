@@ -36,7 +36,7 @@ class CustomDropDownList extends StatelessWidget {
       itemAsString: (item) => item,
       compareFn: (item, selectedItem) => item == selectedItem,
       selectedItem: selectedItem,
-      onChanged: (String? selectedReason) {
+      onSelected: (String? selectedReason) {
         FocusManager.instance.primaryFocus?.unfocus();
         ScaffoldMessenger.of(context).clearSnackBars();
         onChangedFunction(selectedReason);

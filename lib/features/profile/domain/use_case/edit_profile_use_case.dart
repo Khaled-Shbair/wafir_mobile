@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:wafir_mobile/core/error_handler/error_handler.dart';
 import 'package:wafir_mobile/core/use_case/base_use_case.dart';
@@ -12,10 +14,10 @@ class EditProfileUseCaseInput {
   final String? phoneNumber;
   final String? governorate;
   final String? wilaya;
-  final int id;
+  final File? image;
 
   EditProfileUseCaseInput({
-    required this.id,
+    this.image,
     this.email,
     this.firstName,
     this.lastName,
@@ -34,9 +36,32 @@ class EditProfileUseCase
   @override
   Future<Either<Failure, ProfileModel>> execute(
       EditProfileUseCaseInput input) async {
-    return await _repository.editProfile(
+    Either<Failure, ProfileModel>? imageResult;
+
+    if (input.image != null) {
+      imageResult = await _repository.editProfileImage(
+        EditProfileRequest(image: input.image),
+      );
+      if (imageResult.isLeft()) {
+        return imageResult;
+      }
+    }
+
+    final hasDataChanges = input.firstName != null ||
+        input.lastName != null ||
+        input.phoneNumber != null ||
+        input.governorate != null ||
+        input.wilaya != null;
+
+    if (!hasDataChanges) {
+      if (imageResult != null) {
+        return imageResult;
+      }
+      return _repository.getProfile();
+    }
+
+    return _repository.editProfileData(
       EditProfileRequest(
-        id: input.id,
         email: input.email,
         firstName: input.firstName,
         lastName: input.lastName,

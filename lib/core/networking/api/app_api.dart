@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
@@ -66,12 +68,26 @@ abstract class AppApi {
     @Field(ApiKeys.otpType) String otpType,
   );
 
-  @POST(ApiConstants.resetPassword)
+  @PATCH(ApiConstants.resetPassword)
   Future<ResetPasswordResponse> resetPassword(
-    @Field(ApiKeys.resetToken) String resetToken,
     @Field(ApiKeys.password) String password,
     @Field(ApiKeys.passwordConfirm) String passwordConfirm,
   );
+
+  @PATCH(ApiConstants.updateProfile)
+  Future<ProfileResponse> updateProfile(
+    @Field(ApiKeys.firstName) String? firstName,
+    @Field(ApiKeys.lastName) String? lastName,
+    @Field(ApiKeys.phoneNumber) String? phoneNumber,
+    @Field(ApiKeys.governorate) String? governorate,
+    @Field(ApiKeys.wilaya) String? wilaya,
+  );
+
+  @MultiPart()
+  @PATCH(ApiConstants.updateProfileAvatar)
+  Future<ProfileResponse> updateProfileAvatar(
+      @Part(name: ApiKeys.avatar) MultipartFile imageFile,
+      );
 
   @GET(ApiConstants.profile)
   Future<ProfileResponse> getProfile();
@@ -87,11 +103,6 @@ abstract class AppApi {
   @GET(ApiConstants.getAllVendor)
   Future<GetVendorsPublicResponse> getPublicVendors();
 
-  @PATCH("${ApiConstants.editProfile}{id}")
-  Future<ProfileResponse> editProfile(
-    @Path(ApiKeys.id) int id,
-    @Body() Map<String, dynamic> data,
-  );
 
   @GET(ApiConstants.getAllFavoriteOffers)
   Future<FavoriteOffersResponse> getAllFavoriteOffers();
@@ -101,12 +112,10 @@ abstract class AppApi {
     @Path(ApiKeys.id) int offerId,
   );
 
-
   @GET(ApiConstants.getAllOffers)
   Future<GetOffersResponse> getAllOffers(
     @Query(ApiKeys.page) int? page,
     @Query(ApiKeys.take) int? take,
     @Query(ApiKeys.query) String? query,
   );
-
 }
