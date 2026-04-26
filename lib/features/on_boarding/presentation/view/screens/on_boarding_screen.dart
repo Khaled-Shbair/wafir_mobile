@@ -26,21 +26,18 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       title: ManagerStrings.titleOnBoardingOne,
       subTitle: ManagerStrings.subTitleOnBoardingOne,
       topText: ManagerStrings.next,
-      bottomText: ManagerStrings.skip,
     ),
     (
       image: ManagerAssets.onBoardingImageTwo,
       title: ManagerStrings.titleOnBoardingTwo,
       subTitle: ManagerStrings.subTitleOnBoardingTwo,
       topText: ManagerStrings.next,
-      bottomText: ManagerStrings.previous,
     ),
     (
       image: ManagerAssets.onBoardingImageThree,
       title: ManagerStrings.titleOnBoardingThree,
       subTitle: ManagerStrings.subTitleOnBoardingThree,
-      topText: ManagerStrings.login,
-      bottomText: ManagerStrings.loginAsGuest,
+      topText: ManagerStrings.browseOffers,
     ),
   ];
 
@@ -56,7 +53,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     if (isLast) {
       _viewOnBoarding();
       Navigator.pushNamedAndRemoveUntil(
-          context, Routes.homeScreen, (route) => false);
+          context, Routes.mainScreen, (route) => false);
     } else {
       setState(() {
         _currentIndex++;
