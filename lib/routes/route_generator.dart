@@ -28,11 +28,14 @@ import 'package:wafir_mobile/features/profile/presentation/controller/edit_profi
 import 'package:wafir_mobile/features/profile/presentation/view/screens/edit_profile_screen.dart';
 import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.dart';
 import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendor_details_screen.dart';
+import 'package:wafir_mobile/features/splash/presentation/view/screens/splash_screen.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings setting) {
     switch (setting.name) {
+      case Routes.splashScreen:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
       // onBoarding routes
       case Routes.onBoardingScreen:
         return MaterialPageRoute(builder: (_) => const OnBoardingScreen());
