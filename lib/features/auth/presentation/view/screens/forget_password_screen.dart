@@ -22,10 +22,11 @@ class ForgetPasswordScreen extends StatelessWidget with CustomToastMassage {
     return BlocListener<ForgetPasswordBloc, ForgetPasswordState>(
       listener: (context, state) {
         if (state is ForgetPasswordLoading) {
-          context.customLoading();
+          showCustomLoading(context);
         } else if (state is ForgetPasswordSuccess) {
-          context.hideLoading();
-          Navigator.of(context).pushReplacementNamed(
+          showCustomLoading(context);
+          Navigator.pushNamed(
+            context,
             Routes.verifyOtpScreen,
             arguments: [
               state.email,
@@ -33,7 +34,7 @@ class ForgetPasswordScreen extends StatelessWidget with CustomToastMassage {
             ],
           );
         } else if (state is ForgetPasswordFailure) {
-          context.hideLoading();
+          Navigator.of(context, rootNavigator: true).pop();
           showToast(state.message);
         }
       },

@@ -13,6 +13,8 @@ LoginResponse _$LoginResponseFromJson(Map<String, dynamic> json) =>
       timestamp: json['timestamp'] as String?,
       path: json['path'] as String?,
       message: json['message'] as String?,
+      token: json['token'] as String?,
+      errorCode: json['error_code'] as String?,
       data: json['data'] == null
           ? null
           : LoginDataResponse.fromJson(json['data'] as Map<String, dynamic>),
@@ -25,5 +27,7 @@ Map<String, dynamic> _$LoginResponseToJson(LoginResponse instance) =>
       'timestamp': instance.timestamp,
       'path': instance.path,
       'message': instance.message,
+      'token': instance.token,
+      'error_code': instance.errorCode,
       'data': instance.data,
     };

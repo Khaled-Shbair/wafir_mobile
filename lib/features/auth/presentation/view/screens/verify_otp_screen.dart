@@ -22,12 +22,15 @@ class VerifyOtpScreen extends StatelessWidget with CustomToastMassage {
     return BlocListener<VerifyOtpBloc, VerifyOtpState>(
       listener: (context, state) {
         if (state is VerifyOtpLoading) {
-          context.customLoading();
+          showCustomLoading(context);
         } else if (state is VerifyOtpSuccess) {
-          context.hideLoading();
-          Navigator.of(context).pushReplacementNamed(nextScreenRoute);
+          Navigator.of(context, rootNavigator: true).pop();
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            nextScreenRoute,
+            (route) => false,
+          );
         } else if (state is VerifyOtpFailure) {
-          context.hideLoading();
+          Navigator.of(context, rootNavigator: true).pop();
           showToast(state.message);
         }
       },

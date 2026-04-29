@@ -14,6 +14,9 @@ class DioFactory {
     Dio dio = Dio();
 
     dio.options = BaseOptions(
+      validateStatus: (status) {
+        return status != null && status < 500;
+      },
       baseUrl: ApiConstants.baseUrl,
       headers: _headers,
       sendTimeout: const Duration(seconds: ApiConstants.sendTimeoutSeconds),

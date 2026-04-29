@@ -57,7 +57,7 @@ Future<bool?> showConfirmationDialog(
                     colorText: ManagerColors.blackColor,
                     borderColor: const Color(0xFFE2E8EA),
                     onPressed: () {
-                      Navigator.of(dialogContext).pop(false);
+                      Navigator.of(context).pop(false);
                     },
                   ),
                 ),
@@ -67,7 +67,10 @@ Future<bool?> showConfirmationDialog(
                     text: confirmText ?? ManagerStrings.confirm,
                     height: ManagerHeights.h45,
                     colorText: ManagerColors.whiteColor,
-                    onPressed: confirmButtonOnPressed(),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      confirmButtonOnPressed();
+                    },
                   ),
                 ),
               ],

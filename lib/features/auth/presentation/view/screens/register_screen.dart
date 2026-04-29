@@ -11,6 +11,7 @@ import 'package:wafir_mobile/core/widgets/custom_loading.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
 import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
+import 'package:wafir_mobile/core/widgets/custom_web_view_bottom_sheet.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/register_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
@@ -35,9 +36,11 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
       body: BlocListener<RegisterBloc, RegisterState>(
         listener: (_, state) {
           if (state is RegisterLoading) {
-            context.customLoading();
+            showCustomLoading(context);
           } else if (state is RegisterSuccessfully) {
-            context.hideLoading();
+            // Close loading dialog using root navigator
+            Navigator.of(context, rootNavigator: true).pop();
+            // Navigate using root navigator to escape dialog context
             Navigator.pushReplacementNamed(
               context,
               Routes.verifyOtpScreen,
@@ -47,7 +50,8 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
               ],
             );
           } else if (state is RegisterFailure) {
-            context.hideLoading();
+            // Close loading dialog using root navigator
+            Navigator.of(context, rootNavigator: true).pop();
             showToast(state.errorMessage);
           }
         },
@@ -216,6 +220,14 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
                         children: [
                           TextSpan(
                             text: ' ${ManagerStrings.privacyPolicy} ',
+                            recognizer: controller.privacyPolicy
+                              ..onTap = () {
+                                customWebViewBottomSheet(
+                                  context,
+                                  ManagerStrings.privacyPolicy,
+                                  AppConstants.privacyPolicy,
+                                );
+                              },
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge
@@ -226,6 +238,14 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
                           TextSpan(text: ' ${ManagerStrings.and}'),
                           TextSpan(
                             text: ManagerStrings.termsOfUse,
+                            recognizer: controller.termsOfUse
+                              ..onTap = () {
+                                customWebViewBottomSheet(
+                                  context,
+                                  ManagerStrings.termsOfUse,
+                                  AppConstants.termsOfUse,
+                                );
+                              },
                             style: Theme.of(context)
                                 .textTheme
                                 .labelLarge

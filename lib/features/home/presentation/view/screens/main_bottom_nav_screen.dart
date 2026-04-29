@@ -79,10 +79,16 @@ class MainBottomNavScreen extends StatelessWidget {
                     label: ManagerStrings.favorite,
                     active: state.selectedIndex == 2,
                     onTap: () {
-                      context
-                          .read<FavoriteBloc>()
-                          .add(GetFavoriteOffers(message: '', offerId: 1));
-                      context.read<NavigationCubit>().goToFavorites();
+                      if (instance<SharedPreferencesController>()
+                          .getString(SharedPreferencesKeys.token)
+                          .isNotEmpty) {
+                        context
+                            .read<FavoriteBloc>()
+                            .add(GetFavoriteOffers(message: '', offerId: 1));
+                        context.read<NavigationCubit>().goToFavorites();
+                      } else {
+                        loginPop(context);
+                      }
                     },
                   ),
                   CustomBottomNavItem(

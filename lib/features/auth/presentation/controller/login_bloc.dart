@@ -1,7 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
+import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/login_by_email_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/login_by_google_use_case.dart';
 
@@ -10,7 +12,8 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc(this._loginByGoogleUseCase, this._loginByEmailUseCase)
+  LoginBloc(
+      this._loginByGoogleUseCase, this._loginByEmailUseCase, this._sharedPref)
       : super(LoginInitial()) {
     on<LoginProcess>(_loginProcess);
     on<LoginByGoogle>(_loginByGoogle);
@@ -25,6 +28,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  final SharedPreferencesController _sharedPref;
 
   void _loginProcess(LoginProcess event, Emitter emit) async {
     if (formKey.currentState!.validate()) {
@@ -37,6 +41,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       )
         ..fold(
           (f) {
+            print('EEEEEE: ${f.token}');
+
+            _sharedPref.setData(SharedPreferencesKeys.token,
+                f.token);
             emit(LoginFailure(f.message));
           },
           (r) {

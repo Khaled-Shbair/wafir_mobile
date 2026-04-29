@@ -73,7 +73,7 @@ class _OffersScreenState extends State<OffersScreen> {
               controller: controller.search,
               focusNode: _searchFocusNode,
               onFieldSubmitted: (v) {
-                if (v != null) {
+                if (v != null || v!.isNotEmpty) {
                   FocusManager.instance.primaryFocus?.unfocus();
                   context.read<OffersBloc>().add(GetAllOffersEvent());
                 }

@@ -1,9 +1,9 @@
 class ResetPasswordRequest {
-  final String resetToken;
-  final String password;
+  final String currentPassword;
+  final String newPassword;
 
   ResetPasswordRequest({
-    required this.resetToken,
-    required this.password,
+    required this.currentPassword,
+    required this.newPassword,
   });
 }

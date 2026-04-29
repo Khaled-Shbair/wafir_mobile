@@ -50,3 +50,4 @@ final class LoginFailure extends LoginState {
   const LoginFailure(this.errorMessage,
       {super.rememberMe, super.passwordVisible});
 }
+

@@ -17,6 +17,10 @@ class LoginResponse {
   final String? path;
   @JsonKey(name: ApiKeys.message)
   final String? message;
+  @JsonKey(name: ApiKeys.token)
+  final String? token;
+  @JsonKey(name: 'error_code')
+  final String? errorCode;
   @JsonKey(name: ApiKeys.data)
   final LoginDataResponse? data;
 
@@ -26,6 +30,8 @@ class LoginResponse {
     this.timestamp,
     this.path,
     this.message,
+    this.token,
+    this.errorCode,
     this.data,
   });
 

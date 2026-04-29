@@ -235,15 +235,16 @@ class _AppApi implements AppApi {
     String password,
     String passwordConfirm,
   ) async {
+
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = {'password': password, 'password_confirm': passwordConfirm};
+    final _data = {'current_password': password, 'new_password': passwordConfirm};
     final _options = _setStreamType<ResetPasswordResponse>(
       Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/user/me/password',
+            'https://discount-platform.onrender.com/api/users/me/password',
             queryParameters: queryParameters,
             data: _data,
           )

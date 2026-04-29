@@ -39,8 +39,8 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   final SharedPreferencesController _sharedPreferencesController;
   final GoogleAuthService _googleAuthService;
 
-  RemoteAuthDataSourceImpl(
-      this._appApi, this._sharedPreferencesController, this._googleAuthService);
+  RemoteAuthDataSourceImpl(this._appApi, this._sharedPreferencesController,
+      this._googleAuthService);
 
   @override
   Future<LoginResponse> loginByEmail(LoginByEmailRequest request) async {
@@ -124,9 +124,20 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       ApiKeys.registrationType,
     );
     if (response.success == true) {
-      _sharedPreferencesController.setData(
-          SharedPreferencesKeys.token, response.data?.token);
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.email,
+        response.data?.user?.email,
+      );
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.token,
+        response.data?.token ?? '',
+      );
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.name,
+        '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
+      );
     }
+
     return response;
   }
 
@@ -139,8 +150,8 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   Future<ResetPasswordResponse> resetPassword(
       ResetPasswordRequest request) async {
     return await _appApi.resetPassword(
-      request.resetToken,
-      request.password,
+      request.currentPassword,
+      request.newPassword,
     );
   }
 }

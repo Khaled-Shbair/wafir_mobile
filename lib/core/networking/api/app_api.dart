@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
@@ -70,9 +68,10 @@ abstract class AppApi {
 
   @PATCH(ApiConstants.resetPassword)
   Future<ResetPasswordResponse> resetPassword(
-    @Field(ApiKeys.password) String password,
-    @Field(ApiKeys.passwordConfirm) String passwordConfirm,
+    @Field(ApiKeys.currentPassword) String currentPassword,
+    @Field(ApiKeys.newPassword) String newPassword,
   );
+
 
   @PATCH(ApiConstants.updateProfile)
   Future<ProfileResponse> updateProfile(
@@ -86,8 +85,8 @@ abstract class AppApi {
   @MultiPart()
   @PATCH(ApiConstants.updateProfileAvatar)
   Future<ProfileResponse> updateProfileAvatar(
-      @Part(name: ApiKeys.avatar) MultipartFile imageFile,
-      );
+    @Part(name: ApiKeys.avatar) MultipartFile imageFile,
+  );
 
   @GET(ApiConstants.profile)
   Future<ProfileResponse> getProfile();
@@ -102,7 +101,6 @@ abstract class AppApi {
 
   @GET(ApiConstants.getAllVendor)
   Future<GetVendorsPublicResponse> getPublicVendors();
-
 
   @GET(ApiConstants.getAllFavoriteOffers)
   Future<FavoriteOffersResponse> getAllFavoriteOffers();

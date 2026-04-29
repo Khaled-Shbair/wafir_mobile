@@ -81,7 +81,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         selectedImage = null;
         emit(
           state.copyWith(
-            status: EditProfileStatus.ready,
+            status: EditProfileStatus.success,
             selectedGovernorate: r.user.governorate,
             selectedWilaya: r.user.wilaya,
             message: null,
@@ -127,7 +127,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       );
       emit(
         state.copyWith(
-          status: EditProfileStatus.ready,
+          status: EditProfileStatus.success,
           message: null,
           isProfileLoaded: true,
         ),

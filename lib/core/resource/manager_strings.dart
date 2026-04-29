@@ -14,6 +14,8 @@ class ManagerStrings {
   static String copy = 'copy'.tr();
   static String description = 'description'.tr();
   static String login = 'login'.tr();
+  static String favourite = 'favourite'.tr();
+  static String browseOffers = 'browse_offers'.tr();
   static String currentPrice = 'current_price'.tr();
   static String couponCode = 'coupon_code'.tr();
   static String phoneNumberMustBeNineDigitsLong =

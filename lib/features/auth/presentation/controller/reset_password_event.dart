@@ -8,8 +8,7 @@ class ToggleNewPasswordVisibility extends ResetPasswordEvent {}
 
 class ToggleConfirmPasswordVisibility extends ResetPasswordEvent {}
 
-class ResetPasswordProcess extends ResetPasswordEvent {
-  final String resetToken;
 
-  ResetPasswordProcess({required this.resetToken});
+class ResetPasswordProcess extends ResetPasswordEvent {
+
 }

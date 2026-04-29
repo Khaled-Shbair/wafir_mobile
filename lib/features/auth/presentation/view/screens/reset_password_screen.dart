@@ -22,12 +22,14 @@ class ResetPasswordScreen extends StatelessWidget with CustomToastMassage {
     return BlocListener<ResetPasswordBloc, ResetPasswordState>(
       listener: (context, state) {
         if (state is ResetPasswordLoading) {
-          context.customLoading();
+          showCustomLoading(context);
         } else if (state is ResetPasswordSuccess) {
-          context.hideLoading();
-          Navigator.of(context).pop();
+          Navigator.of(context, rootNavigator: true).pop();
+          showToast(state.message, false);
+          Navigator.of(context, rootNavigator: true).pop();
+
         } else if (state is ResetPasswordFailure) {
-          context.hideLoading();
+          Navigator.of(context, rootNavigator: true).pop();
           showToast(state.message);
         }
       },
@@ -121,7 +123,7 @@ class ResetPasswordScreen extends StatelessWidget with CustomToastMassage {
                 text: ManagerStrings.changePasswordButton,
                 onPressed: () {
                   FocusManager.instance.primaryFocus?.unfocus();
-                  controller.add(ResetPasswordProcess(resetToken: token));
+                  controller.add(ResetPasswordProcess());
                 },
               ),
             ],

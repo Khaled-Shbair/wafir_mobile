@@ -6,12 +6,12 @@ import 'package:wafir_mobile/features/auth/domain/model/reset_password_model.dar
 import 'package:wafir_mobile/features/auth/domain/repository/auth_repository.dart';
 
 class ResetPasswordUseCaseInput {
-  final String resetToken;
-  final String password;
+  final String currentPassword;
+  final String newPassword;
 
   ResetPasswordUseCaseInput({
-    required this.password,
-    required this.resetToken,
+    required this.currentPassword,
+    required this.newPassword,
   });
 }
 
@@ -26,8 +26,8 @@ class ResetPasswordUseCase
       ResetPasswordUseCaseInput input) async {
     return await _repository.resetPassword(
       ResetPasswordRequest(
-        resetToken: input.resetToken,
-        password: input.password,
+        currentPassword    : input.currentPassword,
+      newPassword: input.newPassword,
       ),
     );
   }

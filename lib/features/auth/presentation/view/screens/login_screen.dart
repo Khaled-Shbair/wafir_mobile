@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
+import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_assets.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
+import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/core/validator/validator.dart';
 import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_loading.dart';
@@ -23,25 +26,31 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
     var controller = context.read<LoginBloc>();
     return BlocListener<LoginBloc, LoginState>(
       listener: (_, state) {
+
         if (state is LoginLoading) {
-          context.customLoading();
+          showCustomLoading(context);
         } else if (state is LoginSuccessfully) {
-          context.hideLoading();
+          // Close loading dialog using root navigator
+          Navigator.of(context, rootNavigator: true).pop();
+          // Navigate using root navigator to escape dialog context
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainScreen, (route) => false);
         } else if (state is LoginFailure) {
-          context.hideLoading();
-          if (state.errorMessage.contains('غير مفعل')) {
-            customActivationMessenger(context);
+          // Close loading dialog using root navigator
+          Navigator.of(context, rootNavigator: true).pop();
+          if (state.errorMessage.contains('تحقق')) {
+            customActivationMessenger(context, controller.email.text);
           } else {
             showToast(state.errorMessage);
           }
         }
+        print('Token :${instance<SharedPreferencesController>()
+            .getString(SharedPreferencesKeys.token)}');
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.grey.shade200,
-        body: Container(
+        body: SafeArea(child: Container(
           height: ManagerHeights.infinity,
           padding: EdgeInsetsDirectional.only(
             top: ManagerHeights.h30,
@@ -121,7 +130,7 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                           builder: (context, state) {
                             return Checkbox(
                               materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
+                              MaterialTapTargetSize.shrinkWrap,
                               splashRadius: 0,
                               value: state.rememberMe,
                               onChanged: (value) => controller
@@ -166,8 +175,8 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
                     Text(
                       ManagerStrings.orLoginBy,
                       style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                            fontSize: ManagerFontsSizes.f14,
-                          ),
+                        fontSize: ManagerFontsSizes.f14,
+                      ),
                     ),
                     Expanded(child: Divider(indent: ManagerWidths.w5)),
                   ],
@@ -216,8 +225,9 @@ class LoginScreen extends StatelessWidget with CustomToastMassage {
               ],
             ),
           ),
-        ),
+        ),),
       ),
     );
   }
 }
+

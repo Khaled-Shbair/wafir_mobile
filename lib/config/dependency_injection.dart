@@ -12,6 +12,7 @@ import 'package:wafir_mobile/features/auth/domain/use_case/login_by_google_use_c
 import 'package:wafir_mobile/features/auth/domain/use_case/register_by_email_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/register_by_google_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/reset_password_use_case.dart';
+import 'package:wafir_mobile/features/auth/domain/use_case/resend_otp_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/verify_otp_use_case.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/reset_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/register_bloc.dart';
@@ -143,6 +144,7 @@ void initLogin() async {
       () => LoginBloc(
         instance<LoginByGoogleUseCase>(),
         instance<LoginByEmailUseCase>(),
+        instance<SharedPreferencesController>(),
       ),
     );
   }
@@ -219,9 +221,24 @@ void disposeForgetPassword() async {
 }
 
 void initResetPassword() async {
+  _initAuth();
+  if (!GetIt.I.isRegistered<ResetPasswordUseCase>()) {
+    instance
+        .registerLazySingleton<ResetPasswordUseCase>(() => ResetPasswordUseCase(
+              instance<AuthRepository>(),
+            ));
+  }
   if (!GetIt.I.isRegistered<ResetPasswordBloc>()) {
     instance
         .registerLazySingleton<ResetPasswordBloc>(() => ResetPasswordBloc());
+  }
+}
+
+void initResetOtp() async {
+  if (!GetIt.I.isRegistered<ResendOtpUseCase>()) {
+    instance.registerLazySingleton<ResendOtpUseCase>(
+      () => ResendOtpUseCase(instance<AuthRepository>()),
+    );
   }
 }
 
@@ -240,9 +257,16 @@ void initVerifyOtp() async {
       () => VerifyOtpUseCase(instance<AuthRepository>()),
     );
   }
+  if (!GetIt.I.isRegistered<ResendOtpUseCase>()) {
+    instance.registerLazySingleton<ResendOtpUseCase>(
+      () => ResendOtpUseCase(instance<AuthRepository>()),
+    );
+  }
   if (!GetIt.I.isRegistered<VerifyOtpBloc>()) {
     instance.registerLazySingleton<VerifyOtpBloc>(
-      () => VerifyOtpBloc(instance<VerifyOtpUseCase>()),
+      () => VerifyOtpBloc(
+        instance<VerifyOtpUseCase>(),
+      ),
     );
   }
 }
@@ -250,6 +274,9 @@ void initVerifyOtp() async {
 void disposeVerifyOtp() async {
   if (GetIt.I.isRegistered<VerifyOtpUseCase>()) {
     instance.unregister<VerifyOtpUseCase>();
+  }
+  if (GetIt.I.isRegistered<ResendOtpUseCase>()) {
+    instance.unregister<ResendOtpUseCase>();
   }
   if (GetIt.I.isRegistered<VerifyOtpBloc>()) {
     instance.unregister<VerifyOtpBloc>();
@@ -262,7 +289,10 @@ void disposeVerifyOtp() async {
 void initProfile() async {
   if (!GetIt.I.isRegistered<RemoteProfileDataSource>()) {
     instance.registerLazySingleton<RemoteProfileDataSource>(
-      () => RemoteProfileDataSourceImpl(instance<AppApi>()),
+      () => RemoteProfileDataSourceImpl(
+        instance<AppApi>(),
+      instance<SharedPreferencesController>(),
+      ),
     );
   }
 
@@ -547,6 +577,7 @@ void disposeFavorite() async {
     instance.unregister<FavoriteBloc>();
   }
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 // Navigation (Bottom Tabs)
 void initNavigation() {

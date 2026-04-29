@@ -29,7 +29,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final TextEditingController lastName = TextEditingController();
   final TextEditingController phoneNumber = TextEditingController();
   final TapGestureRecognizer login = TapGestureRecognizer();
-
+  final TapGestureRecognizer termsOfUse = TapGestureRecognizer();
+  final TapGestureRecognizer privacyPolicy = TapGestureRecognizer();
   final formKey = GlobalKey<FormState>();
 
   void _registerByEmailProcess(

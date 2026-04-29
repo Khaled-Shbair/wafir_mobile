@@ -8,7 +8,7 @@ class ApiConstants {
   static const String registerByGoogle = '${baseUrl}auth/register-by-google';
   static const String logout = '${baseUrl}auth/logout';
   static const String resendOtp = '${baseUrl}auth/resend-otp';
-  static const String resetPassword = '${baseUrl}user/me/password';
+  static const String resetPassword = '${baseUrl}users/me/password';
   static const String verifyOtp = '${baseUrl}auth/verify-otp';
   static const String updateProfile = '${baseUrl}users/me';
   static const String updateProfileAvatar = '${baseUrl}users/me/avatar';
@@ -62,6 +62,8 @@ class ApiKeys {
   static const String createdAt = 'created_at';
   static const String updatedAt = 'updated_at';
   static const String password = 'password';
+  static const String currentPassword = 'current_password';
+  static const String newPassword = 'new_password';
   static const String passwordConfirm = 'password_confirm';
   static const String requiresVerification = 'requires_verification';
   static const String otp = 'otp';

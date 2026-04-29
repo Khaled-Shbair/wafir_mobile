@@ -36,7 +36,17 @@ class AuthRepositoryImpl implements AuthRepository {
     if (await _networkInfo.isConnected) {
       try {
         final response = await _dataSource.loginByEmail(request);
-        return Right(response.toDomain());
+        if (response.success == true) {
+          return Right(response.toDomain());
+        } else {
+          return Left(
+            Failure(
+              token: response.token,
+              message: response.message ?? 'Login failed',
+              code: response.statusCode ?? ResponseCode.BAD_REQUEST.value,
+            ),
+          );
+        }
       } catch (e) {
         return Left(ErrorHandler.handle(e).failure);
       }
@@ -134,7 +144,16 @@ class AuthRepositoryImpl implements AuthRepository {
     if (await _networkInfo.isConnected) {
       try {
         final response = await _dataSource.resetPassword(request);
-        return Right(response.toDomain());
+        if (response.success == true) {
+          return Right(response.toDomain());
+        } else {
+          return Left(
+            Failure(
+              message: response.message ?? 'Reset password failed',
+              code: response.statusCode ?? ResponseCode.BAD_REQUEST.value,
+            ),
+          );
+        }
       } catch (e) {
         return Left(ErrorHandler.handle(e).failure);
       }

@@ -90,11 +90,6 @@ class RouteGenerator {
             child: const ForgetPasswordScreen(),
           ),
         );
-      // Sectors routes
-
-      // Offers routes
-
-      //Home routes
       case Routes.homeScreen:
         initHome();
         return MaterialPageRoute(
@@ -139,7 +134,8 @@ class RouteGenerator {
         initEditProfile();
         return MaterialPageRoute(
           builder: (_) => BlocProvider<EditProfileBloc>(
-            create: (_) => instance<EditProfileBloc>()..add(LoadEditProfileData()),
+            create: (_) =>
+                instance<EditProfileBloc>()..add(LoadEditProfileData()),
             child: const EditProfileScreen(),
           ),
         );

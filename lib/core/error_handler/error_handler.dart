@@ -6,10 +6,12 @@ import 'package:wafir_mobile/core/resource/manager_strings.dart';
 class Failure {
   int code;
   String message;
+  String? token;
 
   Failure({
     required this.code,
     required this.message,
+    this.token,
   });
 }
 

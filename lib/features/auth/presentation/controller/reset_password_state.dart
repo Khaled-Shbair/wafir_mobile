@@ -38,7 +38,9 @@ sealed class ResetPasswordState {
       );
     }
     if (this is ResetPasswordSuccess) {
+      final String message = (this as ResetPasswordSuccess).message;
       return ResetPasswordSuccess(
+        message: message,
         confirmPasswordObscured: newConfirmPasswordObscured,
         currentPasswordObscured: newCurrentPasswordObscured,
         newPasswordObscured: newsPasswordObscured,
@@ -74,7 +76,10 @@ class ResetPasswordLoading extends ResetPasswordState {
 }
 
 class ResetPasswordSuccess extends ResetPasswordState {
+  final String message;
+
   const ResetPasswordSuccess({
+    required this.message,
     super.currentPasswordObscured,
     super.newPasswordObscured,
     super.confirmPasswordObscured,

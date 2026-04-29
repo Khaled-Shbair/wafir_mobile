@@ -39,20 +39,21 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
 
   Future<void> _resetPasswordProcess(
       ResetPasswordProcess event, Emitter<ResetPasswordState> emit) async {
+    emit(ResetPasswordLoading());
     if (formKey.currentState!.validate()) {
       (
         await instance<ResetPasswordUseCase>().execute(
           ResetPasswordUseCaseInput(
-            password: newPassword.text,
-            resetToken: event.resetToken,
+            currentPassword: currentPassword.text,
+            newPassword: newPassword.text,
           ),
-         )
+        )
           ..fold(
             (l) {
               emit(ResetPasswordFailure(message: l.message));
             },
             (r) {
-              emit(ResetPasswordSuccess());
+              emit(ResetPasswordSuccess(message: r.message));
             },
           ),
       );
