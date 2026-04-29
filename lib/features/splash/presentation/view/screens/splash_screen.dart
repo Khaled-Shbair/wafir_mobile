@@ -12,20 +12,18 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  Timer? _timer;
-
   @override
   void initState() {
     super.initState();
-    _timer = Timer(const Duration(seconds: 3000000), () {
-      if (!mounted) return;
-      Navigator.of(context).pushReplacementNamed(Routes.mainScreen);
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        Navigator.of(context).pushReplacementNamed(Routes.mainScreen);
+      }
     });
   }
 
   @override
   void dispose() {
-    _timer?.cancel();
     super.dispose();
   }
 
