@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
@@ -23,10 +22,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   final LoginByEmailUseCase _loginByEmailUseCase;
   final LoginByGoogleUseCase _loginByGoogleUseCase;
-  final TapGestureRecognizer createAccount = TapGestureRecognizer();
 
-  final TextEditingController email = TextEditingController();
-  final TextEditingController password = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final SharedPreferencesController _sharedPref;
 
@@ -35,19 +31,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       emit(LoginLoading());
       (await _loginByEmailUseCase.execute(
         LoginByEmailUseCaseInput(
-          email: email.text,
-          password: password.text,
+          email: event.email,
+          password: event.password,
         ),
       )
         ..fold(
           (f) {
-            print('EEEEEE: ${f.token}');
-
-            _sharedPref.setData(SharedPreferencesKeys.token,
-                f.token);
+            _sharedPref.setData(SharedPreferencesKeys.token, f.token);
             emit(LoginFailure(f.message));
           },
           (r) {
+            if (state.rememberMe) {
+              _sharedPref.setData(
+                  SharedPreferencesKeys.rememberMy, state.rememberMe);
+            }
             emit(LoginSuccessfully());
           },
         ));
@@ -62,6 +59,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           emit(LoginFailure(f.message));
         },
         (r) {
+          if (state.rememberMe) {
+            _sharedPref.setData(
+                SharedPreferencesKeys.rememberMy, state.rememberMe);
+          }
           emit(LoginSuccessfully());
         },
       ));
@@ -77,9 +78,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   @override
   Future<void> close() {
-    email.clear();
-    password.dispose();
-    createAccount.dispose();
     disposeLogin();
     return super.close();
   }
