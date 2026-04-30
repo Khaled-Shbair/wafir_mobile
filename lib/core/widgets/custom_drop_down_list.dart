@@ -1,5 +1,6 @@
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 
 class CustomDropDownList extends StatelessWidget {
@@ -26,7 +27,6 @@ class CustomDropDownList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FocusManager.instance.primaryFocus?.unfocus();
     ScaffoldMessenger.of(context).clearSnackBars();
     return DropdownSearch<String>(
       validator: validator,
@@ -41,17 +41,18 @@ class CustomDropDownList extends StatelessWidget {
         ScaffoldMessenger.of(context).clearSnackBars();
         onChangedFunction(selectedReason);
       },
+
       suffixProps: DropdownSuffixProps(
         dropdownButtonProps: DropdownButtonProps(
           splashColor: Theme.of(context).disabledColor,
           padding: EdgeInsetsDirectional.zero,
           iconClosed: Icon(
             Icons.keyboard_arrow_down_sharp,
-            color: Theme.of(context).colorScheme.primary,
+            color: ManagerColors.primaryColor,
           ),
           iconOpened: Icon(
             Icons.keyboard_arrow_up_sharp,
-            color: Theme.of(context).colorScheme.primary,
+            color: ManagerColors.primaryColor,
           ),
           iconSize: ManagerIconsSizes.i24,
         ),
@@ -89,19 +90,28 @@ class CustomDropDownList extends StatelessWidget {
         );
       },
       decoratorProps: DropDownDecoratorProps(
-        textAlign: TextAlign.center,
+        textAlign: TextAlign.start,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          disabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey.shade400),
-            borderRadius: BorderRadius.circular(ManagerRadius.r10),
-          ),
+          enabledBorder:
+              Theme.of(context).inputDecorationTheme.enabledBorder?.copyWith(
+                    borderSide: BorderSide(
+                      width: 1.2,
+                      color:  selectedItem != null
+                          ? ManagerColors.primaryColor
+                          : ManagerColors.unFocusBorderColor,
+                    ),
+                  ),
           labelText: labelText,
+
           isDense: true,
           hintText: hintText,
-          hintStyle:
-              textStyle ?? Theme.of(context).inputDecorationTheme.hintStyle,
+          hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
+                color:  selectedItem != null
+                    ? ManagerColors.primaryColor
+                    : ManagerColors.unFocusIconColor,
+              ),
           labelStyle:
               textStyle ?? Theme.of(context).inputDecorationTheme.labelStyle,
         ),
