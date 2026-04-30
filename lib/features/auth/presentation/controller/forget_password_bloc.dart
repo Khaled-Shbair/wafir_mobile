@@ -16,19 +16,18 @@ class ForgetPasswordBloc
 
   final ForgotPasswordUseCase _forgotPasswordUseCase;
   final formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
 
   void _forgotPasswordProcess(ForgotPasswordProcess event, Emitter emit) async {
     if (formKey.currentState!.validate()) {
       emit(ForgetPasswordLoading());
       (await _forgotPasswordUseCase
-              .execute(ForgotPasswordUseCaseInput(email: emailController.text)))
+              .execute(ForgotPasswordUseCaseInput(email: event.email)))
           .fold(
         (l) {
           emit(ForgetPasswordFailure(l.message));
         },
         (r) {
-          emit(ForgetPasswordSuccess(emailController.text));
+          emit(ForgetPasswordSuccess(event.email));
         },
       );
     }
@@ -36,7 +35,6 @@ class ForgetPasswordBloc
 
   @override
   Future<void> close() {
-    emailController.dispose();
     disposeForgetPassword();
     return super.close();
   }
