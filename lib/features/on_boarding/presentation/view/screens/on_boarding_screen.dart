@@ -37,24 +37,21 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       image: ManagerAssets.onBoardingImageThree,
       title: ManagerStrings.titleOnBoardingThree,
       subTitle: ManagerStrings.subTitleOnBoardingThree,
-      topText: ManagerStrings.browseOffers,
+      topText: ManagerStrings.next,
     ),
   ];
 
   int _currentIndex = 0;
 
-  void _viewOnBoarding() {
-    instance<SharedPreferencesController>()
-        .setData(SharedPreferencesKeys.viewOnBoarding, true);
-  }
-
   void _goNext() {
     final isLast = _currentIndex == _pages.length - 1;
     if (isLast) {
-      _viewOnBoarding();
-      Navigator.pushNamedAndRemoveUntil(
-          context, Routes.mainScreen, (route) => false);
+      //save view OnBoarding to not show it again
+      instance<SharedPreferencesController>()
+          .setData(SharedPreferencesKeys.viewOnBoarding, true);
+      Navigator.pushReplacementNamed(context, Routes.welcomeScreen);
     } else {
+
       setState(() {
         _currentIndex++;
       });
@@ -120,14 +117,14 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               width: ManagerWidths.infinity,
               decoration: BoxDecoration(
                 color: ManagerColors.primaryColor,
-                gradient: const LinearGradient(
-                  begin: Alignment.topRight,
-                  end: Alignment.bottomLeft,
-                  colors: [
-                    ManagerColors.primaryColor,
-                    ManagerColors.blackColor,
-                  ],
-                ),
+                // gradient: const LinearGradient(
+                //   begin: Alignment.topRight,
+                //   end: Alignment.bottomLeft,
+                //   colors: [
+                //     ManagerColors.primaryColor,
+                //     ManagerColors.blackColor,
+                //   ],
+                // ),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(ManagerRadius.r45),
                   topRight: Radius.circular(ManagerRadius.r45),
@@ -160,8 +157,8 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   SizedBox(
                     width: ManagerWidths.w180,
                     child: CustomButton(
-                      color: Theme.of(context).colorScheme.secondary,
-                      colorText: ManagerColors.primaryColor,
+                      color: ManagerColors.buttonColor,
+                      colorText: ManagerColors.whiteColor,
                       text: _pages[_currentIndex].topText,
                       onPressed: _goNext,
                     ),
