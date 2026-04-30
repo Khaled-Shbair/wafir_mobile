@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -6,6 +7,7 @@ class CustomTextField extends StatelessWidget {
     super.key,
     this.labelText,
     this.validator,
+    this.prefixIconData,
     required this.controller,
     this.prefixIcon,
     this.keyboardType,
@@ -20,8 +22,11 @@ class CustomTextField extends StatelessWidget {
     this.onFieldSubmitted,
     this.readOnly = false,
     this.focusNode,
+    this.isFocused = false,
     this.autofocus = false,
   });
+
+  final bool isFocused;
 
   final String? labelText;
   final String? hintText;
@@ -36,6 +41,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final TextInputAction? textInputAction;
   final String? prefixText;
+  final IconData? prefixIconData;
   final bool readOnly;
   final Widget? suffix;
   final FocusNode? focusNode;
@@ -56,27 +62,63 @@ class CustomTextField extends StatelessWidget {
       style: Theme.of(context).textTheme.labelLarge,
       obscureText: obscureText,
       decoration: InputDecoration(
-        contentPadding: EdgeInsetsDirectional.zero,
+        contentPadding: EdgeInsetsDirectional.only(
+          top: ManagerHeights.h18,
+          bottom: ManagerHeights.h18,
+        ),
         labelText: labelText,
+        filled: Theme.of(context).inputDecorationTheme.filled,
+        fillColor: Theme.of(context).inputDecorationTheme.fillColor,
         counter: SizedBox.shrink(),
         prefixIconColor: Theme.of(context).inputDecorationTheme.prefixIconColor,
-        prefixIcon: prefixIcon,
+        prefixIcon: prefixIcon ??
+            Icon(
+              prefixIconData,
+              size: ManagerIconsSizes.i24,
+              color: isFocused || controller.text.isNotEmpty
+                  ? ManagerColors.primaryColor
+                  : ManagerColors.unFocusIconColor,
+            ),
         hintText: hintText,
+        hintStyle: Theme.of(context).inputDecorationTheme.hintStyle?.copyWith(
+              color: isFocused || controller.text.isNotEmpty
+                  ? ManagerColors.primaryColor
+                  : ManagerColors.unFocusIconColor,
+            ),
+        border: Theme.of(context).inputDecorationTheme.border,
         iconColor: Theme.of(context).inputDecorationTheme.iconColor,
         suffixIcon: isPassword
             ? IconButton(
-                highlightColor: Theme.of(context).disabledColor,
                 onPressed: functionVisibilityPassword,
-                icon: Icon(obscureText
-                    ? Icons.visibility_outlined
-                    : Icons.visibility_off_outlined),
-                style: IconButton.styleFrom(iconSize: ManagerIconsSizes.i24),
+                icon: Icon(
+                  color: isFocused || controller.text.isNotEmpty
+                      ? ManagerColors.primaryColor
+                      : ManagerColors.unFocusIconColor,
+                  obscureText
+                      ? Icons.visibility_outlined
+                      : Icons.visibility_off_outlined,
+                ),
+                style: IconButton.styleFrom(
+                  iconSize: ManagerIconsSizes.i24,
+                  elevation: 0,
+                  focusColor: ManagerColors.transparentColor,
+                  highlightColor: ManagerColors.transparentColor,
+                  hoverColor: ManagerColors.transparentColor,
+                  shadowColor: ManagerColors.transparentColor,
+                ),
               )
             : suffix,
-
         labelStyle: Theme.of(context).inputDecorationTheme.labelStyle,
-        border: Theme.of(context).inputDecorationTheme.border,
         focusedBorder: Theme.of(context).inputDecorationTheme.focusedBorder,
+        enabledBorder:
+            Theme.of(context).inputDecorationTheme.enabledBorder?.copyWith(
+                    borderSide: BorderSide(
+                  width: 1.2,
+                  color: isFocused || controller.text.isNotEmpty
+                      ? ManagerColors.primaryColor
+                      : ManagerColors.unFocusBorderColor,
+                )),
+        errorBorder: Theme.of(context).inputDecorationTheme.errorBorder,
       ),
     );
   }
