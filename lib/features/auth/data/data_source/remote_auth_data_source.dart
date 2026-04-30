@@ -39,25 +39,29 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   final SharedPreferencesController _sharedPreferencesController;
   final GoogleAuthService _googleAuthService;
 
-  RemoteAuthDataSourceImpl(this._appApi, this._sharedPreferencesController,
-      this._googleAuthService);
+  RemoteAuthDataSourceImpl(
+      this._appApi, this._sharedPreferencesController, this._googleAuthService);
 
   @override
   Future<LoginResponse> loginByEmail(LoginByEmailRequest request) async {
     var response = await _appApi.loginByEmail(request.email, request.password);
     if (response.success == true) {
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.email,
-        response.data?.user?.email,
-      );
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.token,
-        response.data?.token ?? '',
-      );
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.name,
-        '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
-      );
+      if (_sharedPreferencesController
+              .getBool(SharedPreferencesKeys.rememberMy) ==
+          true) {
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.email,
+          response.data?.user?.email,
+        );
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.token,
+          response.data?.token ?? '',
+        );
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.name,
+          '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
+        );
+      }
     }
     return response;
   }
@@ -67,18 +71,22 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     String? token = await _googleAuthService.signInWithGoogle();
     var response = await _appApi.loginByGoogle(token ?? '');
     if (response.success == true) {
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.email,
-        response.data?.user?.email,
-      );
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.token,
-        response.data?.token ?? '',
-      );
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.name,
-        '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
-      );
+      if (_sharedPreferencesController
+              .getBool(SharedPreferencesKeys.rememberMy) ==
+          true) {
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.email,
+          response.data?.user?.email,
+        );
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.token,
+          response.data?.token ?? '',
+        );
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.name,
+          '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
+        );
+      }
     }
     return response;
   }
