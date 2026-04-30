@@ -1,7 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
+import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_assets.dart';
+import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -17,7 +20,12 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
-        Navigator.of(context).pushReplacementNamed(Routes.mainScreen);
+        if (instance<SharedPreferencesController>()
+            .getBool(SharedPreferencesKeys.viewOnBoarding)) {
+          Navigator.of(context).pushReplacementNamed(Routes.welcomeScreen);
+        } else {
+          Navigator.of(context).pushReplacementNamed(Routes.onBoardingScreen);
+        }
       }
     });
   }
