@@ -19,7 +19,7 @@ class CustomDotIndicator extends StatelessWidget {
       width: isActive ? ManagerWidths.w20 : ManagerWidths.w10,
       decoration: BoxDecoration(
         color:
-            isActive ? ManagerColors.primaryColor : ManagerColors.disabledColor,
+            isActive ? ManagerColors.buttonColor : ManagerColors.disabledColor,
         borderRadius: BorderRadius.circular(ManagerRadius.r20),
       ),
     );
