@@ -11,6 +11,7 @@ import 'package:wafir_mobile/features/auth/presentation/view/screens/verify_otp_
 import 'package:wafir_mobile/features/auth/presentation/view/screens/reset_password_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/register_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/register_screen.dart';
+import 'package:wafir_mobile/features/auth/presentation/view/screens/welcome_screen.dart';
 import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
@@ -43,6 +44,7 @@ class RouteGenerator {
       case Routes.loginScreen:
         initLogin();
         return MaterialPageRoute(
+          settings: RouteSettings(name: Routes.loginScreen),
           builder: (_) => BlocProvider<LoginBloc>(
             create: (context) => instance<LoginBloc>(),
             child: LoginScreen(),
@@ -61,6 +63,11 @@ class RouteGenerator {
         final offerData = setting.arguments as OfferItemModel;
         return MaterialPageRoute(
           builder: (_) => OfferDetailsScreen(offer: offerData),
+        );
+
+      case Routes.welcomeScreen:
+        return MaterialPageRoute(
+          builder: (_) => WelcomeScreen(),
         );
       case Routes.resetPasswordScreen:
         initResetPassword();
@@ -105,7 +112,6 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
-              // ..add(GetHomeData())
               BlocProvider<HomeBloc>(
                 create: (_) {
                   initHome();

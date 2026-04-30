@@ -8,6 +8,7 @@ class Routes {
   static const String registerScreen = '/register_screen';
   static const String resetPasswordScreen = '/change_password_screen';
   static const String verifyOtpScreen = '/verify_otp_screen';
+  static const String welcomeScreen = '/welcome_screen';
   static const String settingScreen = '/setting_screen';
   static const String editProfileScreen = '/edit_profile_screen';
   static const String favoriteScreen = '/favorite_screen';
