@@ -15,37 +15,17 @@ class VerifyOtpBloc extends Bloc<VerifyOtpEvent, VerifyOtpState> {
     on<VerifyOtpProcess>(_verifyOtpProcess);
   }
 
-  final TextEditingController c1 = TextEditingController();
-  final TextEditingController c2 = TextEditingController();
-  final TextEditingController c3 = TextEditingController();
-  final TextEditingController c4 = TextEditingController();
-  final TextEditingController c5 = TextEditingController();
-  final TextEditingController c6 = TextEditingController();
-  FocusNode f1 = FocusNode();
-  FocusNode f2 = FocusNode();
-  FocusNode f3 = FocusNode();
-  FocusNode f4 = FocusNode();
-  FocusNode f5 = FocusNode();
-  FocusNode f6 = FocusNode();
   final formKey = GlobalKey<FormState>();
   final VerifyOtpUseCase _useCase;
 
   void _verifyOtpProcess(VerifyOtpProcess event, Emitter emit) async {
-    if (event.email.isNotEmpty) {
+    if (event.otp.isNotEmpty) {
       emit(VerifyOtpLoading());
-      (await _useCase.execute(
-        VerifyOtpUseCaseInput(
-          email: event.email,
-          otp: c1.text + c2.text + c3.text + c4.text + c5.text + c6.text,
-        ),
-      )
+      (await _useCase
+          .execute(VerifyOtpUseCaseInput(email: event.email, otp: event.otp))
         ..fold(
-          (f) {
-            emit(VerifyOtpFailure(f.message));
-          },
-          (r) {
-            emit(VerifyOtpSuccess());
-          },
+          (f) => emit(VerifyOtpFailure(f.message)),
+          (r) => emit(VerifyOtpSuccess()),
         ));
     } else {
       emit(VerifyOtpFailure(ManagerStrings.pleaseEnterOtp));
@@ -55,18 +35,7 @@ class VerifyOtpBloc extends Bloc<VerifyOtpEvent, VerifyOtpState> {
   @override
   Future<void> close() {
     disposeVerifyOtp();
-    c1.dispose();
-    c2.dispose();
-    c3.dispose();
-    c4.dispose();
-    c5.dispose();
-    c6.dispose();
-    f1.dispose();
-    f2.dispose();
-    f3.dispose();
-    f4.dispose();
-    f5.dispose();
-    f6.dispose();
+
     return super.close();
   }
 }

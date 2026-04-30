@@ -4,6 +4,7 @@ sealed class VerifyOtpEvent {}
 
 class VerifyOtpProcess extends VerifyOtpEvent {
   final String email;
+  final String otp;
 
-  VerifyOtpProcess({required this.email});
+  VerifyOtpProcess({required this.email, required this.otp});
 }
