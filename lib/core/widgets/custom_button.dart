@@ -7,7 +7,7 @@ class CustomButton extends StatelessWidget {
   const CustomButton({
     super.key,
     this.text,
-     this.onPressed,
+    this.onPressed,
     this.height,
     this.width,
     this.color,
@@ -35,13 +35,15 @@ class CustomButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: color ?? ManagerColors.primaryColor,
         disabledBackgroundColor: color,
-        // overlayColor: ManagerColors.transparentColor,
+        elevation: 0,
+        shadowColor: ManagerColors.transparentColor,
+        overlayColor: ManagerColors.transparentColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ManagerRadius.r10),
+          borderRadius: BorderRadius.circular(ManagerRadius.r45),
         ),
         side: BorderSide(color: borderColor ?? ManagerColors.transparentColor),
         minimumSize: Size(
-          width??  ManagerWidths.infinity,
+          width ?? ManagerWidths.infinity,
           height ?? ManagerHeights.h50,
         ),
       ),
