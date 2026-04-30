@@ -6,7 +6,7 @@ import 'package:wafir_mobile/core/resource/manager_texts_styles.dart';
 
 ThemeData managerLightTheme() {
   return ThemeData.light(useMaterial3: true).copyWith(
-    scaffoldBackgroundColor: ManagerColors.backGroundColor,
+    scaffoldBackgroundColor: ManagerColors.whiteColor,
     appBarTheme: AppBarTheme(
       backgroundColor: ManagerColors.whiteColor,
       surfaceTintColor: ManagerColors.transparentColor,
@@ -52,18 +52,39 @@ ThemeData managerLightTheme() {
         fontWeight: ManagerFontWeight.regular,
         color: ManagerColors.blackColor,
       ),
+
       prefixIconColor: ManagerColors.primaryColor,
+      filled: true,
+      focusColor: ManagerColors.primaryColor,
+      iconColor:ManagerColors.unFocusBorderColor ,
+      fillColor: ManagerColors.transparentColor,
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: ManagerColors.blackColor),
-        borderRadius: BorderRadius.circular(ManagerRadius.r10),
+        borderSide: BorderSide(
+          color: ManagerColors.primaryColor,
+          width: 1.2,
+        ),
+        borderRadius: BorderRadius.circular(ManagerRadius.r45),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: ManagerColors.blackColor),
-        borderRadius: BorderRadius.circular(ManagerRadius.r10),
+        borderSide: BorderSide(
+          color: ManagerColors.unFocusBorderColor,
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(ManagerRadius.r45),
+      ),
+      disabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: ManagerColors.unFocusBorderColor,
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(ManagerRadius.r45),
       ),
       border: OutlineInputBorder(
-        borderSide: BorderSide(color: ManagerColors.primaryColor),
-        borderRadius: BorderRadius.circular(ManagerRadius.r10),
+        borderSide: BorderSide(
+          color: ManagerColors.primaryColor,
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(ManagerRadius.r45),
       ),
     ),
     textTheme: TextTheme(
@@ -86,7 +107,7 @@ ThemeData managerLightTheme() {
       // labelSmall: ManagerTextsStyles.font14GreyRegular,
       labelSmall: ManagerTextsStyles.font12BlackBold,
       titleMedium: ManagerTextsStyles.font14BlackBold,
-    titleSmall: ManagerTextsStyles.font12BlackBold,
+      titleSmall: ManagerTextsStyles.font12BlackBold,
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: ManagerColors.whiteColor,
@@ -109,15 +130,26 @@ ThemeData managerLightTheme() {
       inputDecorationTheme: InputDecorationThemeData(
         hintStyle: TextStyle(
           fontFamily: ManagerFontFamily.tajawal,
-          fontSize: 10,
+          fontSize: ManagerFontsSizes.f10,
           fontWeight: ManagerFontWeight.bold,
           color: ManagerColors.blackColor,
         ),
         labelStyle: TextStyle(
           fontFamily: ManagerFontFamily.tajawal,
-          fontSize: 10,
+          fontSize: ManagerFontsSizes.f10,
           fontWeight: ManagerFontWeight.bold,
           color: ManagerColors.blackColor,
+        ),
+        fillColor: ManagerColors.greyColor,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(ManagerRadius.r45),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(ManagerRadius.r45),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(ManagerRadius.r45),
         ),
       ),
     ),
