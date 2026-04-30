@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
@@ -16,6 +15,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<AcceptedCreate>(_acceptedCreate);
     on<GovernorateChanged>(_governorateChanged);
     on<CityChanged>(_cityChanged);
+    on<TogglePasswordVisibility>(_togglePasswordVisibility);
     on<RegisterByEmailProcess>(_registerByEmailProcess);
     on<RegisterByGoogleProcess>(_registerByGoogleProcess);
   }
@@ -23,14 +23,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterByEmailUseCase _registerByEmailUseCase;
   final RegisterByGoogleUseCase _registerByGoogleUseCase;
 
-  final TextEditingController email = TextEditingController();
-  final TextEditingController password = TextEditingController();
-  final TextEditingController firstName = TextEditingController();
-  final TextEditingController lastName = TextEditingController();
-  final TextEditingController phoneNumber = TextEditingController();
-  final TapGestureRecognizer login = TapGestureRecognizer();
-  final TapGestureRecognizer termsOfUse = TapGestureRecognizer();
-  final TapGestureRecognizer privacyPolicy = TapGestureRecognizer();
+
   final formKey = GlobalKey<FormState>();
 
   void _registerByEmailProcess(
@@ -46,13 +39,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         );
         (await _registerByEmailUseCase.execute(
           RegisterByEmailUseCaseInput(
-            email: email.text,
-            password: password.text,
-            firstName: firstName.text,
-            lastName: lastName.text,
-            phoneNumber: '+968${phoneNumber.text}',
-            governorate: state.selectedGovernorate ?? '',
-            city: state.selectedCity ?? '',
+            email: event.email,
+            password: event.password,
+            firstName: event.firstName,
+            lastName: event.lastName,
+            phoneNumber: '+968${event.phoneNumber}',
+            governorate: event.governorate,
+            city: event.city,
           ),
         )
           ..fold(
@@ -135,17 +128,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(state.copyWith(selectedCity: event.city));
   }
 
+  void _togglePasswordVisibility(TogglePasswordVisibility event, Emitter emit) {
+    emit(state.copyWith(passwordVisible: !state.passwordVisible));
+  }
+
   @override
   Future<void> close() {
     disposeRegister();
-
-    email.dispose();
-    password.dispose();
-    firstName.dispose();
-    lastName.dispose();
-    phoneNumber.dispose();
-    login.dispose();
-
     return super.close();
   }
 }

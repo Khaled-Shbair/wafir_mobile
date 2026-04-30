@@ -5,28 +5,34 @@ sealed class RegisterState {
   final bool isAccepted;
   final String? selectedGovernorate;
   final String? selectedCity;
+  final bool passwordVisible;
 
   const RegisterState({
     this.isAccepted = false,
     this.selectedGovernorate,
     this.selectedCity,
+    this.passwordVisible = false,
   });
+
 
   RegisterState copyWith({
     bool? isAccepted,
     String? selectedGovernorate,
     String? selectedCity,
+    bool? passwordVisible,
   }) {
     final bool newIsAccepted = isAccepted ?? this.isAccepted;
     final String? newSelectedGovernorate =
         selectedGovernorate ?? this.selectedGovernorate;
     final String? newSelectedCity = selectedCity ?? this.selectedCity;
+    final bool newPasswordVisible = passwordVisible ?? this.passwordVisible;
 
     if (this is RegisterInitial) {
       return RegisterInitial(
         isAccepted: newIsAccepted,
         selectedGovernorate: newSelectedGovernorate,
         selectedCity: newSelectedCity,
+        passwordVisible: newPasswordVisible,
       );
     }
 
@@ -35,6 +41,7 @@ sealed class RegisterState {
         isAccepted: newIsAccepted,
         selectedGovernorate: newSelectedGovernorate,
         selectedCity: newSelectedCity,
+        passwordVisible: newPasswordVisible,
       );
     }
 
@@ -43,6 +50,7 @@ sealed class RegisterState {
         isAccepted: newIsAccepted,
         selectedGovernorate: newSelectedGovernorate,
         selectedCity: newSelectedCity,
+        passwordVisible: newPasswordVisible,
       );
     }
 
@@ -53,6 +61,7 @@ sealed class RegisterState {
         isAccepted: newIsAccepted,
         selectedGovernorate: newSelectedGovernorate,
         selectedCity: newSelectedCity,
+        passwordVisible: newPasswordVisible,
       );
     }
 
@@ -65,6 +74,7 @@ class RegisterInitial extends RegisterState {
     super.isAccepted = false,
     super.selectedGovernorate,
     super.selectedCity,
+    super.passwordVisible = false,
   });
 }
 
@@ -73,6 +83,7 @@ class RegisterLoading extends RegisterState {
     super.isAccepted = false,
     super.selectedGovernorate,
     super.selectedCity,
+    super.passwordVisible = false,
   });
 }
 
@@ -81,6 +92,7 @@ final class RegisterSuccessfully extends RegisterState {
     super.isAccepted = false,
     super.selectedGovernorate,
     super.selectedCity,
+    super.passwordVisible = false,
   });
 }
 
@@ -91,6 +103,7 @@ final class RegisterFailure extends RegisterState {
     super.isAccepted = false,
     super.selectedGovernorate,
     super.selectedCity,
+    super.passwordVisible = false,
     required this.errorMessage,
   });
 }

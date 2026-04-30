@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/constants/app_constants.dart';
@@ -15,8 +16,106 @@ import 'package:wafir_mobile/core/widgets/custom_web_view_bottom_sheet.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/register_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
-class RegisterScreen extends StatelessWidget with CustomToastMassage {
+class RegisterScreen extends StatefulWidget with CustomToastMassage {
   const RegisterScreen({super.key});
+
+  @override
+  State<RegisterScreen> createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen>
+    with CustomToastMassage {
+  final FocusNode firstNameFocusNode = FocusNode();
+  final FocusNode lastNameFocusNode = FocusNode();
+  final FocusNode emailFocusNode = FocusNode();
+  final FocusNode phoneNumberFocusNode = FocusNode();
+  final FocusNode governorateFocusNode = FocusNode();
+  final FocusNode wilayaFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+
+  late TextEditingController firstName;
+  late TextEditingController lastName;
+  late TextEditingController email;
+  late TextEditingController phoneNumber;
+  late TextEditingController password;
+  late TapGestureRecognizer loginRecognizer;
+
+  late TapGestureRecognizer termsOfUseRecognizer;
+  late TapGestureRecognizer privacyPolicyRecognizer;
+  bool firstNameIsFocused = false;
+  bool lastNameIsFocused = false;
+  bool emailIsFocused = false;
+  bool phoneNumberIsFocused = false;
+  bool governorateIsFocused = false;
+  bool wilayaIsFocused = false;
+  bool passwordIsFocused = false;
+
+  @override
+  initState() {
+    super.initState();
+    loginRecognizer = TapGestureRecognizer();
+    termsOfUseRecognizer = TapGestureRecognizer();
+    privacyPolicyRecognizer = TapGestureRecognizer();
+    firstName = TextEditingController();
+    lastName = TextEditingController();
+    email = TextEditingController();
+    phoneNumber = TextEditingController();
+    password = TextEditingController();
+
+    firstNameFocusNode.addListener(() {
+      setState(() {
+        firstNameIsFocused = firstNameFocusNode.hasFocus;
+      });
+    });
+    lastNameFocusNode.addListener(() {
+      setState(() {
+        lastNameIsFocused = lastNameFocusNode.hasFocus;
+      });
+    });
+    emailFocusNode.addListener(() {
+      setState(() {
+        emailIsFocused = emailFocusNode.hasFocus;
+      });
+    });
+    phoneNumberFocusNode.addListener(() {
+      setState(() {
+        phoneNumberIsFocused = phoneNumberFocusNode.hasFocus;
+      });
+    });
+    governorateFocusNode.addListener(() {
+      setState(() {
+        governorateIsFocused = governorateFocusNode.hasFocus;
+      });
+    });
+    wilayaFocusNode.addListener(() {
+      setState(() {
+        wilayaIsFocused = wilayaFocusNode.hasFocus;
+      });
+    });
+    passwordFocusNode.addListener(() {
+      setState(() {
+        passwordIsFocused = passwordFocusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  dispose() {
+    firstName.dispose();
+    lastName.dispose();
+    email.dispose();
+    phoneNumber.dispose();
+    password.dispose();
+    firstNameFocusNode.dispose();
+    lastNameFocusNode.dispose();
+    emailFocusNode.dispose();
+    phoneNumberFocusNode.dispose();
+    governorateFocusNode.dispose();
+    wilayaFocusNode.dispose();
+    passwordFocusNode.dispose();
+    disposeRegister();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +125,7 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
       appBar: AppBar(
         title: Text(ManagerStrings.createAccount),
         leading: IconButton(
-          onPressed: () {
-            disposeRegister();
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
@@ -45,36 +141,26 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
               context,
               Routes.verifyOtpScreen,
               arguments: [
-                controller.email.text,
+                email.text,
                 Routes.mainScreen,
               ],
             );
           } else if (state is RegisterFailure) {
             // Close loading dialog using root navigator
             Navigator.of(context, rootNavigator: true).pop();
-            showToast(state.errorMessage);
+            widget.showToast(state.errorMessage);
           }
         },
         child: SingleChildScrollView(
           padding: EdgeInsetsDirectional.only(
             start: ManagerWidths.w20,
             end: ManagerWidths.w20,
-            top: ManagerHeights.h10,
+            top: ManagerHeights.h20,
             bottom: ManagerHeights.h7,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                ManagerStrings.createAccount,
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-              verticalSpace(ManagerHeights.h7),
-              Text(
-                ManagerStrings.createAccountSubTitle,
-                style: Theme.of(context).textTheme.labelMedium,
-              ),
-              verticalSpace(ManagerHeights.h20),
               Form(
                 key: controller.formKey,
                 child: Column(
@@ -82,69 +168,64 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
                     Row(
                       children: [
                         Expanded(
-                            child: CustomTextField(
-                          controller: controller.firstName,
-                          hintText: ManagerStrings.firstName,
-                          keyboardType: TextInputType.name,
-                          prefixIcon: Icon(
-                            Icons.person_outline,
-                            size: ManagerIconsSizes.i24,
+                          child: CustomTextField(
+                            maxLength: 30,
+                            controller: firstName,
+                            hintText: ManagerStrings.firstName,
+                            keyboardType: TextInputType.name,
+                            prefixIconData: Icons.person_outline,
+                            isFocused: firstNameIsFocused,
+                            focusNode: firstNameFocusNode,
+                            textInputAction: TextInputAction.next,
+                            validator: (v) => Validator.nameValidate(v),
                           ),
-                          validator: (v) => Validator.nameValidate(v),
-                        )),
+                        ),
                         horizontalSpace(ManagerWidths.w20),
                         Expanded(
                           child: CustomTextField(
-                            controller: controller.lastName,
-                            prefixIcon: Icon(
-                              Icons.person_outline,
-                              size: ManagerIconsSizes.i24,
-                            ),
+                            maxLength: 30,
+                            controller: lastName,
                             hintText: ManagerStrings.lastName,
-                            validator: (v) => Validator.nameValidate(v),
                             keyboardType: TextInputType.name,
+                            prefixIconData: Icons.person_outline,
+                            isFocused: lastNameIsFocused,
+                            focusNode: lastNameFocusNode,
+                            textInputAction: TextInputAction.next,
+                            validator: (v) => Validator.nameValidate(v),
                           ),
                         ),
                       ],
                     ),
                     verticalSpace(ManagerHeights.h20),
                     CustomTextField(
-                      controller: controller.email,
+                      maxLength: 30,
+                      controller: email,
                       hintText: ManagerStrings.email,
-                      prefixIcon: Icon(
-                        Icons.mail_outline,
-                        size: ManagerIconsSizes.i24,
-                      ),
+                      prefixIconData: Icons.mail_outline,
+                      isFocused: emailIsFocused,
+                      focusNode: emailFocusNode,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
                       validator: (v) => Validator.emailValidator(v),
                     ),
                     verticalSpace(ManagerHeights.h20),
                     CustomTextField(
-                      controller: controller.phoneNumber,
+                      maxLength: 12,
+                      controller: phoneNumber,
                       hintText: ManagerStrings.phoneNumber,
-                      validator: (v) => Validator.phoneValidate(v),
-                      prefixIcon: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          horizontalSpace(ManagerWidths.w10),
-                          Icon(
-                            Icons.phone,
-                            size: ManagerIconsSizes.i24,
-                          ),
-                          horizontalSpace(ManagerWidths.w5),
-                          Text(
-                            '+869',
-                            style: Theme.of(context).textTheme.labelLarge,
-                          ),
-                        ],
-                      ),
+                      prefixIconData: Icons.phone,
+                      isFocused: phoneNumberIsFocused,
+                      focusNode: phoneNumberFocusNode,
                       keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.next,
+                      validator: (v) => Validator.phoneValidate(v),
                     ),
                     verticalSpace(ManagerHeights.h20),
                     BlocBuilder<RegisterBloc, RegisterState>(
                       builder: (context, state) {
                         return CustomDropDownList(
                           validator: (v) => Validator.governorateValidator(v),
-                          labelText: ManagerStrings.governorate,
+                          hintText: ManagerStrings.governorate,
                           items: AppConstants.omanLocations.keys.toList(),
                           selectedItem: state.selectedGovernorate,
                           onChangedFunction: (value) {
@@ -164,7 +245,7 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
                             : AppConstants.omanLocations[selectedGovernorate] ??
                                 <String>[];
                         return CustomDropDownList(
-                          labelText: ManagerStrings.wilaya,
+                          hintText: ManagerStrings.wilaya,
                           items: cities,
                           validator: (v) => Validator.wilayaValidator(v),
                           selectedItem: state.selectedCity,
@@ -178,15 +259,24 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
                       },
                     ),
                     verticalSpace(ManagerHeights.h20),
-                    CustomTextField(
-                      controller: controller.password,
-                      labelText: ManagerStrings.password,
-                      prefixIcon: Icon(
-                        Icons.lock_outline,
-                        size: ManagerIconsSizes.i24,
-                      ),
-                      validator: (v) => Validator.passwordValidator(v),
-                      keyboardType: TextInputType.visiblePassword,
+                    BlocBuilder<RegisterBloc, RegisterState>(
+                      builder: (context, state) {
+                        return CustomTextField(
+                          maxLength: 50,
+                          controller: password,
+                          hintText: ManagerStrings.password,
+                          prefixIconData: Icons.lock_outline,
+                          isFocused: passwordIsFocused,
+                          focusNode: passwordFocusNode,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: state.passwordVisible,
+                          isPassword: true,
+                          textInputAction: TextInputAction.done,
+                          validator: (v) => Validator.passwordValidator(v),
+                          functionVisibilityPassword: () =>
+                              controller.add(TogglePasswordVisibility()),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -220,7 +310,7 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
                         children: [
                           TextSpan(
                             text: ' ${ManagerStrings.privacyPolicy} ',
-                            recognizer: controller.privacyPolicy
+                            recognizer: privacyPolicyRecognizer
                               ..onTap = () {
                                 customWebViewBottomSheet(
                                   context,
@@ -238,7 +328,7 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
                           TextSpan(text: ' ${ManagerStrings.and}'),
                           TextSpan(
                             text: ManagerStrings.termsOfUse,
-                            recognizer: controller.termsOfUse
+                            recognizer: termsOfUseRecognizer
                               ..onTap = () {
                                 customWebViewBottomSheet(
                                   context,
@@ -260,13 +350,42 @@ class RegisterScreen extends StatelessWidget with CustomToastMassage {
                 ],
               ),
               verticalSpace(ManagerHeights.h20),
-              CustomButton(
-                  onPressed: () {
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    ScaffoldMessenger.of(context).clearSnackBars();
-                    controller.add(RegisterByEmailProcess());
-                  },
-                  text: ManagerStrings.create),
+              BlocBuilder<RegisterBloc, RegisterState>(
+                builder: (context, state) {
+                  return CustomButton(
+                      onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        ScaffoldMessenger.of(context).clearSnackBars();
+                        if (state.selectedGovernorate != null &&
+                            state.selectedCity != null) {
+                          controller.add(
+                            RegisterByEmailProcess(
+                              email: email.text,
+                              password: password.text,
+                              firstName: firstName.text,
+                              lastName: lastName.text,
+                              phoneNumber: phoneNumber.text,
+                              governorate: state.selectedGovernorate!,
+                              city: state.selectedCity!,
+                            ),
+                          );
+                        } else {
+                          controller.add(
+                            RegisterByEmailProcess(
+                              email: email.text,
+                              password: password.text,
+                              firstName: firstName.text,
+                              lastName: lastName.text,
+                              phoneNumber: phoneNumber.text,
+                              governorate: '',
+                              city: '',
+                            ),
+                          );
+                        }
+                      },
+                      text: ManagerStrings.create);
+                },
+              ),
               verticalSpace(ManagerHeights.h50),
             ],
           ),
