@@ -12,8 +12,37 @@ import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
-class ForgetPasswordScreen extends StatelessWidget with CustomToastMassage {
+class ForgetPasswordScreen extends StatefulWidget with CustomToastMassage {
   const ForgetPasswordScreen({super.key});
+
+  @override
+  State<ForgetPasswordScreen> createState() => _ForgetPasswordScreenState();
+}
+
+class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
+    with CustomToastMassage {
+  final FocusNode emailFocusNode = FocusNode();
+  final TextEditingController email = TextEditingController();
+
+  bool emailIsFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    emailFocusNode.addListener(() {
+      setState(() {
+        emailIsFocused = emailFocusNode.hasFocus;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    email.dispose();
+    emailFocusNode.dispose();
+    disposeForgetPassword();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +53,7 @@ class ForgetPasswordScreen extends StatelessWidget with CustomToastMassage {
         if (state is ForgetPasswordLoading) {
           showCustomLoading(context);
         } else if (state is ForgetPasswordSuccess) {
-          showCustomLoading(context);
+          Navigator.of(context, rootNavigator: true).pop();
           Navigator.pushNamed(
             context,
             Routes.verifyOtpScreen,
@@ -42,10 +71,7 @@ class ForgetPasswordScreen extends StatelessWidget with CustomToastMassage {
         appBar: AppBar(
           title: Text(ManagerStrings.forgetPasswordTitle),
           leading: IconButton(
-            onPressed: () {
-              disposeForgetPassword();
-              Navigator.pop(context);
-            },
+            onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.arrow_back_ios),
           ),
         ),
@@ -70,13 +96,14 @@ class ForgetPasswordScreen extends StatelessWidget with CustomToastMassage {
               Form(
                 key: controller.formKey,
                 child: CustomTextField(
+                  maxLength: 50,
                   hintText: ManagerStrings.email,
-                  controller: controller.emailController,
+                  controller: email,
                   keyboardType: TextInputType.emailAddress,
-                  prefixIcon: Icon(
-                    Icons.email_outlined,
-                    size: ManagerIconsSizes.i24,
-                  ),
+                  prefixIconData: Icons.email_outlined,
+                  isFocused: emailIsFocused,
+                  focusNode: emailFocusNode,
+                  textInputAction: TextInputAction.done,
                   validator: (v) => Validator.emailValidator(v),
                 ),
               ),
@@ -85,7 +112,7 @@ class ForgetPasswordScreen extends StatelessWidget with CustomToastMassage {
                 text: ManagerStrings.send,
                 onPressed: () {
                   FocusManager.instance.primaryFocus?.unfocus();
-                  controller.add(ForgotPasswordProcess());
+                  controller.add(ForgotPasswordProcess(email.text.trim()));
                 },
               ),
             ],
