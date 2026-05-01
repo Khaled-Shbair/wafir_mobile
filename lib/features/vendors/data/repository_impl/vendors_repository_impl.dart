@@ -5,6 +5,7 @@ import 'package:wafir_mobile/core/internet_checker/internet_checker.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/features/vendors/data/data_source/remote_vendors_data_source.dart';
 import 'package:wafir_mobile/features/vendors/data/mapper/vendors_mapper.dart';
+import 'package:wafir_mobile/features/vendors/data/request/get_all_vendors_request.dart';
 import 'package:wafir_mobile/features/vendors/data/request/get_vendor_details_request.dart';
 import 'package:wafir_mobile/features/vendors/domain/model/vendor_model.dart';
 import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.dart';
@@ -37,11 +38,21 @@ class VendorsRepositoryImpl implements VendorsRepository {
   }
 
   @override
-  Future<Either<Failure, VendorsPublicModel>> getPublicVendors() async {
+  Future<Either<Failure, VendorsPublicModel>> getPublicVendors(
+      GetAllVendorsRequest request) async {
     if (await _networkInfo.isConnected) {
       try {
-        final response = await _dataSource.getPublicVendors();
-        return Right(response.toDomain());
+        final response = await _dataSource.getPublicVendors(request);
+        if (response.data != null) {
+          return Right(response.toDomain());
+        } else {
+          return Left(
+            Failure(
+              message: response.message ?? ManagerStrings.badRequest,
+              code: ResponseCode.BAD_REQUEST.value,
+            ),
+          );
+        }
       } catch (e) {
         return Left(ErrorHandler.handle(e).failure);
       }

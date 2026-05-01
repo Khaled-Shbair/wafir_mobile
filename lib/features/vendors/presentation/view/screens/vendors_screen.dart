@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/constants/app_constants.dart';
+import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
@@ -15,7 +16,9 @@ import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bl
 import 'package:wafir_mobile/routes/routes.dart';
 
 class VendorsScreen extends StatelessWidget {
-  const VendorsScreen({super.key});
+  const VendorsScreen({this.sectorName, super.key});
+
+  final String? sectorName;
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +27,13 @@ class VendorsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('المتاجر'),
+        leading: IconButton(
+          onPressed: () {
+            disposePublicVendors();
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
       ),
       body: BlocBuilder<VendorsBloc, VendorsState>(
         builder: (context, state) {
@@ -53,7 +63,8 @@ class VendorsScreen extends StatelessWidget {
                   CustomTextField(
                     textInputAction: TextInputAction.search,
                     controller: bloc.search,
-                    onFieldSubmitted: (_) => bloc.add(GetPublicVendorsEvent()),
+                    onFieldSubmitted: (_) =>
+                        bloc.add(GetPublicVendorsEvent(sectorName)),
                     hintText: ManagerStrings.searchOnStoreOrOffer,
                     prefixIcon: Icon(
                       Icons.search,
@@ -86,7 +97,7 @@ class VendorsScreen extends StatelessWidget {
                               bloc.add(
                                 WilayaChangedVendorsEvent(selection.wilaya),
                               );
-                              bloc.add(GetPublicVendorsEvent());
+                              bloc.add(GetPublicVendorsEvent(sectorName));
                             },
                           ),
                         );
