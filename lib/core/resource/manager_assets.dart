@@ -4,7 +4,8 @@ class ManagerAssets {
   static const String logo = 'assets/images/splash/wafer_logo.png';
   static const String welcomeImageGif = 'assets/images/login_images/welcome_image.gif';
   static const String welcomeImage = 'assets/images/login_images/welcome_image.jpeg';
-
+  static const String bannerImageOne = 'assets/images/home_images/banner_image_one.png';
+  static const String bannerImageTwo = 'assets/images/home_images/banner_image_two.png';
   static const String onBoardingImageOne =
       'assets/images/on_boarding_images/on_boarding_image_one.png';
   static const String onBoardingImageTwo =

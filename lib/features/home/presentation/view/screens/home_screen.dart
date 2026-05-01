@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/core/model/offers_model.dart';
+import 'package:wafir_mobile/core/resource/manager_assets.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
@@ -10,6 +11,7 @@ import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
 import 'package:wafir_mobile/features/home/domain/model/home_models.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/navigation_cubit.dart';
+import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_banner_widget.dart';
 import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_section_header.dart';
 import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_ventor_item.dart';
 import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_verified_store_card.dart';
@@ -65,6 +67,8 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
                     verticalSpace(ManagerHeights.h18),
                     CustomVentorItem(ventors: state.home.sectors),
                     verticalSpace(ManagerHeights.h18),
+                    CustomBannerWidget(image: ManagerAssets.bannerImageTwo),
+                    verticalSpace(ManagerHeights.h25),
                     CustomSectionHeader(
                       title: 'أحدث العروض والخصومات',
                       viewAllButton: () {
@@ -83,6 +87,8 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
                     verticalSpace(ManagerHeights.h18),
                     _buildLatestOffers(state.home.bestHotels),
                     verticalSpace(ManagerHeights.h25),
+                    CustomBannerWidget(image: ManagerAssets.bannerImageOne),
+                    verticalSpace(ManagerHeights.h18),
                     CustomSectionHeader(
                       title: 'العروض الأمثل لك',
                       viewAllButton: () {

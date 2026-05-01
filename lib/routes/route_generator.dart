@@ -14,6 +14,7 @@ import 'package:wafir_mobile/features/auth/presentation/view/screens/register_sc
 import 'package:wafir_mobile/features/auth/presentation/view/screens/welcome_screen.dart';
 import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
+import 'package:wafir_mobile/features/home/domain/model/home_models.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/login_screen.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/main_bottom_nav_screen.dart';
@@ -28,8 +29,10 @@ import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dar
 import 'package:wafir_mobile/features/profile/presentation/controller/edit_profile_bloc.dart';
 import 'package:wafir_mobile/features/profile/presentation/view/screens/edit_profile_screen.dart';
 import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.dart';
+import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bloc.dart';
 import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendor_details_screen.dart';
 import 'package:wafir_mobile/features/splash/presentation/view/screens/splash_screen.dart';
+import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendors_screen.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class RouteGenerator {
@@ -48,6 +51,17 @@ class RouteGenerator {
           builder: (_) => BlocProvider<LoginBloc>(
             create: (context) => instance<LoginBloc>(),
             child: LoginScreen(),
+          ),
+        );
+      case Routes.vendorsScreen:
+        initPublicVendors();
+        final String sectorName = setting.arguments as String;
+        return MaterialPageRoute(
+          settings: RouteSettings(name: Routes.vendorsScreen),
+          builder: (_) => BlocProvider<VendorsBloc>(
+            create: (context) =>
+                instance<VendorsBloc>()..add(GetPublicVendorsEvent(sectorName)),
+            child: VendorsScreen(sectorName: sectorName),
           ),
         );
       case Routes.registerScreen:
