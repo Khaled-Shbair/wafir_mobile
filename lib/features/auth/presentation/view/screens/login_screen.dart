@@ -97,21 +97,17 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
         ),
         body: SingleChildScrollView(
           padding: EdgeInsetsDirectional.only(
-            top: ManagerHeights.h40,
             bottom: ManagerHeights.h40,
             start: ManagerWidths.w25,
             end: ManagerWidths.w25,
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                ManagerStrings.welcomeBack,
-                style: Theme.of(context).textTheme.headlineLarge,
+              Image.asset(
+                ManagerAssets.logo,
+                height: ManagerHeights.h100,
               ),
-              verticalSpace(ManagerHeights.h10),
-              Text(ManagerStrings.loginToCompleteToAccount,
-                  style: Theme.of(context).textTheme.labelMedium),
               verticalSpace(ManagerHeights.h50),
               Form(
                 key: controller.formKey,
@@ -229,8 +225,6 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
               verticalSpace(ManagerHeights.h20),
               CustomButton(
                 color: ManagerColors.unFocusBorderColor,
-
-                // borderColor: ManagerColors.transparentColor,
                 onPressed: () {
                   FocusManager.instance.primaryFocus?.unfocus();
                   ScaffoldMessenger.of(context).clearSnackBars();
@@ -246,7 +240,15 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
                       width: ManagerWidths.w20,
                     ),
                     horizontalSpace(ManagerWidths.w10),
-                    Text(ManagerStrings.google)
+                    Text(
+                      ManagerStrings.google,
+                      style: TextStyle(
+                        fontFamily: ManagerFontFamily.tajawal,
+                        fontSize: ManagerFontsSizes.f18,
+                        fontWeight: ManagerFontWeight.bold,
+                        color: ManagerColors.primaryColor,
+                      ),
+                    )
                   ],
                 ),
               ),
