@@ -7,6 +7,7 @@ import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.
 import 'package:wafir_mobile/features/vendors/domain/use_case/get_public_vendors_use_case.dart';
 
 part 'vendors_event.dart';
+
 part 'vendors_state.dart';
 
 class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
@@ -96,7 +97,13 @@ class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
         selectedWilaya: state.selectedWilaya,
       ));
 
-      (await _getPublicVendorsUseCase.execute()).fold(
+      (await _getPublicVendorsUseCase.execute(
+        GetAllVendorsInput(
+          page: 1,
+          searchQuery: event.searchQuery,
+        ),
+      ))
+          .fold(
         (l) => emit(VendorsFailure(
           message: l.message,
           selectedCategory: state.selectedCategory,
