@@ -1,4 +1,5 @@
 import 'package:wafir_mobile/core/networking/api/app_api.dart';
+import 'package:wafir_mobile/features/vendors/data/request/get_all_vendors_request.dart';
 import 'package:wafir_mobile/features/vendors/data/request/get_vendor_details_request.dart';
 import 'package:wafir_mobile/features/vendors/data/response/get_vendor_details_response.dart';
 import 'package:wafir_mobile/features/vendors/data/response/get_vendors_public_response.dart';
@@ -6,7 +7,9 @@ import 'package:wafir_mobile/features/vendors/data/response/get_vendors_public_r
 abstract class RemoteVendorsDataSource {
   Future<GetVendorDetailsResponse> getVendorDetails(
       GetVendorDetailsRequest request);
-  Future<GetVendorsPublicResponse> getPublicVendors();
+
+  Future<GetVendorsPublicResponse> getPublicVendors(
+      GetAllVendorsRequest request);
 }
 
 class RemoteVendorsDataSourceImpl implements RemoteVendorsDataSource {
@@ -21,7 +24,12 @@ class RemoteVendorsDataSourceImpl implements RemoteVendorsDataSource {
   }
 
   @override
-  Future<GetVendorsPublicResponse> getPublicVendors() async {
-    return await _appApi.getPublicVendors();
+  Future<GetVendorsPublicResponse> getPublicVendors(
+      GetAllVendorsRequest request) async {
+    return await _appApi.getPublicVendors(
+      request.page,
+      20,
+      request.searchQuery,
+    );
   }
 }

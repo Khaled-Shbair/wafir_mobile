@@ -1,7 +1,6 @@
 import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wafir_mobile/features/offers/data/response/offer_sector_response.dart';
-import 'package:wafir_mobile/features/offers/data/response/offer_vendor_branch_response.dart';
 
 part 'offer_vendor_response.g.dart';
 
@@ -53,6 +52,7 @@ class OfferVendorResponse {
 
   Map<String, dynamic> toJson() => _$OfferVendorResponseToJson(this);
 }
+
 
 @JsonSerializable()
 class WorkingHoursResponse {

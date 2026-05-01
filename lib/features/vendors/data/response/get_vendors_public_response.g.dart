@@ -47,7 +47,10 @@ VendorPublicResponse _$VendorPublicResponseFromJson(
       facebookUrl: json['facebook_url'] as String?,
       tiktokUrl: json['tiktok_url'] as String?,
       snapchatUrl: json['snapchat_url'] as String?,
-      workingHours: json['working_hours'] as String?,
+      workingHours: json['working_hours'] == null
+          ? null
+          : WorkingHoursResponse.fromJson(
+              json['working_hours'] as Map<String, dynamic>),
       status: json['status'] as String?,
       activeOffersCount: (json['active_offers_count'] as num?)?.toInt(),
       sector: json['sector'] == null

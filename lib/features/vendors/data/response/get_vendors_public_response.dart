@@ -1,6 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/features/offers/data/response/offer_sector_response.dart';
+import 'package:wafir_mobile/features/offers/data/response/offer_vendor_response.dart';
 
 part 'get_vendors_public_response.g.dart';
 
@@ -58,7 +59,7 @@ class VendorPublicResponse {
   @JsonKey(name: ApiKeys.snapchatUrl)
   final String? snapchatUrl;
   @JsonKey(name: ApiKeys.workingHours)
-  final String? workingHours;
+  final WorkingHoursResponse? workingHours;
   @JsonKey(name: ApiKeys.status)
   final String? status;
   @JsonKey(name: 'active_offers_count')
