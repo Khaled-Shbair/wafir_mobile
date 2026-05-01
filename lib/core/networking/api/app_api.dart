@@ -100,7 +100,12 @@ abstract class AppApi {
   );
 
   @GET(ApiConstants.getAllVendor)
-  Future<GetVendorsPublicResponse> getPublicVendors();
+  Future<GetVendorsPublicResponse> getPublicVendors(
+      @Query(ApiKeys.page) int? page,
+      @Query(ApiKeys.take) int? take,
+      @Query(ApiKeys.query) String? query,
+      );
+
 
   @GET(ApiConstants.getAllFavoriteOffers)
   Future<FavoriteOffersResponse> getAllFavoriteOffers();

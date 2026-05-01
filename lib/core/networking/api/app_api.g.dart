@@ -232,14 +232,16 @@ class _AppApi implements AppApi {
 
   @override
   Future<ResetPasswordResponse> resetPassword(
-    String password,
-    String passwordConfirm,
+    String currentPassword,
+    String newPassword,
   ) async {
-
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = {'current_password': password, 'new_password': passwordConfirm};
+    final _data = {
+      'current_password': currentPassword,
+      'new_password': newPassword,
+    };
     final _options = _setStreamType<ResetPasswordResponse>(
       Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
@@ -417,9 +419,18 @@ class _AppApi implements AppApi {
   }
 
   @override
-  Future<GetVendorsPublicResponse> getPublicVendors() async {
+  Future<GetVendorsPublicResponse> getPublicVendors(
+    int? page,
+    int? take,
+    String? query,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'take': take,
+      r'q': query,
+    };
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
     final _options = _setStreamType<GetVendorsPublicResponse>(
