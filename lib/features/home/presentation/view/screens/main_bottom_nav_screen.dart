@@ -32,80 +32,91 @@ class MainBottomNavScreen extends StatelessWidget {
       create: (_) => instance<NavigationCubit>(),
       child: BlocBuilder<NavigationCubit, NavigationState>(
         builder: (context, state) {
-          return Scaffold(
-            body: IndexedStack(
-              index: state.selectedIndex,
-              children: [
-                ..._pages,
-                SettingScreen(),
-              ],
-            ),
-            bottomNavigationBar: Container(
-              height: ManagerHeights.h55,
-              decoration: BoxDecoration(
-                color:
-                    Theme.of(context).bottomNavigationBarTheme.backgroundColor,
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x12000000),
-                    blurRadius: 18,
-                    offset: Offset(0, -6),
-                  ),
+          return PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (didPop, result) {
+              if (didPop) return;
+              disposeLogin();
+              Navigator.pop(context);
+            },
+            child: Scaffold(
+              body: IndexedStack(
+                index: state.selectedIndex,
+                children: [
+                  ..._pages,
+                  SettingScreen(),
                 ],
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  CustomBottomNavItem(
-                    icon: Icons.home_rounded,
-                    label: ManagerStrings.home,
-                    active: state.selectedIndex == 0,
-                    onTap: () {
-                      context.read<HomeBloc>().add(GetHomeData());
-                      context.read<NavigationCubit>().goToHome();
-                    },
-                  ),
-                  CustomBottomNavItem(
-                    icon: Icons.local_offer_outlined,
-                    label: ManagerStrings.offers,
-                    active: state.selectedIndex == 1,
-                    onTap: () {
-                      context.read<OffersBloc>().add(GetAllOffersEvent());
-                      context.read<NavigationCubit>().goToOffers();
-                    },
-                  ),
-                  CustomBottomNavItem(
-                    icon: Icons.favorite_border_rounded,
-                    label: ManagerStrings.favorite,
-                    active: state.selectedIndex == 2,
-                    onTap: () {
-                      if (instance<SharedPreferencesController>()
-                          .getString(SharedPreferencesKeys.token)
-                          .isNotEmpty) {
-                        context
-                            .read<FavoriteBloc>()
-                            .add(GetFavoriteOffers(message: '', offerId: 1));
-                        context.read<NavigationCubit>().goToFavorites();
-                      } else {
-                        loginPop(context);
-                      }
-                    },
-                  ),
-                  CustomBottomNavItem(
-                    icon: Icons.settings_outlined,
-                    label: ManagerStrings.settings,
-                    active: state.selectedIndex == 3,
-                    onTap: () {
-                      if (instance<SharedPreferencesController>()
-                          .getString(SharedPreferencesKeys.token)
-                          .isNotEmpty) {
-                        context.read<NavigationCubit>().goToSettings();
-                      } else {
-                        loginPop(context);
-                      }
-                    },
-                  ),
-                ],
+              bottomNavigationBar: Container(
+                height: ManagerHeights.h55,
+                decoration: BoxDecoration(
+                  color: Theme.of(context)
+                      .bottomNavigationBarTheme
+                      .backgroundColor,
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Color(0x12000000),
+                      blurRadius: 18,
+                      offset: Offset(0, -6),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    CustomBottomNavItem(
+                      icon: Icons.home_rounded,
+                      label: ManagerStrings.home,
+                      active: state.selectedIndex == 0,
+                      onTap: () {
+                        context.read<HomeBloc>().add(GetHomeData());
+                        context.read<NavigationCubit>().goToHome();
+                        disposeOffers();
+                      },
+                    ),
+                    CustomBottomNavItem(
+                      icon: Icons.local_offer_outlined,
+                      label: ManagerStrings.offers,
+                      active: state.selectedIndex == 1,
+                      onTap: () {
+                        context.read<OffersBloc>().add(GetAllOffersEvent());
+                        context.read<NavigationCubit>().goToOffers();
+                        disposeHome();
+                      },
+                    ),
+                    CustomBottomNavItem(
+                      icon: Icons.favorite_border_rounded,
+                      label: ManagerStrings.favorite,
+                      active: state.selectedIndex == 2,
+                      onTap: () {
+                        if (instance<SharedPreferencesController>()
+                            .getString(SharedPreferencesKeys.token)
+                            .isNotEmpty) {
+                          context
+                              .read<FavoriteBloc>()
+                              .add(GetFavoriteOffers(message: '', offerId: 1));
+                          context.read<NavigationCubit>().goToFavorites();
+                        } else {
+                          loginPop(context);
+                        }
+                      },
+                    ),
+                    CustomBottomNavItem(
+                      icon: Icons.settings_outlined,
+                      label: ManagerStrings.settings,
+                      active: state.selectedIndex == 3,
+                      onTap: () {
+                        if (instance<SharedPreferencesController>()
+                            .getString(SharedPreferencesKeys.token)
+                            .isNotEmpty) {
+                          context.read<NavigationCubit>().goToSettings();
+                        } else {
+                          loginPop(context);
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           );

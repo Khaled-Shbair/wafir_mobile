@@ -95,7 +95,7 @@ flutter:
     - assets/images/splash/
     - assets/images/home_images/
     - assets/images/on_boarding_images/
-    - assets/images/login_images/
+    - assets/images/auth_images/
     - assets/images/profile_images/
     - assets/images/icons/
     - assets/languages/

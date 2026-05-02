@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wafir_mobile/core/resource/manager_assets.dart';
+import 'package:wafir_mobile/core/resource/manager_colors.dart';
+import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/core/widgets/custom_button.dart';
@@ -43,8 +46,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen>
   bool f5IsFocused = false;
   bool f6IsFocused = false;
 
-  void _updateFocusState(FocusNode node, bool current,
-      ValueChanged<bool> set) {
+  void _updateFocusState(FocusNode node, bool current, ValueChanged<bool> set) {
     final newState = node.hasFocus;
     if (current != newState) {
       setState(() => set(newState));
@@ -136,11 +138,15 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen>
             vertical: ManagerHeights.h30,
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Image.asset(ManagerAssets.verifyOtpImage),
               Text(
                 ManagerStrings.otpDescription,
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      fontWeight: ManagerFontWeight.semiBold,
+                      color: ManagerColors.blackColor,
+                    ),
               ),
               verticalSpace(ManagerHeights.h30),
               SizedBox(
@@ -241,17 +247,24 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen>
                   ),
                 ),
               ),
-              verticalSpace(ManagerHeights.h30),
-              CustomButton(
-                text: ManagerStrings.confirm,
-                onPressed: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  ScaffoldMessenger.of(context).clearSnackBars();
-                  final otp =
-                      c1.text + c2.text + c3.text + c4.text + c5.text + c6.text;
-                  controller
-                      .add(VerifyOtpProcess(email: widget.email, otp: otp));
-                },
+              verticalSpace(ManagerHeights.h40),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: ManagerWidths.w20),
+                child: CustomButton(
+                  text: ManagerStrings.confirm,
+                  onPressed: () {
+                    FocusManager.instance.primaryFocus?.unfocus();
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    final otp = c1.text +
+                        c2.text +
+                        c3.text +
+                        c4.text +
+                        c5.text +
+                        c6.text;
+                    controller
+                        .add(VerifyOtpProcess(email: widget.email, otp: otp));
+                  },
+                ),
               ),
             ],
           ),

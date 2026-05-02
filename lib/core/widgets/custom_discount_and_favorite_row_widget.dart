@@ -40,7 +40,7 @@ class CustomDiscountAndFavoriteRowWidget extends StatelessWidget
               vertical: ManagerHeights.h5,
             ),
             decoration: BoxDecoration(
-              color: ManagerColors.failureColor,
+              color: ManagerColors.buttonColor,
               borderRadius: BorderRadius.circular(ManagerRadius.r15),
             ),
             child: Text(

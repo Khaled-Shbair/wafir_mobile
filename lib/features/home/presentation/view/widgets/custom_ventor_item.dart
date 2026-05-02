@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
@@ -37,6 +38,7 @@ class CustomVentorItem extends StatelessWidget {
             child: Column(
               children: [
                 Badge(
+                  backgroundColor: ManagerColors.primaryColor,
                   isLabelVisible: item.status == 'soon',
                   label: Text(
                     'قريباً',

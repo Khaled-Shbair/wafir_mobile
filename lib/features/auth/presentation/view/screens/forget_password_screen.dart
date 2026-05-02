@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
+import 'package:wafir_mobile/core/resource/manager_assets.dart';
+import 'package:wafir_mobile/core/resource/manager_colors.dart';
+import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/core/validator/validator.dart';
@@ -79,18 +82,19 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
           padding: EdgeInsetsDirectional.symmetric(
             horizontal: ManagerWidths.w20,
             vertical: ManagerHeights.h30,
+
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                ManagerStrings.forgetPasswordTitle,
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
+              Image.asset(ManagerAssets.forgotPasswordImage),
               verticalSpace(ManagerHeights.h10),
               Text(
                 ManagerStrings.forgetPasswordDescription,
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                      fontWeight: ManagerFontWeight.semiBold,
+                      color: ManagerColors.blackColor,
+                    ),
               ),
               verticalSpace(ManagerHeights.h30),
               Form(
@@ -107,7 +111,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
                   validator: (v) => Validator.emailValidator(v),
                 ),
               ),
-              verticalSpace(ManagerHeights.h30),
+              verticalSpace(ManagerHeights.h40),
               CustomButton(
                 text: ManagerStrings.send,
                 onPressed: () {

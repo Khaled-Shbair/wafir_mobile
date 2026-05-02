@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
@@ -25,7 +26,7 @@ class CustomOfferTimeAndLocationWidget extends StatelessWidget {
         vertical: ManagerHeights.h3,
       ),
       decoration: BoxDecoration(
-        color: backgroundColor,
+        color: ManagerColors.primaryColor,
         borderRadius: BorderRadius.circular(ManagerRadius.r20),
       ),
       child: Row(

@@ -15,6 +15,7 @@ import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_bann
 import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_section_header.dart';
 import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_ventor_item.dart';
 import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_verified_store_card.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class HomeScreen extends StatelessWidget with CustomToastMassage {
@@ -48,6 +49,7 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
           ],
         ),
         body: BlocBuilder<HomeBloc, HomeState>(
+
           builder: (context, state) {
             if (state is HomeLoading) {
               return Center(
@@ -81,6 +83,7 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
                     CustomSectionHeader(
                       title: 'أفضل عروض الفنادق',
                       viewAllButton: () {
+                        context.read<OffersBloc>().add(GetAllOffersEvent());
                         context.read<NavigationCubit>().goToOffers();
                       },
                     ),
@@ -92,6 +95,7 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
                     CustomSectionHeader(
                       title: 'العروض الأمثل لك',
                       viewAllButton: () {
+                        context.read<OffersBloc>().add(GetAllOffersEvent());
                         context.read<NavigationCubit>().goToOffers();
                       },
                     ),
@@ -134,7 +138,7 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
           height: ManagerHeights.h50,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(ManagerRadius.r15),
+            borderRadius: BorderRadius.circular(ManagerRadius.r32),
             border: Border.all(color: const Color(0xFFE2E8EA)),
           ),
           child: Row(

@@ -145,8 +145,8 @@ class CustomOfferItemWidget extends StatelessWidget {
                     children: [
                       CustomOfferTimeAndLocationWidget(
                         backgroundColor:
-                            ManagerColors.secondaryColor.withValues(alpha: 0.2),
-                        textColor: ManagerColors.secondaryColor,
+                        ManagerColors.buttonColor,
+                        textColor: ManagerColors.whiteColor,
                         text: AppConstants.getRemainingDays(
                             item.validFrom, item.validUntil),
                         icon: Icons.access_time,
@@ -154,8 +154,8 @@ class CustomOfferItemWidget extends StatelessWidget {
                       horizontalSpace(ManagerWidths.w3),
                       CustomOfferTimeAndLocationWidget(
                         backgroundColor:
-                            ManagerColors.secondaryColor.withValues(alpha: 0.2),
-                        textColor: ManagerColors.secondaryColor,
+                        ManagerColors.buttonColor,
+                        textColor: ManagerColors.whiteColor,
                         text: item.governorate,
                         icon: Icons.location_on_outlined,
                       ),
@@ -165,6 +165,7 @@ class CustomOfferItemWidget extends StatelessWidget {
                   CustomButton(
                     height: ManagerHeights.h30,
                     fontSize: ManagerFontsSizes.f12,
+                    color: ManagerColors.buttonColor,
                     onPressed: () {
                       if (instance<SharedPreferencesController>()
                           .getString(SharedPreferencesKeys.token)
