@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_assets.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
@@ -62,7 +63,8 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
             Routes.verifyOtpScreen,
             arguments: [
               state.email,
-              Routes.loginScreen,
+              Routes.resetPasswordScreen,
+              ApiKeys.forgotPasswordType,
             ],
           );
         } else if (state is ForgetPasswordFailure) {
@@ -82,7 +84,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
           padding: EdgeInsetsDirectional.symmetric(
             horizontal: ManagerWidths.w20,
             vertical: ManagerHeights.h30,
-
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

@@ -7,6 +7,7 @@ import 'package:wafir_mobile/core/networking/api/app_api.dart';
 import 'package:wafir_mobile/core/networking/api/dio_factory.dart';
 import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/features/auth/data/services/google_auth_service.dart';
+import 'package:wafir_mobile/features/auth/domain/use_case/change_password_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/forgot_password_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/login_by_google_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/logout_use_case.dart';
@@ -15,6 +16,7 @@ import 'package:wafir_mobile/features/auth/domain/use_case/register_by_google_us
 import 'package:wafir_mobile/features/auth/domain/use_case/reset_password_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/resend_otp_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/verify_otp_use_case.dart';
+import 'package:wafir_mobile/features/auth/presentation/controller/change_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/reset_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/register_bloc.dart';
 import 'package:wafir_mobile/features/auth/data/data_source/remote_auth_data_source.dart';
@@ -245,6 +247,19 @@ void initResetPassword() async {
         .registerLazySingleton<ResetPasswordBloc>(() => ResetPasswordBloc());
   }
 }
+void initChangePassword() async {
+  _initAuth();
+  if (!GetIt.I.isRegistered<ChangePasswordUseCase>()) {
+    instance
+        .registerLazySingleton<ChangePasswordUseCase>(() => ChangePasswordUseCase(
+      instance<AuthRepository>(),
+    ));
+  }
+  if (!GetIt.I.isRegistered<ChangePasswordBloc>()) {
+    instance
+        .registerLazySingleton<ChangePasswordBloc>(() => ChangePasswordBloc());
+  }
+}
 
 void initResetOtp() async {
   if (!GetIt.I.isRegistered<ResendOtpUseCase>()) {
@@ -263,6 +278,15 @@ void disposeResetPassword() async {
   }
 }
 
+
+void disposeChangePassword() async {
+  if (GetIt.I.isRegistered< ChangePasswordUseCase>()) {
+    instance.unregister<ChangePasswordUseCase>();
+  }
+  if (GetIt.I.isRegistered< ChangePasswordBloc>()) {
+    instance.unregister<ChangePasswordBloc>();
+  }
+}
 void initVerifyOtp() async {
   if (!GetIt.I.isRegistered<VerifyOtpUseCase>()) {
     instance.registerLazySingleton<VerifyOtpUseCase>(

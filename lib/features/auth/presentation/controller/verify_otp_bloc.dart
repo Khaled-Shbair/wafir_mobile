@@ -21,8 +21,11 @@ class VerifyOtpBloc extends Bloc<VerifyOtpEvent, VerifyOtpState> {
   void _verifyOtpProcess(VerifyOtpProcess event, Emitter emit) async {
     if (event.otp.isNotEmpty) {
       emit(VerifyOtpLoading());
-      (await _useCase
-          .execute(VerifyOtpUseCaseInput(email: event.email, otp: event.otp))
+      (await _useCase.execute(VerifyOtpUseCaseInput(
+        email: event.email,
+        otp: event.otp,
+      type: event.type,
+      ))
         ..fold(
           (f) => emit(VerifyOtpFailure(f.message)),
           (r) => emit(VerifyOtpSuccess()),

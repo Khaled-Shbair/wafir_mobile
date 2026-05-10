@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
+import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_assets.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
+import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_loading.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
@@ -14,10 +17,15 @@ import 'package:wafir_mobile/features/auth/presentation/view/widgets/custom_otp_
 import 'package:wafir_mobile/routes/routes.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
-  const VerifyOtpScreen(
-      {required this.email, required this.nextScreenRoute, super.key});
+  const VerifyOtpScreen({
+    required this.email,
+    required this.type,
+    required this.nextScreenRoute,
+    super.key,
+  });
 
   final String email;
+  final String type;
   final String nextScreenRoute;
 
   @override
@@ -103,6 +111,8 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen>
     f4.dispose();
     f5.dispose();
     f6.dispose();
+    disposeVerifyOtp();
+    disposeForgetPassword();
     super.dispose();
   }
 
@@ -115,9 +125,12 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen>
           showCustomLoading(context);
         } else if (state is VerifyOtpSuccess) {
           Navigator.of(context, rootNavigator: true).pop();
-          Navigator.of(context).pushNamedAndRemoveUntil(
+
+          // Navigator.of(context).pop();
+          Navigator.of(context).pushReplacementNamed(
             widget.nextScreenRoute,
-            (route) => route.settings.name == Routes.loginScreen,
+            arguments: instance<SharedPreferencesController>()
+                .getString(SharedPreferencesKeys.resetToken),
           );
         } else if (state is VerifyOtpFailure) {
           Navigator.of(context, rootNavigator: true).pop();
@@ -261,8 +274,11 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen>
                         c4.text +
                         c5.text +
                         c6.text;
-                    controller
-                        .add(VerifyOtpProcess(email: widget.email, otp: otp));
+                    controller.add(VerifyOtpProcess(
+                      email: widget.email,
+                      otp: otp,
+                      type: widget.type,
+                    ));
                   },
                 ),
               ),

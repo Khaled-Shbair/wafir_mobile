@@ -67,10 +67,17 @@ abstract class AppApi {
     @Field(ApiKeys.otpType) String otpType,
   );
 
-  @PATCH(ApiConstants.resetPassword)
-  Future<ResetPasswordResponse> resetPassword(
+  @PATCH(ApiConstants.changePassword)
+  Future<ResetPasswordResponse> changePassword(
     @Field(ApiKeys.currentPassword) String currentPassword,
     @Field(ApiKeys.newPassword) String newPassword,
+  );
+
+  @POST(ApiConstants.resetPassword)
+  Future<ResetPasswordResponse> resetPassword(
+    @Field(ApiKeys.resetToken) String resetToken,
+    @Field(ApiKeys.password) String newPassword,
+    @Field(ApiKeys.passwordConfirm) String passwordConfirm,
   );
 
   @PATCH(ApiConstants.updateProfile)
@@ -106,8 +113,8 @@ abstract class AppApi {
     @Query(ApiKeys.query) String? query,
   );
 
-   @POST(ApiConstants.logout)
-   Future<void> logout();
+  @POST(ApiConstants.logout)
+  Future<void> logout();
 
   @GET(ApiConstants.getAllFavoriteOffers)
   Future<FavoriteOffersResponse> getAllFavoriteOffers();
@@ -115,7 +122,6 @@ abstract class AppApi {
   @POST("${ApiConstants.addOrDeleteFavoriteOffer}{id}/toggle")
   Future<FavoriteToggleResponse> toggleFavoriteOffer(
     @Path(ApiKeys.id) int offerId,
-
   );
 
   @GET(ApiConstants.getAllOffers)

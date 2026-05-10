@@ -8,7 +8,8 @@ class ApiConstants {
   static const String registerByGoogle = '${baseUrl}auth/register-by-google';
   static const String logout = '${baseUrl}auth/logout';
   static const String resendOtp = '${baseUrl}auth/resend-otp';
-  static const String resetPassword = '${baseUrl}users/me/password';
+  static const String changePassword = '${baseUrl}users/me/password';
+  static const String resetPassword = '${baseUrl}auth/reset-password';
   static const String verifyOtp = '${baseUrl}auth/verify-otp';
   static const String updateProfile = '${baseUrl}users/me';
   static const String updateProfileAvatar = '${baseUrl}users/me/avatar';
@@ -38,6 +39,7 @@ class ApiKeys {
   static const String page = 'page';
   static const String take = 'take';
   static const String query = 'q';
+
   // Login / generic response keys
   static const String success = 'success';
   static const String statusCode = 'statusCode';
@@ -72,14 +74,15 @@ class ApiKeys {
   static const String otp = 'otp';
   static const String otpType = 'otp_type';
   static const String resetToken = 'reset_token';
-  static const String registrationType  = 'REGISTRATION';
-  static const String passwordResetToken  = 'password_reset_token';
-  static const String passwordResetExpires  = 'password_reset_expires';
-  static const String isVerified  = 'is_verified';
-  static const String otpExpires  = 'otp_expires';
-  static const String otpAttempts  = 'otp_attempts';
-  static const String lastOtpSentAt  = 'last_otp_sent_at';
-  static const String otpHash  = 'otp_hash';
+  static const String registrationType = 'REGISTRATION';
+  static const String forgotPasswordType = 'FORGOT_PASSWORD';
+  static const String passwordResetToken = 'password_reset_token';
+  static const String passwordResetExpires = 'password_reset_expires';
+  static const String isVerified = 'is_verified';
+  static const String otpExpires = 'otp_expires';
+  static const String otpAttempts = 'otp_attempts';
+  static const String lastOtpSentAt = 'last_otp_sent_at';
+  static const String otpHash = 'otp_hash';
 
   // Sector keys
   static const String name = 'name';
@@ -124,7 +127,7 @@ class ApiKeys {
   static const String isFavorited = 'is_favorited';
   static const String cursors = 'cursors';
   static const String logoUrl = 'logo_url';
-  
+
   // Favorite offers & vendor/offer details keys
   static const String userId = 'user_id';
   static const String offerId = 'offer_id';

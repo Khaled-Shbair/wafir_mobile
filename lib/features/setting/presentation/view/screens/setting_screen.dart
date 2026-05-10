@@ -99,9 +99,7 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
                 icon: Icons.lock_outline,
                 title: ManagerStrings.changePassword,
                 onTap: () {
-                  Navigator.of(context).pushNamed(Routes.resetPasswordScreen,
-                      arguments: instance<SharedPreferencesController>()
-                          .getString(SharedPreferencesKeys.token));
+                  Navigator.of(context).pushNamed(Routes.changePasswordScreen);
                 },
               ),
             ],
@@ -171,19 +169,19 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
           verticalSpace(ManagerHeights.h20),
           _buildSectionContainer(
             children: [
-               _buildSettingItem(
-                 context: context,
-                 icon: Icons.logout,
-                 title: ManagerStrings.logout,
-                 onTap: () {
-                   showConfirmationDialog(
-                     context,
-                     confirmButtonOnPressed: () async {
-                       await _performLogout(context);
-                     },
-                   );
-                 },
-               ),
+              _buildSettingItem(
+                context: context,
+                icon: Icons.logout,
+                title: ManagerStrings.logout,
+                onTap: () {
+                  showConfirmationDialog(
+                    context,
+                    confirmButtonOnPressed: () async {
+                      await _performLogout(context);
+                    },
+                  );
+                },
+              ),
             ],
           ),
         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
@@ -34,6 +35,7 @@ void customActivationMessenger(BuildContext context, String email) {
                 arguments: [
                   email,
                   Routes.mainScreen,
+                  ApiKeys.registrationType,
                 ],
               );
             },

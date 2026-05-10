@@ -1,8 +1,8 @@
-import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/networking/api/app_api.dart';
 import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
+import 'package:wafir_mobile/features/auth/data/request/change_password_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/forgot_password_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/login_by_email_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/register_request.dart';
@@ -30,6 +30,8 @@ abstract class RemoteAuthDataSource {
 
   Future<VerifyOtpResponse> verifyOtp(VerifyOtpRequest request);
 
+  Future<ResetPasswordResponse> changePassword(ChangePasswordRequest request);
+
   Future<ResetOtpResponse> resendOtp(ResetOtpRequest request);
 
   Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request);
@@ -48,6 +50,7 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   @override
   Future<LoginResponse> loginByEmail(LoginByEmailRequest request) async {
     var response = await _appApi.loginByEmail(request.email, request.password);
+    print('response.success:${response.success}');
     if (response.success == true) {
       await _sharedPreferencesController.setData(
         SharedPreferencesKeys.email,
@@ -55,8 +58,9 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       );
       await _sharedPreferencesController.setData(
         SharedPreferencesKeys.token,
-        response.data?.token ?? '',
+        response.token ?? '',
       );
+
       await _sharedPreferencesController.setData(
         SharedPreferencesKeys.name,
         '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
@@ -75,6 +79,7 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     disposeEditProfile();
     disposeFavorite();
     _sharedPreferencesController.removeData(SharedPreferencesKeys.token);
+    _sharedPreferencesController.removeData(SharedPreferencesKeys.resetToken);
     _sharedPreferencesController.removeData(SharedPreferencesKeys.email);
     _sharedPreferencesController.removeData(SharedPreferencesKeys.name);
     _sharedPreferencesController.removeData(SharedPreferencesKeys.image);
@@ -119,7 +124,7 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     );
     if (response.success == true) {
       _sharedPreferencesController.setData(
-          SharedPreferencesKeys.token, response.data?.verificationToken);
+          SharedPreferencesKeys.resetToken, response.data?.verificationToken);
     }
     return response;
   }
@@ -143,20 +148,12 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     var response = await _appApi.verifyOtp(
       request.email,
       request.otp,
-      ApiKeys.registrationType,
+      request.type,
     );
     if (response.success == true) {
       await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.email,
-        response.data?.user?.email,
-      );
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.token,
-        response.data?.token ?? '',
-      );
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.name,
-        '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
+        SharedPreferencesKeys.resetToken,
+        response.token,
       );
     }
 
@@ -172,6 +169,16 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   Future<ResetPasswordResponse> resetPassword(
       ResetPasswordRequest request) async {
     return await _appApi.resetPassword(
+      request.token,
+      request.newPassword,
+      request.newPassword,
+    );
+  }
+
+  @override
+  Future<ResetPasswordResponse> changePassword(
+      ChangePasswordRequest request) async {
+    return await _appApi.changePassword(
       request.currentPassword,
       request.newPassword,
     );

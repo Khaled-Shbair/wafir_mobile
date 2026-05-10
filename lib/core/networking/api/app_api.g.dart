@@ -231,7 +231,7 @@ class _AppApi implements AppApi {
   }
 
   @override
-  Future<ResetPasswordResponse> resetPassword(
+  Future<ResetPasswordResponse> changePassword(
     String currentPassword,
     String newPassword,
   ) async {
@@ -247,6 +247,41 @@ class _AppApi implements AppApi {
           .compose(
             _dio.options,
             'https://discount-platform.onrender.com/api/users/me/password',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late ResetPasswordResponse _value;
+    try {
+      _value = ResetPasswordResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
+  Future<ResetPasswordResponse> resetPassword(
+    String resetToken,
+    String newPassword,
+    String passwordConfirm,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = {
+      'reset_token': resetToken,
+      'password': newPassword,
+      'password_confirm': passwordConfirm,
+    };
+    final _options = _setStreamType<ResetPasswordResponse>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            'https://discount-platform.onrender.com/api/auth/reset-password',
             queryParameters: queryParameters,
             data: _data,
           )

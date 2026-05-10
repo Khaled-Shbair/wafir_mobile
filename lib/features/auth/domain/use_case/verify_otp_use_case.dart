@@ -8,10 +8,12 @@ import 'package:wafir_mobile/features/auth/domain/repository/auth_repository.dar
 class VerifyOtpUseCaseInput {
   final String email;
   final String otp;
+  final String type;
 
   VerifyOtpUseCaseInput({
     required this.email,
     required this.otp,
+    required this.type,
   });
 }
 
@@ -28,6 +30,7 @@ class VerifyOtpUseCase
       VerifyOtpRequest(
         email: input.email,
         otp: input.otp,
+        type: input.type,
       ),
     );
   }

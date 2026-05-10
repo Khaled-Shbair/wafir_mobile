@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/config/constants/app_constants.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
@@ -143,6 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen>
               arguments: [
                 email.text,
                 Routes.mainScreen,
+                ApiKeys.registrationType,
               ],
             );
           } else if (state is RegisterFailure) {

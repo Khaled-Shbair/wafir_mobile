@@ -85,22 +85,15 @@ class OfferDetailsScreen extends StatelessWidget {
   }
 
   void _shareOffer(OfferDetailsModel offerDetails) {
-    final message = '''
-🎉 عرض رائع: ${offerDetails.offer.title}
-
-🏪 المتجر: ${offerDetails.offer.vendor.businessName}
-📍 العنوان: ${_getMainBranchAddress(offerDetails.offer.branches)}
-💰 الحد الأدنى للشراء: ${offerDetails.offer.minPurchaseAmount} ر.ع
-📅 ينتهي في: ${_formatDate(offerDetails.offer.validUntil)}
-
-✨ ${offerDetails.offer.description}
-
-تحمل تطبيق وافر واستمتع بأفضل العروض والخصومات!
-''';
-
     SharePlus.instance.share(
-      ShareParams(text: message, subject: offerDetails.offer.title),
+      ShareParams(
+
+        text: "wafar://offer/${offerDetails.offer.id}",
+        // uri: Uri(path: "https://wafar.com/offer/${offerDetails.offer.id}"),
+        title: offerDetails.offer.title,
+      ),
     );
+
   }
 
   String _formatDate(String value) {
@@ -170,9 +163,9 @@ class _OfferDetailsContent extends StatelessWidget {
                                 arguments: offerDetails.offer.vendor.id,
                               );
                             },
-
                             child: CustomRestaurantCardWidget(
-                              restaurantImage: offerDetails.offer.vendor.logoUrl,
+                              restaurantImage:
+                                  offerDetails.offer.vendor.logoUrl,
                               restaurantAddress: _getMainBranchAddress(
                                 offerDetails.offer.branches,
                               ),
@@ -196,22 +189,26 @@ class _OfferDetailsContent extends StatelessWidget {
                                     _InfoBox(
                                       icon: Icons.calendar_today,
                                       label: ManagerStrings.offerStarted,
-                                      value: _formatDate(offerDetails.offer.validFrom),
+                                      value: _formatDate(
+                                          offerDetails.offer.validFrom),
                                     ),
                                     _InfoBox(
                                       icon: Icons.event_busy_outlined,
                                       label: ManagerStrings.offerFinished,
-                                      value: _formatDate(offerDetails.offer.validUntil),
+                                      value: _formatDate(
+                                          offerDetails.offer.validUntil),
                                     ),
                                     _InfoBox(
                                       icon: Icons.attach_money_outlined,
                                       label: ManagerStrings.minimumPurchase,
-                                      value: '${offerDetails.offer.minPurchaseAmount} ر.ع',
+                                      value:
+                                          '${offerDetails.offer.minPurchaseAmount} ر.ع',
                                     ),
                                     _InfoBox(
                                       icon: Icons.list_alt_outlined,
                                       label: 'عدد الحجوزات',
-                                      value: '${offerDetails.offer.totalClaims} / ${offerDetails.offer.maxTotalClaims}',
+                                      value:
+                                          '${offerDetails.offer.totalClaims} / ${offerDetails.offer.maxTotalClaims}',
                                     ),
                                   ],
                                 );
@@ -235,7 +232,6 @@ class _OfferDetailsContent extends StatelessWidget {
                                 ),
                               },
                             ),
-
                           ),
                           verticalSpace(ManagerHeights.h15),
                           if (offerDetails.offer.branches.isNotEmpty)
@@ -300,7 +296,6 @@ class _OfferDetailsContent extends StatelessWidget {
       ],
     );
   }
-
 
   Widget _buildBranchItem(
     BuildContext context,
@@ -452,10 +447,8 @@ class _InfoBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return ConstrainedBox(
-      constraints: BoxConstraints(minWidth: 140,
-          maxWidth: double.infinity),
+      constraints: BoxConstraints(minWidth: 140, maxWidth: double.infinity),
       child: Container(
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
@@ -568,4 +561,3 @@ class _HeroSection extends StatelessWidget {
     );
   }
 }
-

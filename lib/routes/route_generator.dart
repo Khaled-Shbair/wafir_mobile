@@ -4,11 +4,13 @@ import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
+import 'package:wafir_mobile/features/auth/presentation/controller/change_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/register_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/reset_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/verify_otp_bloc.dart';
+import 'package:wafir_mobile/features/auth/presentation/view/screens/change_password_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/forget_password_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/login_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/register_screen.dart';
@@ -81,16 +83,26 @@ class RouteGenerator {
             child: ResetPasswordScreen(token: token),
           ),
         );
+      case Routes.changePasswordScreen:
+        initChangePassword();
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<ChangePasswordBloc>(
+            create: (_) => instance<ChangePasswordBloc>(),
+            child: ChangePasswordScreen(),
+          ),
+        );
       case Routes.verifyOtpScreen:
         initVerifyOtp();
         final arguments = setting.arguments as List;
         final email = arguments[0] as String;
         final nextScreenRoute = arguments[1] as String;
+        final type = arguments[2] as String;
         return MaterialPageRoute(
           builder: (_) => BlocProvider<VerifyOtpBloc>(
             create: (_) => instance<VerifyOtpBloc>(),
             child: VerifyOtpScreen(
               email: email,
+              type: type,
               nextScreenRoute: nextScreenRoute,
             ),
           ),

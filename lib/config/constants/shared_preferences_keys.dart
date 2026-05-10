@@ -5,5 +5,6 @@ class SharedPreferencesKeys {
   static const String email = 'email';
   static const String rememberMy = 'remember_my';
   static const String image = 'image';
-  static const String token = 'token';
+   static const String token = 'token';
+  static const String resetToken = 'reset_token';
 }

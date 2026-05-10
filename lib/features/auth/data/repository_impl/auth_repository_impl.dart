@@ -10,6 +10,7 @@ import 'package:wafir_mobile/features/auth/data/mapper/register_by_email_mapper.
 import 'package:wafir_mobile/features/auth/data/mapper/reset_otp_mapper.dart';
 import 'package:wafir_mobile/features/auth/data/mapper/reset_password_mapper.dart';
 import 'package:wafir_mobile/features/auth/data/mapper/verify_otp_mapper.dart';
+import 'package:wafir_mobile/features/auth/data/request/change_password_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/forgot_password_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/register_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/reset_otp_request.dart';
@@ -187,6 +188,35 @@ class AuthRepositoryImpl implements AuthRepository {
           return Left(
             Failure(
               message: response.message ?? 'Reset password failed',
+              code: response.statusCode ?? ResponseCode.BAD_REQUEST.value,
+            ),
+          );
+        }
+      } catch (e) {
+        return Left(ErrorHandler.handle(e).failure);
+      }
+    } else {
+      return Left(
+        Failure(
+          message: ManagerStrings.noInternetConnection,
+          code: ResponseCode.NO_INTERNET_CONNECTION.value,
+        ),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, ResetPasswordModel>> changePassword(
+      ChangePasswordRequest request) async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final response = await _dataSource.changePassword(request);
+        if (response.success == true) {
+          return Right(response.toDomain());
+        } else {
+          return Left(
+            Failure(
+              message: response.message ?? 'Change password failed',
               code: response.statusCode ?? ResponseCode.BAD_REQUEST.value,
             ),
           );

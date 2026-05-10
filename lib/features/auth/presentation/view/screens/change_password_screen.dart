@@ -9,18 +9,16 @@ import 'package:wafir_mobile/core/widgets/custom_loading.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
 import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
-import 'package:wafir_mobile/features/auth/presentation/controller/reset_password_bloc.dart';
+import 'package:wafir_mobile/features/auth/presentation/controller/change_password_bloc.dart';
 
-class ResetPasswordScreen extends StatefulWidget {
-  const ResetPasswordScreen({required this.token, super.key});
-
-  final String token;
+class ChangePasswordScreen extends StatefulWidget {
+  const ChangePasswordScreen({super.key});
 
   @override
-  State<ResetPasswordScreen> createState() => _ResetPasswordScreenState();
+  State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
 }
 
-class _ResetPasswordScreenState extends State<ResetPasswordScreen>
+class _ChangePasswordScreenState extends State<ChangePasswordScreen>
     with CustomToastMassage {
   late TextEditingController currentPassword;
   late TextEditingController newPassword;
@@ -62,23 +60,24 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
     currentPasswordFocusNode.dispose();
     newPasswordFocusNode.dispose();
     confirmPasswordFocusNode.dispose();
-    disposeResetPassword();
+    disposeChangePassword();
+    disposeAuth();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.read<ResetPasswordBloc>();
+    final controller = context.read<ChangePasswordBloc>();
 
-    return BlocListener<ResetPasswordBloc, ResetPasswordState>(
+    return BlocListener<ChangePasswordBloc, ChangePasswordState>(
       listener: (context, state) {
-        if (state is ResetPasswordLoading) {
+        if (state is ChangePasswordLoading) {
           showCustomLoading(context);
-        } else if (state is ResetPasswordSuccess) {
+        } else if (state is ChangePasswordSuccess) {
           Navigator.of(context, rootNavigator: true).pop();
           showToast(state.message, false);
           Navigator.of(context, rootNavigator: true).pop();
-        } else if (state is ResetPasswordFailure) {
+        } else if (state is ChangePasswordFailure) {
           Navigator.of(context, rootNavigator: true).pop();
           showToast(state.message);
         }
@@ -116,7 +115,30 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
                 key: controller.formKey,
                 child: Column(
                   children: [
-                    BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
+                    BlocBuilder<ChangePasswordBloc, ChangePasswordState>(
+                      buildWhen: (previous, current) =>
+                          previous.currentPasswordObscured !=
+                          current.currentPasswordObscured,
+                      builder: (context, state) {
+                        return CustomTextField(
+                          maxLength: 50,
+                          hintText: ManagerStrings.currentPassword,
+                          controller: currentPassword,
+                          keyboardType: TextInputType.visiblePassword,
+                          obscureText: state.currentPasswordObscured,
+                          isPassword: true,
+                          prefixIconData: Icons.lock_outline,
+                          isFocused: currentPasswordIsFocused,
+                          focusNode: currentPasswordFocusNode,
+                          textInputAction: TextInputAction.next,
+                          validator: (v) => Validator.passwordValidator(v),
+                          functionVisibilityPassword: () =>
+                              controller.add(ToggleCurrentPasswordVisibility()),
+                        );
+                      },
+                    ),
+                    verticalSpace(ManagerHeights.h20),
+                    BlocBuilder<ChangePasswordBloc, ChangePasswordState>(
                       buildWhen: (previous, current) =>
                           previous.newPasswordObscured !=
                           current.newPasswordObscured,
@@ -139,7 +161,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
                       },
                     ),
                     verticalSpace(ManagerHeights.h20),
-                    BlocBuilder<ResetPasswordBloc, ResetPasswordState>(
+                    BlocBuilder<ChangePasswordBloc, ChangePasswordState>(
                       buildWhen: (previous, current) =>
                           previous.confirmPasswordObscured !=
                           current.confirmPasswordObscured,
@@ -174,9 +196,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen>
                   FocusManager.instance.primaryFocus?.unfocus();
                   if (newPassword.text.isNotEmpty &&
                       confirmPassword.text.isNotEmpty) {
-                    controller.add(ResetPasswordProcess(
-                      token: widget.token,
+                    controller.add(ChangePasswordProcess(
                       newPassword: newPassword.text,
+                      currentPassword: currentPassword.text,
                     ));
                   }
                 },

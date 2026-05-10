@@ -1,5 +1,6 @@
 import 'package:wafir_mobile/core/error_handler/error_handler.dart';
 import 'package:dartz/dartz.dart';
+import 'package:wafir_mobile/features/auth/data/request/change_password_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/forgot_password_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/login_by_email_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/register_request.dart';
@@ -32,6 +33,7 @@ abstract class AuthRepository {
 
   Future<Either<Failure, ResetPasswordModel>> resetPassword(
       ResetPasswordRequest request);
-
+  Future<Either<Failure, ResetPasswordModel>> changePassword(
+      ChangePasswordRequest request);
   Future<Either<Failure, void>> logout();
 }
