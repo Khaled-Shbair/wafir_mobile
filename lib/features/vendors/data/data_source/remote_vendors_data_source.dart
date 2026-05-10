@@ -32,4 +32,5 @@ class RemoteVendorsDataSourceImpl implements RemoteVendorsDataSource {
       request.searchQuery,
     );
   }
+
 }

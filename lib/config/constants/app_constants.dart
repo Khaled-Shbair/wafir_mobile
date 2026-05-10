@@ -12,14 +12,9 @@ class AppConstants {
   static const List<String> categories = [
     'الكل',
     'المطاعم',
-    'المقاهي',
     'الفنادق',
-    'السياحة',
-    'الملابس',
-    'الإلكترونيات',
-    'الصحة والجمال',
-    'الرياضة',
-    'التعليم',
+    'تأجير السيارات',
+    'تذاكر السفر',
   ];
 
   static final Map<String, List<String>> omanLocations = {

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/model/offers_model.dart';
 import 'package:wafir_mobile/features/favorite/domain/use_case/get_all_favorite_offers_use_case.dart';
 import 'package:wafir_mobile/features/favorite/domain/use_case/toggle_favorite_offer_use_case.dart';
@@ -55,11 +54,30 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       (r) {
         // Emit state with toggled offerId and isFavorited status
         if (previousState is FavoriteLoaded) {
+          // If the offer was unfavorited, remove it from the current list so the
+          // favorites screen updates immediately. If it was favorited, keep
+          // the current list (it should already contain the item) —
+          // re-fetching would be heavier.
+          final currentItems = previousState.favorites.items;
+          final bool nowFavorited = r.isFavorited;
+
+          final updatedItems = nowFavorited
+              ? currentItems
+              : currentItems.where((i) => i.offerId != event.offerId).toList();
+
           emit(FavoriteLoaded(
             favorites: previousState.favorites,
             message: r.message,
             toggledOfferId: event.offerId,
-            isFavorited: r.isFavorited,
+            isFavorited: nowFavorited,
+          ));
+
+          // Emit a second FavoriteLoaded with the updated items list so UI reads it
+          emit(FavoriteLoaded(
+            favorites: OffersModel(items: updatedItems, totalCount: updatedItems.length),
+            message: r.message,
+            toggledOfferId: event.offerId,
+            isFavorited: nowFavorited,
           ));
         } else {
           // Fetch all favorites to update the list
@@ -69,9 +87,5 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     );
   }
 
-  @override
-  Future<void> close() {
-    disposeFavorite();
-    return super.close();
-  }
+
 }

@@ -155,7 +155,7 @@ class _VendorListCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.of(context).pushNamed(
         Routes.vendorDetailsScreen,
-        arguments: vendor,
+        arguments: vendor.id,
       ),
       child: Container(
         padding: EdgeInsetsDirectional.all(ManagerWidths.w12),

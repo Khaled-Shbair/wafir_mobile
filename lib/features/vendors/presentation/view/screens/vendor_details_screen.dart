@@ -1,84 +1,101 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
+import 'package:wafir_mobile/core/widgets/custom_offer_item_widget.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
-import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.dart';
+import 'package:wafir_mobile/features/vendors/data/mapper/vendors_mapper.dart';
+import 'package:wafir_mobile/features/vendors/presentation/controller/vendor_details_bloc.dart';
+import 'package:wafir_mobile/features/vendors/presentation/controller/vendor_details_state.dart';
+import 'package:wafir_mobile/features/vendors/domain/model/vendor_model.dart';
 
 class VendorDetailsScreen extends StatelessWidget {
-  const VendorDetailsScreen({
-    super.key,
-    required this.vendor,
-  });
-
-  final VendorPublicItemModel vendor;
+  const VendorDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final mainBranch = _getMainBranch(vendor.branches);
+    return BlocBuilder<VendorDetailsBloc, VendorDetailsState>(
+      builder: (context, state) {
+        final vendor = state.vendor;
 
-    return Scaffold(
-      backgroundColor: const Color(0xffF8F9FB),
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(Icons.arrow_back_ios),
-        ),
-        title: const Text('تفاصيل المتجر'),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsetsDirectional.only(
-          start: ManagerWidths.w15,
-          end: ManagerWidths.w15,
-          top: ManagerHeights.h10,
-          bottom: ManagerHeights.h20,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildHeader(context, mainBranch),
-            verticalSpace(ManagerHeights.h15),
-            _buildStatsSection(context),
-            verticalSpace(ManagerHeights.h15),
-            _buildInfoCard(
-              context: context,
-              title: 'عن المتجر',
-              icon: Icons.info_outline,
-              child: Text(
-                vendor.description.trim().isNotEmpty
-                    ? vendor.description
-                    : 'لا يوجد وصف متاح',
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
+        return Scaffold(
+          backgroundColor: const Color(0xffF8F9FB),
+          appBar: AppBar(
+            leading: IconButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              icon: const Icon(Icons.arrow_back_ios),
             ),
-            verticalSpace(ManagerHeights.h15),
-            _buildInfoCard(
-              title: 'الفروع',
-              context: context,
-              icon: Icons.account_tree_outlined,
-              child: vendor.branches.isEmpty
-                  ? Text(
-                      'لا يوجد فروع متاحة',
-                      style: Theme.of(context).textTheme.labelLarge,
-                    )
-                  : Column(
-                      children: vendor.branches
-                          .map((branch) => _buildBranchTile(branch, context))
-                          .toList(),
-                    ),
-            ),
-          ],
-        ),
-      ),
+            title: const Text('تفاصيل المتجر'),
+          ),
+          body: vendor == null
+              ? Center(
+                  child: state is VendorDetailsFailure
+                      ? Text(
+                          state.message,
+                          style: const TextStyle(color: Colors.red),
+                        )
+                      : const CircularProgressIndicator(),
+                )
+              : SingleChildScrollView(
+                  padding: EdgeInsetsDirectional.only(
+                    start: ManagerWidths.w15,
+                    end: ManagerWidths.w15,
+                    top: ManagerHeights.h10,
+                    bottom: ManagerHeights.h20,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildHeader(context, vendor),
+                      verticalSpace(ManagerHeights.h15),
+                      _buildStatsSection(context, vendor),
+                      verticalSpace(ManagerHeights.h15),
+                      _buildInfoCard(
+                        context: context,
+                        title: 'عن المتجر',
+                        icon: Icons.info_outline,
+                        child: Text(
+                          vendor.description.trim().isNotEmpty
+                              ? vendor.description
+                              : 'لا يوجد وصف متاح',
+                          style: Theme.of(context).textTheme.labelLarge,
+                        ),
+                      ),
+                      verticalSpace(ManagerHeights.h15),
+                      _buildInfoCard(
+                        title: 'الفروع',
+                        context: context,
+                        icon: Icons.account_tree_outlined,
+                        child: vendor.branches.isEmpty
+                            ? Text(
+                                'لا يوجد فروع متاحة',
+                                style: Theme.of(context).textTheme.labelLarge,
+                              )
+                            : Column(
+                                children: vendor.branches
+                                    .map((branch) =>
+                                        _buildBranchTile(branch, context))
+                                    .toList(),
+                              ),
+                      ),
+                      verticalSpace(ManagerHeights.h15),
+                      _buildOffersSection(context, vendor),
+                    ],
+                  ),
+                ),
+        );
+      },
     );
   }
 
   Widget _buildHeader(
     BuildContext context,
-    VendorPublicBranchModel? mainBranch,
+    VendorModel vendor,
   ) {
+    final mainBranch = _getMainBranch(vendor.branches);
     final address = _formatBranchAddress(mainBranch);
     return Container(
       width: double.infinity,
@@ -156,7 +173,7 @@ class VendorDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatsSection(BuildContext context) {
+  Widget _buildStatsSection(BuildContext context, VendorModel vendor) {
     return Row(
       children: [
         Expanded(
@@ -172,12 +189,64 @@ class VendorDetailsScreen extends StatelessWidget {
           child: _buildStatCard(
             context: context,
             title: 'العروض النشطة',
-            value: vendor.activeOffersCount.toString(),
+            value: vendor.offers.length.toString(),
             icon: Icons.local_offer_outlined,
           ),
         ),
         horizontalSpace(ManagerWidths.w12),
       ],
+    );
+  }
+
+  Widget _buildOffersSection(BuildContext context, VendorModel vendor) {
+    return BlocBuilder<VendorDetailsBloc, VendorDetailsState>(
+      builder: (context, state) {
+        final offers = vendor.offers
+            .map(
+              (offer) => offer.toOfferItemModel(
+                businessName: vendor.businessName,
+                logoUrl: vendor.logoUrl,
+                fallbackGovernorate:
+                    _getMainBranch(vendor.branches)?.governorate ?? '',
+                fallbackWilaya: _getMainBranch(vendor.branches)?.wilaya ?? '',
+              ),
+            )
+            .toList();
+
+        return _buildInfoCard(
+          context: context,
+          title: 'العروض المتاحة',
+          icon: Icons.local_offer_outlined,
+          child: offers.isEmpty
+              ? Padding(
+                  padding: EdgeInsets.symmetric(vertical: ManagerHeights.h10),
+                  child: Center(
+                    child: Text(
+                      state is VendorDetailsLoading
+                          ? 'جاري تحميل العروض...'
+                          : 'لا توجد عروض متاحة لهذا المزود حالياً',
+                      style: Theme.of(context).textTheme.labelLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              : GridView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  // physics: const NeverScrollableScrollPhysics(),
+                  itemCount: offers.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: ManagerWidths.w12,
+                    mainAxisSpacing: ManagerHeights.h12,
+                    childAspectRatio: 3 / 6,
+                  ),
+                  itemBuilder: (context, index) {
+                    return CustomOfferItemWidget(item: offers[index]);
+                  },
+                ),
+        );
+      },
     );
   }
 
@@ -222,8 +291,7 @@ class VendorDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBranchTile(
-      VendorPublicBranchModel branch, BuildContext context) {
+  Widget _buildBranchTile(VendorBranchModel branch, BuildContext context) {
     final address = _formatBranchAddress(branch);
 
     return Container(
@@ -351,8 +419,7 @@ class VendorDetailsScreen extends StatelessWidget {
     );
   }
 
-  VendorPublicBranchModel? _getMainBranch(
-      List<VendorPublicBranchModel> branches) {
+  VendorBranchModel? _getMainBranch(List<VendorBranchModel> branches) {
     if (branches.isEmpty) return null;
     return branches.firstWhere(
       (branch) => branch.isMain,
@@ -360,7 +427,7 @@ class VendorDetailsScreen extends StatelessWidget {
     );
   }
 
-  String _formatBranchAddress(VendorPublicBranchModel? branch) {
+  String _formatBranchAddress(VendorBranchModel? branch) {
     if (branch == null) return 'لا يوجد عنوان متاح';
 
     final parts = <String>[branch.governorate, branch.wilaya, branch.address]

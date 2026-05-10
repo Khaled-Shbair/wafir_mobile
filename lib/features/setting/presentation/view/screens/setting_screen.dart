@@ -13,9 +13,9 @@ import 'package:wafir_mobile/core/widgets/custom_dialog.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
 import 'package:wafir_mobile/core/widgets/custom_web_view_bottom_sheet.dart';
+import 'package:wafir_mobile/features/auth/domain/use_case/logout_use_case.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class SettingScreen extends StatelessWidget with CustomToastMassage {
   SettingScreen({super.key});
@@ -96,7 +96,7 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
             children: [
               _buildSettingItem(
                 context: context,
-                icon: ManagerAssets.lockIcon,
+                icon: Icons.lock_outline,
                 title: ManagerStrings.changePassword,
                 onTap: () {
                   Navigator.of(context).pushNamed(Routes.resetPasswordScreen,
@@ -116,11 +116,11 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
             children: [
               _buildSettingItem(
                 context: context,
-                icon: ManagerAssets.contactUsIcon,
+                icon: Icons.call,
                 title: 'التواصل واتساب',
                 onTap: () async {
                   final Uri url = Uri.parse(
-                      "https://wa.me/970598297458?text=مرحبا، أريد الاستفسار عن تطبيق وافر");
+                      "https://wa.me/96871189661?text=مرحبا، أريد الاستفسار عن تطبيق وافر");
                   if (!await launchUrl(url,
                       mode: LaunchMode.externalApplication)) {
                     showToast('سيتم إضافتها قريباً');
@@ -130,7 +130,7 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
               _buildDivider(),
               _buildSettingItem(
                 context: context,
-                icon: ManagerAssets.infoIcon,
+                icon: Icons.question_answer_outlined,
                 title: ManagerStrings.frequentlyAskedQuestions,
                 onTap: () {
                   customWebViewBottomSheet(
@@ -143,7 +143,7 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
               _buildDivider(),
               _buildSettingItem(
                 context: context,
-                icon: ManagerAssets.infoIcon,
+                icon: Icons.privacy_tip_outlined,
                 title: ManagerStrings.privacyPolicy,
                 onTap: () async {
                   customWebViewBottomSheet(
@@ -156,7 +156,7 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
               _buildDivider(),
               _buildSettingItem(
                 context: context,
-                icon: ManagerAssets.infoIcon,
+                icon: Icons.info_outline,
                 title: ManagerStrings.termsOfUse,
                 onTap: () async {
                   customWebViewBottomSheet(
@@ -171,42 +171,19 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
           verticalSpace(ManagerHeights.h20),
           _buildSectionContainer(
             children: [
-              _buildSettingItem(
-                context: context,
-                icon: ManagerAssets.logoutIcon,
-                title: ManagerStrings.logout,
-                isLogout: true,
-                onTap: () {
-                  showConfirmationDialog(
-                    context,
-                    confirmButtonOnPressed: () {
-                      showConfirmationDialog(
-                        context,
-                        confirmButtonOnPressed: () {
-                          disposeHome();
-                          disposeOffers();
-                          disposeProfile();
-                          disposeEditProfile();
-                          disposeFavorite();
-                          instance<SharedPreferencesController>()
-                              .removeData(SharedPreferencesKeys.token);
-                          instance<SharedPreferencesController>()
-                              .removeData(SharedPreferencesKeys.email);
-                          instance<SharedPreferencesController>()
-                              .removeData(SharedPreferencesKeys.name);
-                          instance<SharedPreferencesController>()
-                              .removeData(SharedPreferencesKeys.image);
-                          Navigator.of(context, rootNavigator: true)
-                              .pushNamedAndRemoveUntil(
-                            Routes.loginScreen,
-                            (route) => false,
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
+               _buildSettingItem(
+                 context: context,
+                 icon: Icons.logout,
+                 title: ManagerStrings.logout,
+                 onTap: () {
+                   showConfirmationDialog(
+                     context,
+                     confirmButtonOnPressed: () async {
+                       await _performLogout(context);
+                     },
+                   );
+                 },
+               ),
             ],
           ),
         ],
@@ -262,37 +239,24 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
 
   Widget _buildSettingItem({
     required BuildContext context,
-    required String icon,
+    required IconData icon,
     required String title,
     required VoidCallback onTap,
-    bool isLogout = false,
   }) {
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: onTap,
       child: Padding(
         padding: EdgeInsetsDirectional.symmetric(
-          horizontal: ManagerWidths.w10,
-          vertical: ManagerHeights.h10,
+          horizontal: ManagerWidths.w12,
+          vertical: ManagerHeights.h12,
         ),
         child: Row(
           children: [
-            Container(
-              width: ManagerWidths.w40,
-              height: ManagerHeights.h40,
-              decoration: BoxDecoration(
-                color: isLogout
-                    ? Colors.red.withOpacity(0.08)
-                    : ManagerColors.primaryColor.withOpacity(0.08),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Center(
-                child: Image.asset(
-                  icon,
-                  width: ManagerWidths.w20,
-                  height: ManagerHeights.h20,
-                ),
-              ),
+            Icon(
+              icon,
+              size: ManagerIconsSizes.i24,
+              color: ManagerColors.greyColor,
             ),
             horizontalSpace(ManagerWidths.w10),
             Expanded(
@@ -300,18 +264,42 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
                 title,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: isLogout ? Colors.red : Colors.black,
+                      color: Colors.black,
                     ),
               ),
             ),
             Icon(
               Icons.arrow_forward_ios_rounded,
-              color: isLogout ? Colors.red : ManagerColors.greyColor,
+              color: ManagerColors.greyColor,
               size: ManagerIconsSizes.i18,
             ),
           ],
         ),
       ),
     );
+  }
+
+  Future<void> _performLogout(BuildContext context) async {
+    try {
+      instance.registerSingleton<LogoutUseCase>(
+        LogoutUseCase(instance()),
+      );
+      final logoutUseCase = instance<LogoutUseCase>();
+      final result = await logoutUseCase.execute(null);
+
+      result.fold(
+        (failure) {
+          showToast(failure.message);
+        },
+        (_) {
+          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+            Routes.loginScreen,
+            (route) => false,
+          );
+        },
+      );
+    } catch (e) {
+      showToast('خطأ أثناء تسجيل الخروج');
+    }
   }
 }

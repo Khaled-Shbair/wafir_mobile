@@ -1,7 +1,6 @@
 import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wafir_mobile/features/offers/data/response/offer_item_data_response.dart';
-import 'package:wafir_mobile/features/offers/data/response/offer_vendor_branch_response.dart';
 
 part 'get_offers_response.g.dart';
 

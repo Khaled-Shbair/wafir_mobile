@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/constants/app_constants.dart';
+import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/core/widgets/custom_offer_item_widget.dart';
@@ -32,6 +33,7 @@ class _OffersScreenState extends State<OffersScreen> {
 
   @override
   void initState() {
+
     super.initState();
     _searchFocusNode = FocusNode();
   }
@@ -71,6 +73,8 @@ class _OffersScreenState extends State<OffersScreen> {
             CustomTextField(
               textInputAction: TextInputAction.search,
               controller: controller.search,
+              top: 0,
+              bottom: 0,
               focusNode: _searchFocusNode,
               onFieldSubmitted: (v) {
                 if (v != null || v!.isNotEmpty) {
@@ -79,9 +83,10 @@ class _OffersScreenState extends State<OffersScreen> {
                 }
               },
               hintText: ManagerStrings.searchOnStoreOrOffer,
+
               prefixIcon: Icon(
                 Icons.search,
-                size: ManagerIconsSizes.i24,
+                size: ManagerIconsSizes.i20,
               ),
               suffix: IconButton(
                 onPressed: () {
@@ -110,11 +115,13 @@ class _OffersScreenState extends State<OffersScreen> {
                     ),
                   );
                 },
+                padding: EdgeInsets.zero,
                 icon: Icon(
                   Icons.filter_list_outlined,
-                  size: ManagerIconsSizes.i24,
-                  color: Colors.red,
+                  size: ManagerIconsSizes.i20,
+                  color: ManagerColors.primaryColor,
                 ),
+
               ),
             ),
             verticalSpace(ManagerHeights.h25),

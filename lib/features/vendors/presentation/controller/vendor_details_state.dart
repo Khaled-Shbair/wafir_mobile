@@ -1,17 +1,22 @@
-part of 'vendor_details_bloc.dart';
+import 'package:wafir_mobile/features/vendors/domain/model/vendor_model.dart';
 
 sealed class VendorDetailsState {
   final String? selectedGovernorate;
   final String? selectedWilaya;
   final String? selectedCategory;
+  final VendorModel? vendor;
 
   VendorDetailsState(
-      {this.selectedGovernorate, this.selectedWilaya, this.selectedCategory});
+      {this.selectedGovernorate,
+      this.selectedWilaya,
+      this.selectedCategory,
+      this.vendor});
 
   VendorDetailsState copyWith({
     String? selectedGovernorate,
     String? selectedWilaya,
     String? selectedCategory,
+    VendorModel? vendor,
   }) {
     final String? newSelectedGovernorate =
         selectedGovernorate ?? this.selectedGovernorate;
@@ -19,28 +24,31 @@ sealed class VendorDetailsState {
 
     final String? newSelectedCategory =
         selectedCategory ?? this.selectedCategory;
+    final VendorModel? newVendor = vendor ?? this.vendor;
     if (this is VendorDetailsInitial) {
       return VendorDetailsInitial(
         selectedGovernorate: newSelectedGovernorate,
         selectedWilaya: newSelectedWilaya,
         selectedCategory: newSelectedCategory,
+        vendor: newVendor,
       );
     }
 
-    if (this is VendorDetailsInitial) {
+    if (this is VendorDetailsLoading) {
       return VendorDetailsLoading(
         selectedGovernorate: newSelectedGovernorate,
         selectedWilaya: newSelectedWilaya,
         selectedCategory: newSelectedCategory,
+        vendor: newVendor,
       );
     }
 
     if (this is VendorDetailsLoaded) {
-      // final vendorDetails = this as VendorDetailsLoaded;
       return VendorDetailsLoaded(
         selectedCategory: newSelectedCategory,
         selectedGovernorate: newSelectedGovernorate,
         selectedWilaya: newSelectedWilaya,
+        vendor: newVendor,
       );
     }
 
@@ -51,6 +59,7 @@ sealed class VendorDetailsState {
         message: failure.message,
         selectedGovernorate: newSelectedGovernorate,
         selectedWilaya: newSelectedWilaya,
+        vendor: newVendor,
       );
     }
 
@@ -63,6 +72,7 @@ class VendorDetailsInitial extends VendorDetailsState {
     super.selectedGovernorate,
     super.selectedWilaya,
     super.selectedCategory,
+    super.vendor,
   });
 }
 
@@ -71,6 +81,7 @@ class VendorDetailsLoading extends VendorDetailsState {
     super.selectedGovernorate,
     super.selectedWilaya,
     super.selectedCategory,
+    super.vendor,
   });
 }
 
@@ -79,6 +90,7 @@ class VendorDetailsLoaded extends VendorDetailsState {
     super.selectedGovernorate,
     super.selectedWilaya,
     super.selectedCategory,
+    super.vendor,
   });
 }
 
@@ -90,5 +102,6 @@ class VendorDetailsFailure extends VendorDetailsState {
     super.selectedGovernorate,
     super.selectedWilaya,
     super.selectedCategory,
+    super.vendor,
   });
 }

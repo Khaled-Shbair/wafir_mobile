@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
+import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
@@ -28,12 +29,13 @@ class FavoritesScreen extends StatelessWidget {
           } else if (state is FavoriteLoaded) {
             final items = state.favorites.items;
             if (items.isEmpty) {
-              return const Center(
+              return  Center(
                 child: Text(
                   'لا توجد عناصر مفضلة حالياً',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: ManagerFontsSizes.f16,
                     fontWeight: FontWeight.w500,
+                    color: ManagerColors.blackColor,
                   ),
                 ),
               );
@@ -54,6 +56,7 @@ class FavoritesScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return CustomOfferItemWidget(item: items[index]);
               },
+
             );
           } else if (state is FavoriteFailure) {
             return Center(

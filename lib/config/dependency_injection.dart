@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+﻿import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +9,7 @@ import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.da
 import 'package:wafir_mobile/features/auth/data/services/google_auth_service.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/forgot_password_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/login_by_google_use_case.dart';
+import 'package:wafir_mobile/features/auth/domain/use_case/logout_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/register_by_email_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/register_by_google_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/reset_password_use_case.dart';
@@ -23,6 +24,7 @@ import 'package:wafir_mobile/features/auth/domain/use_case/login_by_email_use_ca
 import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/verify_otp_bloc.dart';
+import 'package:wafir_mobile/features/home/data/repository_impl/home_repository_impl.dart';
 import 'package:wafir_mobile/features/profile/data/data_source/remote_profile_data_source.dart';
 import 'package:wafir_mobile/features/profile/data/repository_impl/profile_repository_impl.dart';
 import 'package:wafir_mobile/features/profile/domain/repository/profile_repository.dart';
@@ -32,13 +34,14 @@ import 'package:wafir_mobile/features/profile/presentation/controller/edit_profi
 import 'package:wafir_mobile/features/offers/data/data_source/remote_offers_data_source.dart';
 import 'package:wafir_mobile/features/offers/data/repository_impl/offers_repository_impl.dart';
 import 'package:wafir_mobile/features/offers/domain/repository/offers_repository.dart';
+import 'package:wafir_mobile/features/offers/domain/use_case/get_offer_details_use_case.dart';
 import 'package:wafir_mobile/features/offers/domain/use_case/get_all_offers_use_case.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
-import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_bloc.dart';
 import 'package:wafir_mobile/features/home/data/data_source/remote_home_data_source.dart';
-import 'package:wafir_mobile/features/home/data/repository_impl/home_repository_impl.dart';
 import 'package:wafir_mobile/features/home/domain/repository/home_repository.dart';
 import 'package:wafir_mobile/features/home/domain/use_case/get_home_data_use_case.dart';
+import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
 import 'package:wafir_mobile/features/vendors/data/data_source/remote_vendors_data_source.dart';
 import 'package:wafir_mobile/features/vendors/data/repository_impl/vendors_repository_impl.dart';
 import 'package:wafir_mobile/features/vendors/domain/repository/vendors_repository.dart';
@@ -87,9 +90,18 @@ Future<void> _intiDio() async {
       () => DioFactory(instance<SharedPreferencesController>()),
     );
   }
+
+  Dio? dio;
+  if (!GetIt.I.isRegistered<Dio>() || !GetIt.I.isRegistered<AppApi>()) {
+    dio = await instance<DioFactory>().getDio();
+  }
+
+  if (!GetIt.I.isRegistered<Dio>()) {
+    instance.registerLazySingleton<Dio>(() => dio!);
+  }
+
   if (!GetIt.I.isRegistered<AppApi>()) {
-    Dio dio = await instance<DioFactory>().getDio();
-    instance.registerLazySingleton<AppApi>(() => AppApi(dio));
+    instance.registerLazySingleton<AppApi>(() => AppApi(dio!));
   }
 }
 
@@ -283,6 +295,22 @@ void disposeVerifyOtp() async {
   }
 }
 
+void initLogout() async {
+  _initAuth();
+  if (!GetIt.I.isRegistered<LogoutUseCase>()) {
+    instance.registerLazySingleton<LogoutUseCase>(
+      () => LogoutUseCase(instance<AuthRepository>()),
+    );
+  }
+}
+
+void disposeLogout() async {
+  if (GetIt.I.isRegistered<LogoutUseCase>()) {
+    instance.unregister<LogoutUseCase>();
+  }
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 //Profile
@@ -358,10 +386,9 @@ void disposeEditProfile() async {
 void initOffers() async {
   if (!GetIt.I.isRegistered<RemoteOffersDataSource>()) {
     instance.registerLazySingleton<RemoteOffersDataSource>(
-      () => RemoteOffersDataSourceImpl(instance<AppApi>()),
+      () => RemoteOffersDataSourceImpl(instance<AppApi>(), instance<Dio>()),
     );
   }
-
   if (!GetIt.I.isRegistered<OffersRepository>()) {
     instance.registerLazySingleton<OffersRepository>(
       () => OffersRepositoryImpl(
@@ -370,46 +397,33 @@ void initOffers() async {
       ),
     );
   }
-
   if (!GetIt.I.isRegistered<GetAllOffersUseCase>()) {
     instance.registerLazySingleton<GetAllOffersUseCase>(
       () => GetAllOffersUseCase(instance<OffersRepository>()),
     );
   }
-
+  if (!GetIt.I.isRegistered<GetOfferDetailsUseCase>()) {
+    instance.registerLazySingleton<GetOfferDetailsUseCase>(
+      () => GetOfferDetailsUseCase(instance<OffersRepository>()),
+    );
+  }
   if (!GetIt.I.isRegistered<OffersBloc>()) {
     instance.registerLazySingleton<OffersBloc>(
       () => OffersBloc(instance<GetAllOffersUseCase>()),
     );
   }
-}
-
-void disposeOffers() async {
-  if (GetIt.I.isRegistered<OffersBloc>()) {
-    instance.unregister<OffersBloc>();
-  }
-  if (GetIt.I.isRegistered<GetAllOffersUseCase>()) {
-    instance.unregister<GetAllOffersUseCase>();
-  }
-  if (GetIt.I.isRegistered<OffersRepository>()) {
-    instance.unregister<OffersRepository>();
-  }
-  if (GetIt.I.isRegistered<RemoteOffersDataSource>()) {
-    instance.unregister<RemoteOffersDataSource>();
+  if (!GetIt.I.isRegistered<OfferDetailsBloc>()) {
+    instance.registerLazySingleton<OfferDetailsBloc>(
+      () => OfferDetailsBloc(instance<GetOfferDetailsUseCase>()),
+    );
   }
 }
-
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-void initHome() async {
-  initOffers();
-
+initHome() async {
   if (!GetIt.I.isRegistered<RemoteHomeDataSource>()) {
     instance.registerLazySingleton<RemoteHomeDataSource>(
       () => RemoteHomeDataSourceImpl(instance<AppApi>()),
     );
   }
-
   if (!GetIt.I.isRegistered<HomeRepository>()) {
     instance.registerLazySingleton<HomeRepository>(
       () => HomeRepositoryImpl(
@@ -418,20 +432,17 @@ void initHome() async {
       ),
     );
   }
-
   if (!GetIt.I.isRegistered<GetHomeDataUseCase>()) {
     instance.registerLazySingleton<GetHomeDataUseCase>(
       () => GetHomeDataUseCase(instance<HomeRepository>()),
     );
   }
-
   if (!GetIt.I.isRegistered<HomeBloc>()) {
     instance.registerLazySingleton<HomeBloc>(
       () => HomeBloc(instance<GetHomeDataUseCase>()),
     );
   }
 }
-
 void disposeHome() async {
   if (GetIt.I.isRegistered<HomeBloc>()) {
     instance.unregister<HomeBloc>();
@@ -446,7 +457,34 @@ void disposeHome() async {
     instance.unregister<RemoteHomeDataSource>();
   }
 }
-
+void disposeOffers() async {
+  if (GetIt.I.isRegistered<RemoteOffersDataSource>()) {
+    instance.unregister<RemoteOffersDataSource>();
+  }
+  if (GetIt.I.isRegistered<OffersRepository>()) {
+    instance.unregister<OffersRepository>();
+  }
+  if (GetIt.I.isRegistered<GetAllOffersUseCase>()) {
+    instance.unregister<GetAllOffersUseCase>();
+  }
+  if (GetIt.I.isRegistered<GetOfferDetailsUseCase>()) {
+    instance.unregister<GetOfferDetailsUseCase>();
+  }
+  if (GetIt.I.isRegistered<OffersBloc>()) {
+    instance.unregister<OffersBloc>();
+  }
+  if (GetIt.I.isRegistered<OfferDetailsBloc>()) {
+    instance.unregister<OfferDetailsBloc>();
+  }
+}
+void disposeOfferDetails() async {
+  if (GetIt.I.isRegistered<GetOfferDetailsUseCase>()) {
+    instance.unregister<GetOfferDetailsUseCase>();
+  }
+  if (GetIt.I.isRegistered<OfferDetailsBloc>()) {
+    instance.unregister<OfferDetailsBloc>();
+  }
+}
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 // Sectors
@@ -531,7 +569,6 @@ void initFavorite() async {
       () => RemoteFavoriteDataSourceImpl(instance<AppApi>()),
     );
   }
-
   if (!GetIt.I.isRegistered<FavoriteRepository>()) {
     instance.registerLazySingleton<FavoriteRepository>(
       () => FavoriteRepositoryImpl(

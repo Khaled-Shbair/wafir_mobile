@@ -261,4 +261,23 @@ class AuthRepositoryImpl implements AuthRepository {
       );
     }
   }
+
+  @override
+  Future<Either<Failure, void>> logout() async {
+    if (await _networkInfo.isConnected) {
+      try {
+        await _dataSource.logout();
+        return const Right(null);
+      } catch (e) {
+        return Left(ErrorHandler.handle(e).failure);
+      }
+    } else {
+      return Left(
+        Failure(
+          message: ManagerStrings.noInternetConnection,
+          code: ResponseCode.NO_INTERNET_CONNECTION.value,
+        ),
+      );
+    }
+  }
 }

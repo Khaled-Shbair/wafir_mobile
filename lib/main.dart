@@ -10,6 +10,7 @@ import 'package:wafir_mobile/core/resource/manager_assets.dart';
 import 'package:wafir_mobile/core/service/theme_service.dart';
 import 'package:wafir_mobile/routes/route_generator.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();

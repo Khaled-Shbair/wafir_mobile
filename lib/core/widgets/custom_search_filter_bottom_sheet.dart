@@ -195,16 +195,20 @@ class _CustomSearchFilterBottomSheetState
         verticalSpace(ManagerHeights.h10),
         Container(
           decoration: BoxDecoration(
+            color: Colors.white,
             border: Border.all(color: Colors.grey[300]!),
             borderRadius: BorderRadius.circular(ManagerRadius.r10),
           ),
-          child: DropdownButton<String>(
+          child: DropdownButton<String?>(
             value: selectedValue,
             onChanged: onChanged,
             isExpanded: true,
             underline: const SizedBox(),
+            dropdownColor: Colors.white,
+            menuMaxHeight: 220.0,
+            elevation: 2,
             items: [
-              DropdownMenuItem<String>(
+              DropdownMenuItem<String?>(
                 value: null,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: ManagerWidths.w10),
@@ -215,7 +219,7 @@ class _CustomSearchFilterBottomSheetState
                 ),
               ),
               ...items.map(
-                (item) => DropdownMenuItem<String>(
+                (item) => DropdownMenuItem<String?>(
                   value: item,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: ManagerWidths.w10),

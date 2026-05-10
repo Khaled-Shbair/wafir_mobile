@@ -14,6 +14,7 @@ import 'package:wafir_mobile/features/vendors/data/response/get_vendors_public_r
 import 'package:wafir_mobile/features/favorite/data/response/favorite_offers_response.dart';
 import 'package:wafir_mobile/features/favorite/data/response/favorite_toggle_response.dart';
 import 'package:wafir_mobile/features/offers/data/response/get_offers_response.dart';
+import 'package:wafir_mobile/features/offers/data/response/offer_details_response.dart';
 
 part 'app_api.g.dart';
 
@@ -72,7 +73,6 @@ abstract class AppApi {
     @Field(ApiKeys.newPassword) String newPassword,
   );
 
-
   @PATCH(ApiConstants.updateProfile)
   Future<ProfileResponse> updateProfile(
     @Field(ApiKeys.firstName) String? firstName,
@@ -101,11 +101,13 @@ abstract class AppApi {
 
   @GET(ApiConstants.getAllVendor)
   Future<GetVendorsPublicResponse> getPublicVendors(
-      @Query(ApiKeys.page) int? page,
-      @Query(ApiKeys.take) int? take,
-      @Query(ApiKeys.query) String? query,
-      );
+    @Query(ApiKeys.page) int? page,
+    @Query(ApiKeys.take) int? take,
+    @Query(ApiKeys.query) String? query,
+  );
 
+   @POST(ApiConstants.logout)
+   Future<void> logout();
 
   @GET(ApiConstants.getAllFavoriteOffers)
   Future<FavoriteOffersResponse> getAllFavoriteOffers();
@@ -113,6 +115,7 @@ abstract class AppApi {
   @POST("${ApiConstants.addOrDeleteFavoriteOffer}{id}/toggle")
   Future<FavoriteToggleResponse> toggleFavoriteOffer(
     @Path(ApiKeys.id) int offerId,
+
   );
 
   @GET(ApiConstants.getAllOffers)
@@ -120,5 +123,11 @@ abstract class AppApi {
     @Query(ApiKeys.page) int? page,
     @Query(ApiKeys.take) int? take,
     @Query(ApiKeys.query) String? query,
+  );
+
+  @GET('${ApiConstants.getOfferDetails}{id}')
+  Future<OfferDetailsResponse> getOfferDetails(
+    @Path(ApiKeys.id) int offerId,
+    @Query('includeStats') bool? includeStats,
   );
 }

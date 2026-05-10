@@ -20,7 +20,8 @@ class CustomOfferTimeAndLocationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Flexible(
+        child: Container(
       padding: EdgeInsetsDirectional.symmetric(
         horizontal: ManagerWidths.w3,
         vertical: ManagerHeights.h3,
@@ -32,18 +33,23 @@ class CustomOfferTimeAndLocationWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, size: ManagerIconsSizes.i12, color: textColor),
           horizontalSpace(ManagerWidths.w2),
-          Text(
-            text.isNotEmpty ? text : 'عمان',
-            style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: textColor,
-                  fontSize: ManagerFontsSizes.f9,
-                ),
+          Flexible(
+            child: Text(
+              text.isNotEmpty ? text : 'عمان',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: textColor,
+                    fontSize: ManagerFontsSizes.f9,
+                  ),
+            ),
           ),
         ],
       ),
-    );
+    ));
   }
 }

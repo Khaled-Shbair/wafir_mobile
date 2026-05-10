@@ -18,8 +18,8 @@ class ManagerStrings {
   static String browseOffers = 'browse_offers'.tr();
   static String currentPrice = 'current_price'.tr();
   static String couponCode = 'coupon_code'.tr();
-  static String phoneNumberMustBeNineDigitsLong =
-      'phone_number_must_be_nine_digits_long'.tr();
+  static String phoneNumberMustBeEightDigitsLong =
+      'phone_number_must_be_eight_digits_long'.tr();
   static String loginAsGuest = 'login_as_guest'.tr();
   static String next = 'next'.tr();
   static String previous = 'previous'.tr();
@@ -153,4 +153,5 @@ class ManagerStrings {
   static String latest = 'latest'.tr();
   static String highestDiscount = 'highest_discount'.tr();
   static String closest = 'closest'.tr();
+  static String pressBackAgainToExit = 'press_back_again_to_exit'.tr();
 }

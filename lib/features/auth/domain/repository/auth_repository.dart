@@ -32,4 +32,6 @@ abstract class AuthRepository {
 
   Future<Either<Failure, ResetPasswordModel>> resetPassword(
       ResetPasswordRequest request);
+
+  Future<Either<Failure, void>> logout();
 }

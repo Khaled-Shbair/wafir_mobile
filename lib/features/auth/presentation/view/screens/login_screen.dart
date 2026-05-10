@@ -57,6 +57,9 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
     passwordFocusNode.dispose();
     disposeLogin();
     disposeAuth();
+    disposeRegister();
+    disposeForgetPassword();
+    disposeResetPassword();
     super.dispose();
   }
 
@@ -68,17 +71,16 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
         if (state is LoginLoading) {
           showCustomLoading(context);
         } else if (state is LoginSuccessfully) {
-          // Close loading dialog using root navigator
-          Navigator.of(context, rootNavigator: true).pop();
-          // Navigate using root navigator to escape dialog context
+          // // Close loading dialog using root navigator
+          // Navigator.of(context, rootNavigator: true).pop();
+          // // Navigate using root navigator to escape dialog context
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainScreen, (route) => false);
         } else if (state is LoginFailure) {
-        } else if (state is LoginFailure) {
           // Close loading dialog using root navigator
           Navigator.of(context, rootNavigator: true).pop();
-          if (state.errorMessage.contains('تحقق')) {
-            customActivationMessenger(context, email.text);
+          if (state.errorMessage.contains('غير مفعل')) {
+            customActivationMessenger(context, email.text.trim());
           } else {
             showToast(state.errorMessage);
           }
@@ -192,8 +194,8 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
                   FocusManager.instance.primaryFocus?.unfocus();
                   ScaffoldMessenger.of(context).clearSnackBars();
                   controller.add(LoginProcess(
-                    email: email.text,
-                    password: password.text,
+                    email: email.text.trim(),
+                    password: password.text.trim(),
                   ));
                 },
               ),

@@ -22,6 +22,8 @@ class CustomTextField extends StatelessWidget {
     this.onFieldSubmitted,
     this.readOnly = false,
     this.focusNode,
+    this.top,
+    this.bottom,
     this.isFocused = false,
     this.autofocus = false,
   });
@@ -46,6 +48,8 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffix;
   final FocusNode? focusNode;
   final bool autofocus;
+  final double? top;
+  final double? bottom;
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +67,8 @@ class CustomTextField extends StatelessWidget {
       obscureText: obscureText,
       decoration: InputDecoration(
         contentPadding: EdgeInsetsDirectional.only(
-          top: ManagerHeights.h18,
-          bottom: ManagerHeights.h18,
+          top: top ?? ManagerHeights.h18,
+          bottom: bottom ?? ManagerHeights.h18,
         ),
         labelText: labelText,
         filled: Theme.of(context).inputDecorationTheme.filled,

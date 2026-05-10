@@ -38,8 +38,8 @@ FavoriteOfferResponse _$FavoriteOfferResponseFromJson(
       termsAndConditions: json['terms_and_conditions'] as String?,
       appliesToAllBranches: json['applies_to_all_branches'] as bool?,
       offerBranches: (json['offer_branches'] as List<dynamic>?)
-          ?.map((e) =>
-              OfferVendorBranchResponse.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => FavoriteOfferBranchLinkResponse.fromJson(
+              e as Map<String, dynamic>))
           .toList(),
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
@@ -74,6 +74,61 @@ Map<String, dynamic> _$FavoriteOfferResponseToJson(
       'terms_and_conditions': instance.termsAndConditions,
       'applies_to_all_branches': instance.appliesToAllBranches,
       'offer_branches': instance.offerBranches,
+      'created_at': instance.createdAt,
+      'updated_at': instance.updatedAt,
+    };
+
+FavoriteOfferBranchLinkResponse _$FavoriteOfferBranchLinkResponseFromJson(
+        Map<String, dynamic> json) =>
+    FavoriteOfferBranchLinkResponse(
+      id: (json['id'] as num?)?.toInt(),
+      offerId: (json['offer_id'] as num?)?.toInt(),
+      branchId: (json['branch_id'] as num?)?.toInt(),
+      branch: json['branch'] == null
+          ? null
+          : FavoriteOfferBranchResponse.fromJson(
+              json['branch'] as Map<String, dynamic>),
+      createdAt: json['created_at'] as String?,
+    );
+
+Map<String, dynamic> _$FavoriteOfferBranchLinkResponseToJson(
+        FavoriteOfferBranchLinkResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'offer_id': instance.offerId,
+      'branch_id': instance.branchId,
+      'branch': instance.branch,
+      'created_at': instance.createdAt,
+    };
+
+FavoriteOfferBranchResponse _$FavoriteOfferBranchResponseFromJson(
+        Map<String, dynamic> json) =>
+    FavoriteOfferBranchResponse(
+      id: (json['id'] as num?)?.toInt(),
+      vendorId: (json['vendor_id'] as num?)?.toInt(),
+      name: json['name'] as String?,
+      governorate: json['governorate'] as String?,
+      wilaya: json['wilaya'] as String?,
+      address: json['address'] as String?,
+      phoneNumber: json['phone_number'] as String?,
+      isMain: json['is_main'] as bool?,
+      status: json['status'] as String?,
+      createdAt: json['created_at'] as String?,
+      updatedAt: json['updated_at'] as String?,
+    );
+
+Map<String, dynamic> _$FavoriteOfferBranchResponseToJson(
+        FavoriteOfferBranchResponse instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'vendor_id': instance.vendorId,
+      'name': instance.name,
+      'governorate': instance.governorate,
+      'wilaya': instance.wilaya,
+      'address': instance.address,
+      'phone_number': instance.phoneNumber,
+      'is_main': instance.isMain,
+      'status': instance.status,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
     };

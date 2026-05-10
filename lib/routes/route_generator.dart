@@ -1,38 +1,38 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
-import 'package:wafir_mobile/core/model/offers_model.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
-import 'package:wafir_mobile/features/auth/presentation/controller/verify_otp_bloc.dart';
-import 'package:wafir_mobile/features/auth/presentation/controller/reset_password_bloc.dart';
-import 'package:wafir_mobile/features/auth/presentation/view/screens/verify_otp_screen.dart';
-import 'package:wafir_mobile/features/auth/presentation/view/screens/reset_password_screen.dart';
+import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
+import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/register_bloc.dart';
+import 'package:wafir_mobile/features/auth/presentation/controller/reset_password_bloc.dart';
+import 'package:wafir_mobile/features/auth/presentation/controller/verify_otp_bloc.dart';
+import 'package:wafir_mobile/features/auth/presentation/view/screens/forget_password_screen.dart';
+import 'package:wafir_mobile/features/auth/presentation/view/screens/login_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/register_screen.dart';
+import 'package:wafir_mobile/features/auth/presentation/view/screens/reset_password_screen.dart';
+import 'package:wafir_mobile/features/auth/presentation/view/screens/verify_otp_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/welcome_screen.dart';
 import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
-import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
-import 'package:wafir_mobile/features/home/domain/model/home_models.dart';
-import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
-import 'package:wafir_mobile/features/auth/presentation/view/screens/login_screen.dart';
-import 'package:wafir_mobile/features/home/presentation/view/screens/main_bottom_nav_screen.dart';
-import 'package:wafir_mobile/features/offers/presentation/view/screens/offer_details_screen.dart';
-import 'package:wafir_mobile/features/on_boarding/presentation/view/screens/on_boarding_screen.dart';
-import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
-import 'package:wafir_mobile/features/auth/presentation/view/screens/forget_password_screen.dart';
-import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
-import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
-import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
+import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
+import 'package:wafir_mobile/features/home/presentation/view/screens/main_bottom_nav_screen.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_bloc.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_event.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
+import 'package:wafir_mobile/features/offers/presentation/view/screens/offer_details_screen.dart';
+import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
+import 'package:wafir_mobile/features/on_boarding/presentation/view/screens/on_boarding_screen.dart';
 import 'package:wafir_mobile/features/profile/presentation/controller/edit_profile_bloc.dart';
 import 'package:wafir_mobile/features/profile/presentation/view/screens/edit_profile_screen.dart';
-import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.dart';
+import 'package:wafir_mobile/features/splash/presentation/view/screens/splash_screen.dart';
+import 'package:wafir_mobile/features/vendors/presentation/controller/vendor_details_bloc.dart';
 import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bloc.dart';
 import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendor_details_screen.dart';
-import 'package:wafir_mobile/features/splash/presentation/view/screens/splash_screen.dart';
 import 'package:wafir_mobile/features/vendors/presentation/view/screens/vendors_screen.dart';
+import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class RouteGenerator {
@@ -40,26 +40,24 @@ class RouteGenerator {
     switch (setting.name) {
       case Routes.splashScreen:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
-      // onBoarding routes
       case Routes.onBoardingScreen:
         return MaterialPageRoute(builder: (_) => const OnBoardingScreen());
-      // auth routes
       case Routes.loginScreen:
         initLogin();
         return MaterialPageRoute(
           settings: RouteSettings(name: Routes.loginScreen),
           builder: (_) => BlocProvider<LoginBloc>(
-            create: (context) => instance<LoginBloc>(),
+            create: (_) => instance<LoginBloc>(),
             child: LoginScreen(),
           ),
         );
       case Routes.vendorsScreen:
         initPublicVendors();
-        final String sectorName = setting.arguments as String;
+        final String? sectorName = setting.arguments as String?;
         return MaterialPageRoute(
           settings: RouteSettings(name: Routes.vendorsScreen),
           builder: (_) => BlocProvider<VendorsBloc>(
-            create: (context) =>
+            create: (_) =>
                 instance<VendorsBloc>()..add(GetPublicVendorsEvent(sectorName)),
             child: VendorsScreen(sectorName: sectorName),
           ),
@@ -68,38 +66,29 @@ class RouteGenerator {
         initRegister();
         return MaterialPageRoute(
           builder: (_) => BlocProvider<RegisterBloc>(
-            create: (context) => instance<RegisterBloc>(),
+            create: (_) => instance<RegisterBloc>(),
             child: RegisterScreen(),
           ),
         );
-
-      case Routes.offerDetailsScreen:
-        final offerData = setting.arguments as OfferItemModel;
-        return MaterialPageRoute(
-          builder: (_) => OfferDetailsScreen(offer: offerData),
-        );
-
       case Routes.welcomeScreen:
-        return MaterialPageRoute(
-          builder: (_) => WelcomeScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => WelcomeScreen());
       case Routes.resetPasswordScreen:
         initResetPassword();
-        String token = setting.arguments as String;
+        final token = setting.arguments as String;
         return MaterialPageRoute(
           builder: (_) => BlocProvider<ResetPasswordBloc>(
-            create: (context) => instance<ResetPasswordBloc>(),
+            create: (_) => instance<ResetPasswordBloc>(),
             child: ResetPasswordScreen(token: token),
           ),
         );
       case Routes.verifyOtpScreen:
         initVerifyOtp();
         final arguments = setting.arguments as List;
-        String email = arguments[0] as String;
-        String nextScreenRoute = arguments[1] as String;
+        final email = arguments[0] as String;
+        final nextScreenRoute = arguments[1] as String;
         return MaterialPageRoute(
           builder: (_) => BlocProvider<VerifyOtpBloc>(
-            create: (context) => instance<VerifyOtpBloc>(),
+            create: (_) => instance<VerifyOtpBloc>(),
             child: VerifyOtpScreen(
               email: email,
               nextScreenRoute: nextScreenRoute,
@@ -110,7 +99,7 @@ class RouteGenerator {
         initForgetPassword();
         return MaterialPageRoute(
           builder: (_) => BlocProvider<ForgetPasswordBloc>(
-            create: (context) => instance<ForgetPasswordBloc>(),
+            create: (_) => instance<ForgetPasswordBloc>(),
             child: const ForgetPasswordScreen(),
           ),
         );
@@ -118,41 +107,26 @@ class RouteGenerator {
         initHome();
         return MaterialPageRoute(
           builder: (_) => BlocProvider<HomeBloc>(
-            create: (context) => instance<HomeBloc>()..add(GetHomeData()),
+            create: (_) => instance<HomeBloc>()..add(GetHomeData()),
             child: const HomeScreen(),
           ),
         );
       case Routes.mainScreen:
+        initHome();
+        initOffers();
+        initFavorite();
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
-              BlocProvider<HomeBloc>(
-                create: (_) {
-                  initHome();
-                  return instance<HomeBloc>()..add(GetHomeData());
-                },
-              ),
-              BlocProvider<FavoriteBloc>(
-                create: (_) {
-                  initFavorite();
-                  return instance<FavoriteBloc>();
-                },
-              ),
-              BlocProvider<OffersBloc>(
-                create: (_) {
-                  initOffers();
-                  return instance<OffersBloc>();
-                },
-              ),
+              BlocProvider.value(value: instance<HomeBloc>()),
+              BlocProvider.value(value: instance<FavoriteBloc>()),
+              BlocProvider.value(value: instance<OffersBloc>()),
             ],
             child: const MainBottomNavScreen(),
           ),
         );
       case Routes.settingScreen:
-        return MaterialPageRoute(
-          builder: (_) => SettingScreen(),
-        );
-
+        return MaterialPageRoute(builder: (_) => SettingScreen());
       case Routes.editProfileScreen:
         initEditProfile();
         return MaterialPageRoute(
@@ -162,17 +136,16 @@ class RouteGenerator {
             child: const EditProfileScreen(),
           ),
         );
-
       case Routes.vendorDetailsScreen:
-        final vendor = setting.arguments as VendorPublicItemModel;
+        initVendorDetails();
+        final vendorId = setting.arguments as int;
         return MaterialPageRoute(
-          builder: (_) => VendorDetailsScreen(vendor: vendor),
+          builder: (_) => BlocProvider<VendorDetailsBloc>.value(
+            value: instance<VendorDetailsBloc>()
+              ..add(GetVendorDetails(vendorId)),
+            child: const VendorDetailsScreen(),
+          ),
         );
-      // case Routes.editProfileScreen:
-      //   initEditProfile();
-      //   ProfileDataModel profileData = setting.arguments as ProfileDataModel;
-      // return MaterialPageRoute(
-      //     builder: (_) => EditProfileScreen(profileData: ProfileDataModel()));
       case Routes.offersScreen:
         initOffers();
         return MaterialPageRoute(
@@ -181,7 +154,16 @@ class RouteGenerator {
             child: const OffersScreen(),
           ),
         );
-
+      case Routes.offerDetailsScreen:
+        initOffers();
+        final offerId = setting.arguments as int;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => instance<OfferDetailsBloc>()
+              ..add(FetchOfferDetailsEvent(offerId)),
+            child: OfferDetailsScreen(offerId: offerId),
+          ),
+        );
       default:
         return unDefinedRoute();
     }

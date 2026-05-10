@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wafir_mobile/config/constants/app_constants.dart';
 import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
-import 'package:wafir_mobile/core/model/offers_model.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
@@ -13,18 +15,20 @@ import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.da
 import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_dialog.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
-import 'package:wafir_mobile/features/offers/domain/model/offer_vendor_branch_model.dart';
+import 'package:wafir_mobile/features/offers/domain/model/offer_details_model.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_bloc.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_state.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/widgets/custom_info_card_widget.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/widgets/custom_restaurant_card_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:wafir_mobile/routes/routes.dart';
 
 class OfferDetailsScreen extends StatelessWidget {
   const OfferDetailsScreen({
     super.key,
-    required this.offer,
+    required this.offerId,
   });
 
-  final OfferItemModel offer;
+  final int offerId;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +37,10 @@ class OfferDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: ManagerColors.transparentColor,
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            disposeOfferDetails();
+            Navigator.pop(context);
+          },
           icon: Icon(
             Icons.arrow_back_ios_new_rounded,
             color: ManagerColors.whiteColor,
@@ -42,7 +49,12 @@ class OfferDetailsScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () => _shareOffer(),
+            onPressed: () {
+              final state = context.read<OfferDetailsBloc>().state;
+              if (state is OfferDetailsLoaded) {
+                _shareOffer(state.offerDetails);
+              }
+            },
             icon: Icon(
               Icons.share_rounded,
               color: ManagerColors.whiteColor,
@@ -51,185 +63,249 @@ class OfferDetailsScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _HeroSection(
-                      offerImage: offer.imageUrl,
-                      offerTitle: offer.title,
-                    ),
-                    Transform.translate(
-                      offset: const Offset(0, -28),
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.only(
-                          start: ManagerWidths.w16,
-                          end: ManagerWidths.w16,
-                          top: ManagerHeights.h15,
-                          bottom: ManagerHeights.h55,
-                        ),
-                        child: Column(
-                          children: [
-                            CustomRestaurantCardWidget(
-                              restaurantImage: offer.logoUrl,
-                              restaurantAddress:
-                                  _getMainBranchAddress(offer.branches),
-                              restaurantName: offer.businessName,
+      body: BlocBuilder<OfferDetailsBloc, OfferDetailsState>(
+        builder: (context, state) {
+          if (state is OfferDetailsLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (state is OfferDetailsLoaded) {
+            return _OfferDetailsContent(offerDetails: state.offerDetails);
+          }
+          return Center(
+            child: Text(
+              state is OfferDetailsError ? state.message : 'حدث خطأ غير متوقع',
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _shareOffer(OfferDetailsModel offerDetails) {
+    final message = '''
+🎉 عرض رائع: ${offerDetails.offer.title}
+
+🏪 المتجر: ${offerDetails.offer.vendor.businessName}
+📍 العنوان: ${_getMainBranchAddress(offerDetails.offer.branches)}
+💰 الحد الأدنى للشراء: ${offerDetails.offer.minPurchaseAmount} ر.ع
+📅 ينتهي في: ${_formatDate(offerDetails.offer.validUntil)}
+
+✨ ${offerDetails.offer.description}
+
+تحمل تطبيق وافر واستمتع بأفضل العروض والخصومات!
+''';
+
+    SharePlus.instance.share(
+      ShareParams(text: message, subject: offerDetails.offer.title),
+    );
+  }
+
+  String _formatDate(String value) {
+    final parsed = DateTime.tryParse(value);
+    if (parsed == null) return value;
+    return DateFormat('yyyy-MM-dd').format(parsed);
+  }
+
+  String _getMainBranchAddress(List<BranchDetailModel> branches) {
+    if (branches.isEmpty) return 'لا يوجد عنوان';
+
+    final mainBranch = branches.firstWhere(
+      (branch) => branch.isMain,
+      orElse: () => branches.first,
+    );
+
+    final parts = <String>[
+      if (mainBranch.wilaya.isNotEmpty) mainBranch.wilaya,
+      if (mainBranch.address.isNotEmpty) mainBranch.address,
+    ];
+
+    return parts.isNotEmpty ? parts.join(' - ') : 'لا يوجد عنوان';
+  }
+}
+
+class _OfferDetailsContent extends StatelessWidget {
+  const _OfferDetailsContent({required this.offerDetails});
+
+  final OfferDetailsModel offerDetails;
+
+  @override
+  Widget build(BuildContext context) {
+    final remainingDays = AppConstants.getRemainingDays(
+      offerDetails.offer.validFrom,
+      offerDetails.offer.validUntil,
+    );
+    final isNotStarted = remainingDays.contains('يبدا');
+
+    return Stack(
+      children: [
+        CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _HeroSection(
+                    offerImage: offerDetails.offer.imageUrl,
+                    offerTitle: offerDetails.offer.title,
+                  ),
+                  Transform.translate(
+                    offset: const Offset(0, -28),
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.only(
+                        start: ManagerWidths.w16,
+                        end: ManagerWidths.w16,
+                        top: ManagerHeights.h15,
+                        bottom: ManagerHeights.h55,
+                      ),
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                Routes.vendorDetailsScreen,
+                                arguments: offerDetails.offer.vendor.id,
+                              );
+                            },
+
+                            child: CustomRestaurantCardWidget(
+                              restaurantImage: offerDetails.offer.vendor.logoUrl,
+                              restaurantAddress: _getMainBranchAddress(
+                                offerDetails.offer.branches,
+                              ),
+                              restaurantName:
+                                  offerDetails.offer.vendor.businessName,
                             ),
-                            verticalSpace(ManagerHeights.h15),
+                          ),
+                          verticalSpace(ManagerHeights.h15),
+                          CustomInfoCardWidget(
+                            child: LayoutBuilder(
+                              builder: (context, constraints) {
+                                return Wrap(
+                                  spacing: 12,
+                                  runSpacing: 12,
+                                  children: [
+                                    _InfoBox(
+                                      icon: Icons.label_important_outline,
+                                      label: ManagerStrings.offerName,
+                                      value: offerDetails.offer.title,
+                                    ),
+                                    _InfoBox(
+                                      icon: Icons.calendar_today,
+                                      label: ManagerStrings.offerStarted,
+                                      value: _formatDate(offerDetails.offer.validFrom),
+                                    ),
+                                    _InfoBox(
+                                      icon: Icons.event_busy_outlined,
+                                      label: ManagerStrings.offerFinished,
+                                      value: _formatDate(offerDetails.offer.validUntil),
+                                    ),
+                                    _InfoBox(
+                                      icon: Icons.attach_money_outlined,
+                                      label: ManagerStrings.minimumPurchase,
+                                      value: '${offerDetails.offer.minPurchaseAmount} ر.ع',
+                                    ),
+                                    _InfoBox(
+                                      icon: Icons.list_alt_outlined,
+                                      label: 'عدد الحجوزات',
+                                      value: '${offerDetails.offer.totalClaims} / ${offerDetails.offer.maxTotalClaims}',
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                          verticalSpace(ManagerHeights.h15),
+                          CustomInfoCardWidget(
+                            child: Html(
+                              data: offerDetails.offer.description,
+                              style: {
+                                'h3': Style(
+                                  fontSize: FontSize(ManagerFontsSizes.f22),
+                                  color: ManagerColors.blackColor,
+                                  fontWeight: ManagerFontWeight.bold,
+                                ),
+                                'body': Style(
+                                  fontSize: FontSize(ManagerFontsSizes.f14),
+                                  color: ManagerColors.greyColor,
+                                  lineHeight: LineHeight.number(-0.5),
+                                ),
+                              },
+                            ),
+
+                          ),
+                          verticalSpace(ManagerHeights.h15),
+                          if (offerDetails.offer.branches.isNotEmpty)
                             CustomInfoCardWidget(
-                              title: ManagerStrings.offerDetails,
+                              title: ManagerStrings.branches,
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  customInfoRow(
-                                    ManagerStrings.offerName,
-                                    offer.title,
-                                  ),
-                                  customInfoRow(
-                                    ManagerStrings.offerStarted,
-                                    DateFormat('yyyy-MM-dd').format(
-                                      DateTime.parse(offer.validFrom),
-                                    ),
-                                  ),
-                                  customInfoRow(
-                                    ManagerStrings.offerFinished,
-                                    DateFormat('yyyy-MM-dd').format(
-                                      DateTime.parse(offer.validUntil),
-                                    ),
-                                  ),
-                                  customInfoRow(
-                                    ManagerStrings.minimumPurchase,
-                                    offer.minimumPurchase,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            verticalSpace(ManagerHeights.h15),
-                            CustomInfoCardWidget(
-                              title: ManagerStrings.description,
-                              child: Text(
-                                offer.description,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .copyWith(
-                                      fontSize: ManagerFontsSizes.f14,
-                                      height: 1.9,
-                                      color: ManagerColors.greyColor,
-                                    ),
-                              ),
-                            ),
-                            verticalSpace(ManagerHeights.h15),
-                            if (offer.branches.isNotEmpty)
-                              CustomInfoCardWidget(
-                                title: ManagerStrings.branches,
-                                child: Column(
-                                  children: List.generate(
-                                    offer.branches.length,
-                                    (index) {
-                                      final branch = offer.branches[index];
-                                      return Padding(
-                                        padding: EdgeInsetsDirectional.only(
-                                          bottom:
-                                              index < offer.branches.length - 1
-                                                  ? ManagerHeights.h10
-                                                  : 0,
-                                        ),
-                                        child: _buildBranchItem(
-                                          context,
-                                          branch,
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                children: List.generate(
+                                  offerDetails.offer.branches.length,
+                                  (index) {
+                                    final branch =
+                                        offerDetails.offer.branches[index];
+                                    return Padding(
+                                      padding: EdgeInsetsDirectional.only(
+                                        bottom: index <
+                                                offerDetails
+                                                        .offer.branches.length -
+                                                    1
+                                            ? ManagerHeights.h10
+                                            : 0,
+                                      ),
+                                      child: _buildBranchItem(
+                                        context,
+                                        branch,
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
-                          ],
-                        ),
+                            ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          Positioned(
-            right: ManagerWidths.w16,
-            left: ManagerWidths.w16,
-            bottom: ManagerHeights.h15,
-            child: CustomButton(
-              onPressed: AppConstants.getRemainingDays(
-                          offer.validFrom, offer.validUntil)
-                      .contains('يبدا')
-                  ? null
-                  : () {
-                      if (instance<SharedPreferencesController>()
-                          .getString(SharedPreferencesKeys.token)
-                          .isNotEmpty) {
-                        // context.read<FavoriteBloc>().add();
-                      } else {
-                        loginPop(context);
-                      }
-                    },
-              height: ManagerHeights.h60,
-              color: AppConstants.getRemainingDays(
-                          offer.validFrom, offer.validUntil)
-                      .contains('يبدا')
-                  ? ManagerColors.greyColor.withOpacity(0.5)
-                  : null,
-              text: AppConstants.getRemainingDays(
-                          offer.validFrom, offer.validUntil)
-                      .contains('يبدا')
-                  ? AppConstants.getRemainingDays(
-                      offer.validFrom, offer.validUntil)
-                  : 'احجز الآن',
             ),
+          ],
+        ),
+        Positioned(
+          right: ManagerWidths.w16,
+          left: ManagerWidths.w16,
+          bottom: ManagerHeights.h15,
+          child: CustomButton(
+            onPressed: isNotStarted
+                ? null
+                : () {
+                    if (instance<SharedPreferencesController>()
+                        .getString(SharedPreferencesKeys.token)
+                        .isNotEmpty) {
+                      // Handle claim offer
+                    } else {
+                      loginPop(context);
+                    }
+                  },
+            height: ManagerHeights.h60,
+            color: isNotStarted
+                ? ManagerColors.greyColor.withValues(alpha: 0.5)
+                : null,
+            text: isNotStarted ? remainingDays : 'احجز الآن',
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget customInfoRow(String label, String value) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: ManagerHeights.h10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Text(
-              label,
-              style: TextStyle(
-                fontSize: ManagerFontsSizes.f14,
-                fontWeight: FontWeight.w600,
-                color: ManagerColors.greyColor,
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              value,
-              textAlign: TextAlign.end,
-              style: TextStyle(
-                fontSize: ManagerFontsSizes.f14,
-                fontWeight: FontWeight.w500,
-                color: ManagerColors.blackColor,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
-  Widget _buildBranchItem(BuildContext context, OfferVendorBranchModel branch) {
+  Widget _buildBranchItem(
+    BuildContext context,
+    BranchDetailModel branch,
+  ) {
     return Container(
       padding: EdgeInsets.all(ManagerWidths.w10),
       decoration: BoxDecoration(
@@ -259,7 +335,7 @@ class OfferDetailsScreen extends StatelessWidget {
                     vertical: ManagerHeights.h3,
                   ),
                   decoration: BoxDecoration(
-                    color: ManagerColors.primaryColor.withOpacity(0.15),
+                    color: ManagerColors.primaryColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
@@ -274,17 +350,17 @@ class OfferDetailsScreen extends StatelessWidget {
             ],
           ),
           verticalSpace(ManagerHeights.h8),
-          if (branch.wilaya != null)
+          if (branch.wilaya.isNotEmpty)
             _buildBranchInfoRow(
               Icons.location_on_outlined,
-              branch.wilaya ?? '',
+              branch.wilaya,
             ),
-          if (branch.address != null)
+          if (branch.address.isNotEmpty)
             _buildBranchInfoRow(
               Icons.home_outlined,
-              branch.address ?? '',
+              branch.address,
             ),
-          if (branch.phoneNumber != null)
+          if (branch.phoneNumber.isNotEmpty)
             GestureDetector(
               onTap: () async {
                 final Uri url = Uri(
@@ -297,7 +373,7 @@ class OfferDetailsScreen extends StatelessWidget {
               },
               child: _buildBranchInfoRow(
                 Icons.phone_outlined,
-                branch.phoneNumber ?? '',
+                branch.phoneNumber,
                 isClickable: true,
               ),
             ),
@@ -340,8 +416,13 @@ class OfferDetailsScreen extends StatelessWidget {
     );
   }
 
-  /// البحث عن الفرع الرئيسي واستخراج العنوان
-  String _getMainBranchAddress(List<OfferVendorBranchModel> branches) {
+  String _formatDate(String value) {
+    final parsed = DateTime.tryParse(value);
+    if (parsed == null) return value;
+    return DateFormat('yyyy-MM-dd').format(parsed);
+  }
+
+  String _getMainBranchAddress(List<BranchDetailModel> branches) {
     if (branches.isEmpty) return 'لا يوجد عنوان';
 
     final mainBranch = branches.firstWhere(
@@ -349,36 +430,84 @@ class OfferDetailsScreen extends StatelessWidget {
       orElse: () => branches.first,
     );
 
-    // دمج العنوان من الولاية والعنوان
     final parts = <String>[
-      if (mainBranch.wilaya != null && mainBranch.wilaya!.isNotEmpty)
-        mainBranch.wilaya!,
-      if (mainBranch.address != null && mainBranch.address!.isNotEmpty)
-        mainBranch.address!,
+      if (mainBranch.wilaya.isNotEmpty) mainBranch.wilaya,
+      if (mainBranch.address.isNotEmpty) mainBranch.address,
     ];
 
     return parts.isNotEmpty ? parts.join(' - ') : 'لا يوجد عنوان';
   }
+}
 
-  /// مشاركة تفاصيل العرض
-  void _shareOffer() {
-    final message = '''
-🎉 عرض رائع: ${offer.title}
+class _InfoBox extends StatelessWidget {
+  const _InfoBox({
+    required this.icon,
+    required this.label,
+    required this.value,
+  });
 
-🏪 المتجر: ${offer.businessName}
-📍 العنوان: ${_getMainBranchAddress(offer.branches)}
-💰 الحد الأدنى للشراء: ${offer.minimumPurchase}
-📅 ينتهي في: ${DateFormat('yyyy-MM-dd').format(DateTime.parse(offer.validUntil))}
+  final IconData icon;
+  final String label;
+  final String value;
 
+  @override
+  Widget build(BuildContext context) {
 
-✨ ${offer.description}
-
-تحمل تطبيق وافر واستمتع بأفضل العروض والخصومات!
-''';
-
-    Share.share(
-      message,
-      subject: offer.title,
+    return ConstrainedBox(
+      constraints: BoxConstraints(minWidth: 140,
+          maxWidth: double.infinity),
+      child: Container(
+        padding: EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: const Color(0xFFE6ECEE)),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: ManagerColors.primaryColor.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(
+                icon,
+                size: 20,
+                color: ManagerColors.primaryColor,
+              ),
+            ),
+            SizedBox(width: ManagerWidths.w10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: ManagerFontsSizes.f12,
+                      color: ManagerColors.greyColor,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: ManagerHeights.h5),
+                  Text(
+                    value,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: ManagerFontsSizes.f14,
+                      color: ManagerColors.blackColor,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -408,8 +537,8 @@ class _HeroSection extends StatelessWidget {
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Colors.black.withOpacity(0.12),
-                    Colors.black.withOpacity(0.60),
+                    Colors.black.withValues(alpha: 0.12),
+                    Colors.black.withValues(alpha: 0.60),
                   ],
                 ),
               ),
@@ -440,38 +569,3 @@ class _HeroSection extends StatelessWidget {
   }
 }
 
-class OfferModel {
-  final String offerTitle;
-  final String imageUrl;
-  final String restaurantName;
-  final String restaurantAddress;
-  final String startDate;
-  final String endDate;
-  final String minPurchase;
-  final String description;
-  final List<String> activityInfo;
-  final String locationNote;
-  final List<String> includedOffers;
-  final List<String> terms;
-  final String originalPrice;
-  final String discountPrice;
-  final String discountPercent;
-
-  OfferModel({
-    required this.offerTitle,
-    required this.imageUrl,
-    required this.restaurantName,
-    required this.restaurantAddress,
-    required this.startDate,
-    required this.endDate,
-    required this.minPurchase,
-    required this.description,
-    required this.activityInfo,
-    required this.locationNote,
-    required this.includedOffers,
-    required this.terms,
-    required this.originalPrice,
-    required this.discountPrice,
-    required this.discountPercent,
-  });
-}

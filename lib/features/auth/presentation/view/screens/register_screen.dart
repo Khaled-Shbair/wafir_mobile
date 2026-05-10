@@ -210,7 +210,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                     ),
                     verticalSpace(ManagerHeights.h20),
                     CustomTextField(
-                      maxLength: 12,
+                      maxLength: 8,
                       controller: phoneNumber,
                       hintText: ManagerStrings.phoneNumber,
                       prefixIconData: Icons.phone,

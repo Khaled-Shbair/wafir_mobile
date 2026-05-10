@@ -22,6 +22,9 @@ class ApiConstants {
   static const String getAllFavoriteOffers = '${baseUrl}favorites/offers/my';
   static const String addOrDeleteFavoriteOffer = '${baseUrl}favorites/offers/';
   static const String getAllOffers = '${baseUrl}offers/active';
+  static const String offers = '${baseUrl}offers';
+  static const String getOfferDetails = '${baseUrl}offers/';
+  static const String offerClaims = '${baseUrl}offer-claims';
   static const String getVendorDetails = '${baseUrl}vendors/public/';
   static const String getAllVendor = '${baseUrl}vendors/public';
 }
@@ -93,9 +96,13 @@ class ApiKeys {
   static const String discountPercentage = 'discount_percentage';
   static const String redemptionType = 'redemption_type';
   static const String discountCode = 'discount_code';
+  static const String claimCode = 'claim_code';
   static const String barcodeImageUrl = 'barcode_image_url';
   static const String whatsappNumber = 'whatsapp_number';
   static const String whatsappMessageTemplate = 'whatsapp_message_template';
+  static const String vendorPrimaryPhoneNumber = 'vendor_primary_phone_number';
+  static const String redeemedAt = 'redeemed_at';
+  static const String expiresAt = 'expires_at';
   static const String validUntil = 'valid_until';
   static const String businessName = 'business_name';
   static const String sectorName = 'sector_name';

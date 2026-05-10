@@ -33,8 +33,8 @@ class Validator {
     if (phone == null || phone.isEmpty) {
       return ManagerStrings.pleaseEnterYourPhoneNumber;
     }
-    if (!RegExp(r'^\d{9}$').hasMatch(phone)) {
-      return ManagerStrings.phoneNumberMustBeNineDigitsLong;
+    if (!RegExp(r'^\d{8}$').hasMatch(phone)) {
+      return ManagerStrings.phoneNumberMustBeEightDigitsLong;
     }
     return null;
   }

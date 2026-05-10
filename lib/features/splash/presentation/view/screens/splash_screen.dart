@@ -22,9 +22,24 @@ class _SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         if (instance<SharedPreferencesController>()
             .getBool(SharedPreferencesKeys.viewOnBoarding)) {
-          Navigator.of(context).pushReplacementNamed(Routes.welcomeScreen);
+          if (instance<SharedPreferencesController>()
+              .getString(SharedPreferencesKeys.token)
+              .isNotEmpty) {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.mainScreen,
+              (route) => false,
+            );
+          } else {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              Routes.welcomeScreen,
+              (route) => false,
+            );
+          }
         } else {
-          Navigator.of(context).pushReplacementNamed(Routes.onBoardingScreen);
+          Navigator.of(context).pushNamedAndRemoveUntil(
+            Routes.onBoardingScreen,
+            (route) => false,
+          );
         }
       }
     });

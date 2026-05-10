@@ -28,7 +28,6 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
         context.read<HomeBloc>().add(GetHomeData());
       },
       child: Scaffold(
-        backgroundColor: ManagerColors.backGroundColor,
         appBar: AppBar(
           title: Text('وافر'),
           centerTitle: false,
@@ -49,7 +48,6 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
           ],
         ),
         body: BlocBuilder<HomeBloc, HomeState>(
-
           builder: (context, state) {
             if (state is HomeLoading) {
               return Center(

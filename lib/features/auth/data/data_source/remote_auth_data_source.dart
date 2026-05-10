@@ -1,5 +1,6 @@
 import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
+import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/networking/api/app_api.dart';
 import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/features/auth/data/request/forgot_password_request.dart';
@@ -32,6 +33,8 @@ abstract class RemoteAuthDataSource {
   Future<ResetOtpResponse> resendOtp(ResetOtpRequest request);
 
   Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request);
+
+  Future<void> logout();
 }
 
 class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
@@ -46,24 +49,35 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   Future<LoginResponse> loginByEmail(LoginByEmailRequest request) async {
     var response = await _appApi.loginByEmail(request.email, request.password);
     if (response.success == true) {
-      if (_sharedPreferencesController
-              .getBool(SharedPreferencesKeys.rememberMy) ==
-          true) {
-        await _sharedPreferencesController.setData(
-          SharedPreferencesKeys.email,
-          response.data?.user?.email,
-        );
-        await _sharedPreferencesController.setData(
-          SharedPreferencesKeys.token,
-          response.data?.token ?? '',
-        );
-        await _sharedPreferencesController.setData(
-          SharedPreferencesKeys.name,
-          '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
-        );
-      }
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.email,
+        response.data?.user?.email,
+      );
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.token,
+        response.data?.token ?? '',
+      );
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.name,
+        '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
+      );
     }
     return response;
+  }
+
+  @override
+  Future<void> logout() async {
+    await _appApi.logout();
+    disposeHome();
+
+    disposeOffers();
+    disposeProfile();
+    disposeEditProfile();
+    disposeFavorite();
+    _sharedPreferencesController.removeData(SharedPreferencesKeys.token);
+    _sharedPreferencesController.removeData(SharedPreferencesKeys.email);
+    _sharedPreferencesController.removeData(SharedPreferencesKeys.name);
+    _sharedPreferencesController.removeData(SharedPreferencesKeys.image);
   }
 
   @override

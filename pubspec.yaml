@@ -59,6 +59,7 @@ dependencies:
   share_plus: ^13.0.0
   flutter_native_splash: ^2.4.7
   gif: ^2.3.0
+  flutter_html: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -97,7 +98,6 @@ flutter:
     - assets/images/on_boarding_images/
     - assets/images/auth_images/
     - assets/images/profile_images/
-    - assets/images/icons/
     - assets/languages/
 
 

@@ -13,7 +13,6 @@ class RemoteHomeDataSourceImpl implements RemoteHomeDataSource {
   @override
   Future<HomeResponse> getHomeData() async {
     final response = await _appApi.getHomeData();
-    print(response.data?.sectors?.toList());
     return response;
   }
 }

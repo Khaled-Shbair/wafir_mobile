@@ -112,7 +112,7 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
                   Row(
                     children: [
                       Flexible(
-                        child: CustomTextField(
+                        child: CustomTextField(  maxLength: 30,
                           labelText: ManagerStrings.firstName,
                           controller: controller.firstName,
                           validator: (v) => Validator.nameValidate(v),
@@ -125,7 +125,7 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
                       ),
                       horizontalSpace(ManagerWidths.w10),
                       Flexible(
-                        child: CustomTextField(
+                        child: CustomTextField(  maxLength: 30,
                           labelText: ManagerStrings.lastName,
                           controller: controller.lastName,
                           validator: (v) => Validator.nameValidate(v),
@@ -139,7 +139,7 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
                     ],
                   ),
                   verticalSpace(ManagerHeights.h20),
-                  CustomTextField(
+                  CustomTextField(   maxLength: 30,
                     labelText: ManagerStrings.email,
                     controller: controller.email,
                     readOnly: true,
@@ -152,6 +152,7 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
                   ),
                   verticalSpace(ManagerHeights.h20),
                   CustomTextField(
+                    maxLength: 8,
                     labelText: ManagerStrings.phoneNumber,
                     controller: controller.phoneNumber,
                     validator: (v) => Validator.phoneValidate(v),

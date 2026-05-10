@@ -6,12 +6,12 @@ import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 
 class CustomInfoCardWidget extends StatelessWidget {
   const CustomInfoCardWidget({
-    required this.title,
+     this.title,
     required this.child,
     super.key,
   });
 
-  final String title;
+  final String? title;
   final Widget child;
 
   @override
@@ -27,22 +27,25 @@ class CustomInfoCardWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(ManagerRadius.r22),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 16,
             offset: const Offset(0, 8),
           ),
         ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: ManagerColors.blackColor,
-                  fontWeight: ManagerFontWeight.extraBold,
-                ),
-          ),
+         if (title != null)
+            Text(
+              title!,
+              style: TextStyle(
+                color: ManagerColors.primaryColor,
+                fontSize: ManagerFontsSizes.f14,
+                fontWeight: ManagerFontWeight.bold,
+              ),
+            ),
           verticalSpace(ManagerHeights.h15),
           child,
         ],

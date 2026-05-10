@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/features/vendors/domain/use_case/get_vendor_details_use_case.dart';
+import 'package:wafir_mobile/features/vendors/presentation/controller/vendor_details_state.dart';
 
 part 'vendor_details_event.dart';
-
-part 'vendor_details_state.dart';
 
 class VendorDetailsBloc extends Bloc<VendorDetailsEvent, VendorDetailsState> {
   VendorDetailsBloc(this._useCase) : super(VendorDetailsInitial()) {
@@ -39,6 +37,7 @@ class VendorDetailsBloc extends Bloc<VendorDetailsEvent, VendorDetailsState> {
           selectedCategory: state.selectedCategory,
           selectedGovernorate: state.selectedGovernorate,
           selectedWilaya: state.selectedWilaya,
+          vendor: r,
         ),
       ),
     );
@@ -69,7 +68,6 @@ class VendorDetailsBloc extends Bloc<VendorDetailsEvent, VendorDetailsState> {
 
   @override
   Future<void> close() {
-    disposeVendorDetails();
     search.dispose();
     return super.close();
   }
