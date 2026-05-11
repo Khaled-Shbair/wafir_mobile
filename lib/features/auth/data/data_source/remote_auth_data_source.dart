@@ -1,5 +1,5 @@
+import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
-import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/networking/api/app_api.dart';
 import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/features/auth/data/request/change_password_request.dart';
@@ -11,6 +11,7 @@ import 'package:wafir_mobile/features/auth/data/request/reset_password_request.d
 import 'package:wafir_mobile/features/auth/data/request/verify_otp_request.dart';
 import 'package:wafir_mobile/features/auth/data/response/forgot_password_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/login_response.dart';
+import 'package:wafir_mobile/features/auth/data/response/logout_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/register_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/reset_otp_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/reset_password_response.dart';
@@ -36,7 +37,7 @@ abstract class RemoteAuthDataSource {
 
   Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request);
 
-  Future<void> logout();
+  Future<LogoutResponse> logout();
 }
 
 class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
@@ -50,7 +51,6 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   @override
   Future<LoginResponse> loginByEmail(LoginByEmailRequest request) async {
     var response = await _appApi.loginByEmail(request.email, request.password);
-    print('response.success:${response.success}');
     if (response.success == true) {
       await _sharedPreferencesController.setData(
         SharedPreferencesKeys.email,
@@ -60,7 +60,10 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
         SharedPreferencesKeys.token,
         response.token ?? '',
       );
-
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.loggedIn,
+        true,
+      );
       await _sharedPreferencesController.setData(
         SharedPreferencesKeys.name,
         '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
@@ -70,19 +73,18 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   }
 
   @override
-  Future<void> logout() async {
-    await _appApi.logout();
-    disposeHome();
-
-    disposeOffers();
-    disposeProfile();
-    disposeEditProfile();
-    disposeFavorite();
-    _sharedPreferencesController.removeData(SharedPreferencesKeys.token);
-    _sharedPreferencesController.removeData(SharedPreferencesKeys.resetToken);
-    _sharedPreferencesController.removeData(SharedPreferencesKeys.email);
-    _sharedPreferencesController.removeData(SharedPreferencesKeys.name);
-    _sharedPreferencesController.removeData(SharedPreferencesKeys.image);
+  Future<LogoutResponse> logout() async {
+    var response = await _appApi.logout();
+    if (response.success == true) {
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.token);
+      await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.loggedIn, false);
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.resetToken);
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.email);
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.name);
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.image);
+    }
+    return response;
   }
 
   @override
@@ -96,6 +98,10 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
         await _sharedPreferencesController.setData(
           SharedPreferencesKeys.email,
           response.data?.user?.email,
+        );
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.loggedIn,
+          true,
         );
         await _sharedPreferencesController.setData(
           SharedPreferencesKeys.token,
@@ -124,7 +130,19 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     );
     if (response.success == true) {
       _sharedPreferencesController.setData(
-          SharedPreferencesKeys.resetToken, response.data?.verificationToken);
+          SharedPreferencesKeys.token, response.verificationToken);
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.name,
+        '${request.firstName} ${request.lastName}',
+      );
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.email,
+        request.email,
+      );
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.loggedIn,
+        true,
+      );
     }
     return response;
   }
@@ -151,10 +169,21 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       request.type,
     );
     if (response.success == true) {
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.resetToken,
-        response.token,
-      );
+      if (request.type == ApiKeys.registrationType) {
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.token,
+          response.token,
+        );
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.loggedIn,
+          true,
+        );
+      } else {
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.resetToken,
+          response.token,
+        );
+      }
     }
 
     return response;

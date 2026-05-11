@@ -29,6 +29,7 @@ import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_sc
 import 'package:wafir_mobile/features/on_boarding/presentation/view/screens/on_boarding_screen.dart';
 import 'package:wafir_mobile/features/profile/presentation/controller/edit_profile_bloc.dart';
 import 'package:wafir_mobile/features/profile/presentation/view/screens/edit_profile_screen.dart';
+import 'package:wafir_mobile/features/setting/presentation/controller/logout_setting_bloc.dart';
 import 'package:wafir_mobile/features/splash/presentation/view/screens/splash_screen.dart';
 import 'package:wafir_mobile/features/vendors/presentation/controller/vendor_details_bloc.dart';
 import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bloc.dart';
@@ -127,18 +128,26 @@ class RouteGenerator {
         initHome();
         initOffers();
         initFavorite();
+        initLogoutSetting();
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
               BlocProvider.value(value: instance<HomeBloc>()),
               BlocProvider.value(value: instance<FavoriteBloc>()),
               BlocProvider.value(value: instance<OffersBloc>()),
+              BlocProvider.value(value: instance<LogoutSettingBloc>()),
             ],
             child: const MainBottomNavScreen(),
           ),
         );
       case Routes.settingScreen:
-        return MaterialPageRoute(builder: (_) => SettingScreen());
+        initLogoutSetting();
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<LogoutSettingBloc>(
+            create: (context) => instance<LogoutSettingBloc>(),
+            child: SettingScreen(),
+          ),
+        );
       case Routes.editProfileScreen:
         initEditProfile();
         return MaterialPageRoute(

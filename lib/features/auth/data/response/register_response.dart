@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
+import 'package:wafir_mobile/features/auth/data/response/user_response.dart';
 
 part 'register_response.g.dart';
 
@@ -16,10 +17,13 @@ class RegisterResponse {
   @JsonKey(name: ApiKeys.path)
   final String? path;
   @JsonKey(name: ApiKeys.data)
-  final RegisterDataResponse? data;
+  final UserResponse? data;
+  @JsonKey(name: ApiKeys.token)
+  final String? verificationToken;
 
   RegisterResponse({
     this.message,
+    this.verificationToken,
     this.success,
     this.statusCode,
     this.timestamp,
@@ -31,19 +35,4 @@ class RegisterResponse {
       _$RegisterResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$RegisterResponseToJson(this);
-}
-
-@JsonSerializable()
-class RegisterDataResponse {
-  @JsonKey(name: ApiKeys.token)
-  final String? verificationToken;
-
-  RegisterDataResponse({
-    this.verificationToken,
-  });
-
-  factory RegisterDataResponse.fromJson(Map<String, dynamic> json) =>
-      _$RegisterDataResponseFromJson(json);
-
-  Map<String, dynamic> toJson() => _$RegisterDataResponseToJson(this);
 }

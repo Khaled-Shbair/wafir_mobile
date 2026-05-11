@@ -71,8 +71,8 @@ class CustomDiscountAndFavoriteRowWidget extends StatelessWidget
               return GestureDetector(
                 onTap: () {
                   if (instance<SharedPreferencesController>()
-                      .getString(SharedPreferencesKeys.token)
-                      .isNotEmpty) {
+                      .getBool(SharedPreferencesKeys.loggedIn)
+                      == true) {
                     context
                         .read<FavoriteBloc>()
                         .add(ToggleFavoriteOfferEvent(offerId: offerId));

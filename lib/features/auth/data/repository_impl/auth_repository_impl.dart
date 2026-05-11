@@ -8,6 +8,7 @@ import 'package:wafir_mobile/features/auth/data/mapper/forgot_password_mapper.da
 import 'package:wafir_mobile/features/auth/data/mapper/login_mapper.dart';
 import 'package:wafir_mobile/features/auth/data/mapper/register_by_email_mapper.dart';
 import 'package:wafir_mobile/features/auth/data/mapper/reset_otp_mapper.dart';
+import 'package:wafir_mobile/features/auth/data/mapper/logout_mapper.dart';
 import 'package:wafir_mobile/features/auth/data/mapper/reset_password_mapper.dart';
 import 'package:wafir_mobile/features/auth/data/mapper/verify_otp_mapper.dart';
 import 'package:wafir_mobile/features/auth/data/request/change_password_request.dart';
@@ -17,6 +18,7 @@ import 'package:wafir_mobile/features/auth/data/request/reset_otp_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/reset_password_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/verify_otp_request.dart';
 import 'package:wafir_mobile/features/auth/domain/model/forgot_password_model.dart';
+import 'package:wafir_mobile/features/auth/domain/model/logout_model.dart';
 import 'package:wafir_mobile/features/auth/domain/model/register_response.dart';
 import 'package:wafir_mobile/features/auth/domain/model/reset_otp_model.dart';
 import 'package:wafir_mobile/features/auth/domain/model/reset_password_model.dart';
@@ -293,11 +295,21 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> logout() async {
+  Future<Either<Failure, LogoutModel>> logout() async {
     if (await _networkInfo.isConnected) {
       try {
-        await _dataSource.logout();
-        return const Right(null);
+        var response = await _dataSource.logout();
+
+        if (response.success == true) {
+          return Right(response.toDomain());
+        } else {
+          return Left(
+            Failure(
+              message: response.message ?? 'Logout failed',
+              code: response.statusCode ?? ResponseCode.BAD_REQUEST.value,
+            ),
+          );
+        }
       } catch (e) {
         return Left(ErrorHandler.handle(e).failure);
       }

@@ -90,7 +90,11 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
+            },
             icon: Icon(
               Icons.arrow_back_ios_new_outlined,
               size: ManagerIconsSizes.i20,

@@ -3,6 +3,7 @@ import 'package:retrofit/retrofit.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/features/auth/data/response/forgot_password_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/login_response.dart';
+import 'package:wafir_mobile/features/auth/data/response/logout_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/register_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/reset_otp_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/reset_password_response.dart';
@@ -114,7 +115,7 @@ abstract class AppApi {
   );
 
   @POST(ApiConstants.logout)
-  Future<void> logout();
+  Future<LogoutResponse> logout();
 
   @GET(ApiConstants.getAllFavoriteOffers)
   Future<FavoriteOffersResponse> getAllFavoriteOffers();

@@ -3,13 +3,13 @@ import 'package:wafir_mobile/core/error_handler/error_handler.dart';
 import 'package:wafir_mobile/core/use_case/base_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/repository/auth_repository.dart';
 
-class LogoutUseCase implements BaseUseCase<void, void> {
+class LogoutUseCase implements BaseOutUseCase<void> {
   final AuthRepository _repository;
 
   LogoutUseCase(this._repository);
 
   @override
-  Future<Either<Failure, void>> execute(void input) async {
+  Future<Either<Failure, void>> execute() async {
     return await _repository.logout();
   }
 }

@@ -5,7 +5,7 @@ import 'package:wafir_mobile/features/auth/domain/model/register_response.dart';
 extension RegisterByEmailMapper on RegisterResponse {
   RegisterModel toDomain() {
     return RegisterModel(
-      token: data!.verificationToken.onNull(),
+      token: verificationToken.onNull(),
       message: message.onNull(),
       path: path.onNull(),
       statusCode: statusCode.onNull(),

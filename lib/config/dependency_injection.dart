@@ -58,6 +58,7 @@ import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_
 import 'package:wafir_mobile/features/vendors/presentation/controller/vendor_details_bloc.dart';
 import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/navigation_cubit.dart';
+import 'package:wafir_mobile/features/setting/presentation/controller/logout_setting_bloc.dart';
 
 final instance = GetIt.instance;
 
@@ -247,13 +248,14 @@ void initResetPassword() async {
         .registerLazySingleton<ResetPasswordBloc>(() => ResetPasswordBloc());
   }
 }
+
 void initChangePassword() async {
   _initAuth();
   if (!GetIt.I.isRegistered<ChangePasswordUseCase>()) {
-    instance
-        .registerLazySingleton<ChangePasswordUseCase>(() => ChangePasswordUseCase(
-      instance<AuthRepository>(),
-    ));
+    instance.registerLazySingleton<ChangePasswordUseCase>(
+        () => ChangePasswordUseCase(
+              instance<AuthRepository>(),
+            ));
   }
   if (!GetIt.I.isRegistered<ChangePasswordBloc>()) {
     instance
@@ -278,15 +280,15 @@ void disposeResetPassword() async {
   }
 }
 
-
 void disposeChangePassword() async {
-  if (GetIt.I.isRegistered< ChangePasswordUseCase>()) {
+  if (GetIt.I.isRegistered<ChangePasswordUseCase>()) {
     instance.unregister<ChangePasswordUseCase>();
   }
-  if (GetIt.I.isRegistered< ChangePasswordBloc>()) {
+  if (GetIt.I.isRegistered<ChangePasswordBloc>()) {
     instance.unregister<ChangePasswordBloc>();
   }
 }
+
 void initVerifyOtp() async {
   if (!GetIt.I.isRegistered<VerifyOtpUseCase>()) {
     instance.registerLazySingleton<VerifyOtpUseCase>(
@@ -334,7 +336,6 @@ void disposeLogout() async {
   }
 }
 
-
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 //Profile
@@ -343,7 +344,7 @@ void initProfile() async {
     instance.registerLazySingleton<RemoteProfileDataSource>(
       () => RemoteProfileDataSourceImpl(
         instance<AppApi>(),
-      instance<SharedPreferencesController>(),
+        instance<SharedPreferencesController>(),
       ),
     );
   }
@@ -442,6 +443,7 @@ void initOffers() async {
     );
   }
 }
+
 initHome() async {
   if (!GetIt.I.isRegistered<RemoteHomeDataSource>()) {
     instance.registerLazySingleton<RemoteHomeDataSource>(
@@ -467,6 +469,7 @@ initHome() async {
     );
   }
 }
+
 void disposeHome() async {
   if (GetIt.I.isRegistered<HomeBloc>()) {
     instance.unregister<HomeBloc>();
@@ -481,6 +484,7 @@ void disposeHome() async {
     instance.unregister<RemoteHomeDataSource>();
   }
 }
+
 void disposeOffers() async {
   if (GetIt.I.isRegistered<RemoteOffersDataSource>()) {
     instance.unregister<RemoteOffersDataSource>();
@@ -501,6 +505,7 @@ void disposeOffers() async {
     instance.unregister<OfferDetailsBloc>();
   }
 }
+
 void disposeOfferDetails() async {
   if (GetIt.I.isRegistered<GetOfferDetailsUseCase>()) {
     instance.unregister<GetOfferDetailsUseCase>();
@@ -509,6 +514,7 @@ void disposeOfferDetails() async {
     instance.unregister<OfferDetailsBloc>();
   }
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 // Sectors
@@ -646,5 +652,30 @@ void initNavigation() {
     instance.registerLazySingleton<NavigationCubit>(
       () => NavigationCubit(),
     );
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// Setting (Logout)
+void initLogoutSetting() async {
+  _initAuth();
+  if (!GetIt.I.isRegistered<LogoutUseCase>()) {
+    instance.registerLazySingleton<LogoutUseCase>(
+      () => LogoutUseCase(instance<AuthRepository>()),
+    );
+  }
+  if (!GetIt.I.isRegistered<LogoutSettingBloc>()) {
+    instance.registerLazySingleton<LogoutSettingBloc>(
+      () => LogoutSettingBloc(instance<LogoutUseCase>()),
+    );
+  }
+}
+
+void disposeLogoutSetting() async {
+  if (GetIt.I.isRegistered<LogoutUseCase>()) {
+    instance.unregister<LogoutUseCase>();
+  }
+  if (GetIt.I.isRegistered<LogoutSettingBloc>()) {
+    instance.unregister<LogoutSettingBloc>();
   }
 }

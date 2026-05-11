@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/config/constants/app_constants.dart';
+import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
+import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/core/validator/validator.dart';
 import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_drop_down_list.dart';
@@ -126,7 +128,11 @@ class _RegisterScreenState extends State<RegisterScreen>
       appBar: AppBar(
         title: Text(ManagerStrings.createAccount),
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            instance<SharedPreferencesController>()
+                .removeData(SharedPreferencesKeys.token);
+            Navigator.pop(context);
+          },
           icon: const Icon(Icons.arrow_back_ios),
         ),
       ),

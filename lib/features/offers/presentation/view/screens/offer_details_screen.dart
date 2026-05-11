@@ -87,13 +87,11 @@ class OfferDetailsScreen extends StatelessWidget {
   void _shareOffer(OfferDetailsModel offerDetails) {
     SharePlus.instance.share(
       ShareParams(
-
         text: "wafar://offer/${offerDetails.offer.id}",
         // uri: Uri(path: "https://wafar.com/offer/${offerDetails.offer.id}"),
         title: offerDetails.offer.title,
       ),
     );
-
   }
 
   String _formatDate(String value) {
@@ -279,8 +277,8 @@ class _OfferDetailsContent extends StatelessWidget {
                 ? null
                 : () {
                     if (instance<SharedPreferencesController>()
-                        .getString(SharedPreferencesKeys.token)
-                        .isNotEmpty) {
+                            .getBool(SharedPreferencesKeys.loggedIn) ==
+                        true) {
                       // Handle claim offer
                     } else {
                       loginPop(context);

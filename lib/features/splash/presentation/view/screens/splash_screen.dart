@@ -23,8 +23,8 @@ class _SplashScreenState extends State<SplashScreen> {
         if (instance<SharedPreferencesController>()
             .getBool(SharedPreferencesKeys.viewOnBoarding)) {
           if (instance<SharedPreferencesController>()
-              .getString(SharedPreferencesKeys.token)
-              .isNotEmpty) {
+                  .getBool(SharedPreferencesKeys.loggedIn) ==
+              true) {
             Navigator.of(context).pushNamedAndRemoveUntil(
               Routes.mainScreen,
               (route) => false,

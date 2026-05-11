@@ -37,7 +37,6 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen>
 
   @override
   void initState() {
-
     super.initState();
     initNavigation();
     // Load home data on first app launch if not already loaded
@@ -46,7 +45,6 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen>
       if (homeState is HomeInitial) {
         context.read<HomeBloc>().add(GetHomeData());
       }
-
     });
   }
 
@@ -129,8 +127,8 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen>
                         disposeOffers();
                         disposeHome();
                         if (instance<SharedPreferencesController>()
-                            .getString(SharedPreferencesKeys.token)
-                            .isNotEmpty) {
+                                .getBool(SharedPreferencesKeys.loggedIn) ==
+                            true) {
                           context
                               .read<FavoriteBloc>()
                               .add(GetFavoriteOffers(message: '', offerId: 1));
@@ -146,8 +144,8 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen>
                       active: state.selectedIndex == 3,
                       onTap: () {
                         if (instance<SharedPreferencesController>()
-                            .getString(SharedPreferencesKeys.token)
-                            .isNotEmpty) {
+                                .getBool(SharedPreferencesKeys.loggedIn) ==
+                            true) {
                           disposeOffers();
                           disposeHome();
                           disposeFavorite();

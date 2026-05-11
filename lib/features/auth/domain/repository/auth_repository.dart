@@ -9,6 +9,7 @@ import 'package:wafir_mobile/features/auth/data/request/reset_password_request.d
 import 'package:wafir_mobile/features/auth/data/request/verify_otp_request.dart';
 import 'package:wafir_mobile/features/auth/domain/model/forgot_password_model.dart';
 import 'package:wafir_mobile/features/auth/domain/model/login_model.dart';
+import 'package:wafir_mobile/features/auth/domain/model/logout_model.dart';
 import 'package:wafir_mobile/features/auth/domain/model/register_response.dart';
 import 'package:wafir_mobile/features/auth/domain/model/reset_otp_model.dart';
 import 'package:wafir_mobile/features/auth/domain/model/reset_password_model.dart';
@@ -33,7 +34,8 @@ abstract class AuthRepository {
 
   Future<Either<Failure, ResetPasswordModel>> resetPassword(
       ResetPasswordRequest request);
-  Future<Either<Failure, ResetPasswordModel>> changePassword(
-      ChangePasswordRequest request);
-  Future<Either<Failure, void>> logout();
+  Future<Either<Failure, ResetPasswordModel>> changePassword(ChangePasswordRequest request);
+
+
+  Future<Either<Failure, LogoutModel>> logout();
 }

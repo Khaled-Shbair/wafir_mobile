@@ -9,13 +9,12 @@ part of 'register_response.dart';
 RegisterResponse _$RegisterResponseFromJson(Map<String, dynamic> json) =>
     RegisterResponse(
       message: json['message'] as String?,
+      verificationToken: json['token'] as String?,
       success: json['success'] as bool?,
       statusCode: (json['statusCode'] as num?)?.toInt(),
       timestamp: json['timestamp'] as String?,
       path: json['path'] as String?,
-      data: json['data'] == null
-          ? null
-          : RegisterDataResponse.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'],
     );
 
 Map<String, dynamic> _$RegisterResponseToJson(RegisterResponse instance) =>
@@ -26,16 +25,5 @@ Map<String, dynamic> _$RegisterResponseToJson(RegisterResponse instance) =>
       'timestamp': instance.timestamp,
       'path': instance.path,
       'data': instance.data,
-    };
-
-RegisterDataResponse _$RegisterDataResponseFromJson(
-        Map<String, dynamic> json) =>
-    RegisterDataResponse(
-      verificationToken: json['token'] as String?,
-    );
-
-Map<String, dynamic> _$RegisterDataResponseToJson(
-        RegisterDataResponse instance) =>
-    <String, dynamic>{
       'token': instance.verificationToken,
     };

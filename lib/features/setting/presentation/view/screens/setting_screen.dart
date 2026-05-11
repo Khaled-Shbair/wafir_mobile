@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/constants/app_constants.dart';
 import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
@@ -10,10 +11,11 @@ import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_dialog.dart';
+import 'package:wafir_mobile/core/widgets/custom_loading.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
 import 'package:wafir_mobile/core/widgets/custom_web_view_bottom_sheet.dart';
-import 'package:wafir_mobile/features/auth/domain/use_case/logout_use_case.dart';
+import 'package:wafir_mobile/features/setting/presentation/controller/logout_setting_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -22,169 +24,192 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
 
   @override
   Widget build(BuildContext context) {
+    initLogoutSetting();
+
     final email = instance<SharedPreferencesController>()
         .getString(SharedPreferencesKeys.email);
 
     final displayEmail = email.contains('@')
         ? email.substring(0, email.indexOf('@') + 1)
         : 'user@';
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text(ManagerStrings.settings),
-      ),
-      body: ListView(
-        padding: EdgeInsetsDirectional.only(
-          top: ManagerHeights.h5,
-          bottom: ManagerHeights.h20,
-          start: ManagerWidths.w20,
-          end: ManagerWidths.w20,
+    return BlocListener<LogoutSettingBloc, LogoutSettingState>(
+      listener: (context, state) {
+        if (state is LogoutSettingLoading) {
+          showCustomLoading(context);
+        } else if (state is LogoutSettingSuccess) {
+          disposeHome();
+          disposeLogoutSetting();
+          disposeOffers();
+          disposeVendors();
+          disposeOfferDetails();
+          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
+            Routes.loginScreen,
+            (route) => false,
+          );
+        } else if (state is LogoutSettingFailure) {
+          Navigator.of(context, rootNavigator: true).pop();
+          showToast(state.message);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          title: Text(ManagerStrings.settings),
         ),
-        children: [
-          Container(
-            margin: EdgeInsetsDirectional.only(
-              bottom: ManagerHeights.h20,
-              start: ManagerWidths.w100,
-              end: ManagerWidths.w100,
-            ),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: ManagerColors.blackColor,
-            ),
-            child: ClipOval(
-              child: CachedNetworkImage(
-                imageUrl: instance<SharedPreferencesController>()
-                    .getString(SharedPreferencesKeys.image),
-                fit: BoxFit.fill,
-                errorWidget: (context, url, error) => Image.asset(
-                  ManagerAssets.personImage,
+        body: ListView(
+          padding: EdgeInsetsDirectional.only(
+            top: ManagerHeights.h5,
+            bottom: ManagerHeights.h20,
+            start: ManagerWidths.w20,
+            end: ManagerWidths.w20,
+          ),
+          children: [
+            Container(
+              margin: EdgeInsetsDirectional.only(
+                bottom: ManagerHeights.h20,
+                start: ManagerWidths.w100,
+                end: ManagerWidths.w100,
+              ),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: ManagerColors.blackColor,
+              ),
+              child: ClipOval(
+                child: CachedNetworkImage(
+                  imageUrl: instance<SharedPreferencesController>()
+                      .getString(SharedPreferencesKeys.image),
                   fit: BoxFit.fill,
+                  errorWidget: (context, url, error) => Image.asset(
+                    ManagerAssets.personImage,
+                    fit: BoxFit.fill,
+                  ),
                 ),
               ),
             ),
-          ),
-          Center(
-            child: Text(
-              instance<SharedPreferencesController>()
-                  .getString(SharedPreferencesKeys.name),
-              style: Theme.of(context).textTheme.headlineLarge,
+            Center(
+              child: Text(
+                instance<SharedPreferencesController>()
+                    .getString(SharedPreferencesKeys.name),
+                style: Theme.of(context).textTheme.headlineLarge,
+              ),
             ),
-          ),
-          verticalSpace(ManagerHeights.h5),
-          Center(
-            child: Text(
-              displayEmail,
-              style: Theme.of(context).textTheme.labelSmall,
+            verticalSpace(ManagerHeights.h5),
+            Center(
+              child: Text(
+                displayEmail,
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
             ),
-          ),
-          verticalSpace(ManagerHeights.h15),
-          CustomButton(
-            text: ManagerStrings.editProfile,
-            onPressed: () {
-              Navigator.of(context).pushNamed(
-                Routes.editProfileScreen,
-              );
-            },
-          ),
-          verticalSpace(ManagerHeights.h25),
-          _buildSectionTitle(
-            context: context,
-            title: 'الإعدادات',
-          ),
-          verticalSpace(ManagerHeights.h10),
-          _buildSectionContainer(
-            children: [
-              _buildSettingItem(
-                context: context,
-                icon: Icons.lock_outline,
-                title: ManagerStrings.changePassword,
-                onTap: () {
-                  Navigator.of(context).pushNamed(Routes.changePasswordScreen);
-                },
-              ),
-            ],
-          ),
-          verticalSpace(ManagerHeights.h20),
-          _buildSectionTitle(
-            context: context,
-            title: 'مركز المساعدة',
-          ),
-          verticalSpace(ManagerHeights.h10),
-          _buildSectionContainer(
-            children: [
-              _buildSettingItem(
-                context: context,
-                icon: Icons.call,
-                title: 'التواصل واتساب',
-                onTap: () async {
-                  final Uri url = Uri.parse(
-                      "https://wa.me/96871189661?text=مرحبا، أريد الاستفسار عن تطبيق وافر");
-                  if (!await launchUrl(url,
-                      mode: LaunchMode.externalApplication)) {
-                    showToast('سيتم إضافتها قريباً');
-                  }
-                },
-              ),
-              _buildDivider(),
-              _buildSettingItem(
-                context: context,
-                icon: Icons.question_answer_outlined,
-                title: ManagerStrings.frequentlyAskedQuestions,
-                onTap: () {
-                  customWebViewBottomSheet(
-                    context,
-                    ManagerStrings.frequentlyAskedQuestions,
-                    AppConstants.faq,
-                  );
-                },
-              ),
-              _buildDivider(),
-              _buildSettingItem(
-                context: context,
-                icon: Icons.privacy_tip_outlined,
-                title: ManagerStrings.privacyPolicy,
-                onTap: () async {
-                  customWebViewBottomSheet(
-                    context,
-                    ManagerStrings.privacyPolicy,
-                    AppConstants.privacyPolicy,
-                  );
-                },
-              ),
-              _buildDivider(),
-              _buildSettingItem(
-                context: context,
-                icon: Icons.info_outline,
-                title: ManagerStrings.termsOfUse,
-                onTap: () async {
-                  customWebViewBottomSheet(
-                    context,
-                    ManagerStrings.termsOfUse,
-                    AppConstants.termsOfUse,
-                  );
-                },
-              ),
-            ],
-          ),
-          verticalSpace(ManagerHeights.h20),
-          _buildSectionContainer(
-            children: [
-              _buildSettingItem(
-                context: context,
-                icon: Icons.logout,
-                title: ManagerStrings.logout,
-                onTap: () {
-                  showConfirmationDialog(
-                    context,
-                    confirmButtonOnPressed: () async {
-                      await _performLogout(context);
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+            verticalSpace(ManagerHeights.h15),
+            CustomButton(
+              text: ManagerStrings.editProfile,
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  Routes.editProfileScreen,
+                );
+              },
+            ),
+            verticalSpace(ManagerHeights.h25),
+            _buildSectionTitle(
+              context: context,
+              title: 'الإعدادات',
+            ),
+            verticalSpace(ManagerHeights.h10),
+            _buildSectionContainer(
+              children: [
+                _buildSettingItem(
+                  context: context,
+                  icon: Icons.lock_outline,
+                  title: ManagerStrings.changePassword,
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(Routes.changePasswordScreen);
+                  },
+                ),
+              ],
+            ),
+            verticalSpace(ManagerHeights.h20),
+            _buildSectionTitle(
+              context: context,
+              title: 'مركز المساعدة',
+            ),
+            verticalSpace(ManagerHeights.h10),
+            _buildSectionContainer(
+              children: [
+                _buildSettingItem(
+                  context: context,
+                  icon: Icons.call,
+                  title: 'التواصل واتساب',
+                  onTap: () async {
+                    final Uri url = Uri.parse(
+                        "https://wa.me/96871189661?text=مرحبا، أريد الاستفسار عن تطبيق وافر");
+                    if (!await launchUrl(url,
+                        mode: LaunchMode.externalApplication)) {
+                      showToast('سيتم إضافتها قريباً');
+                    }
+                  },
+                ),
+                _buildDivider(),
+                _buildSettingItem(
+                  context: context,
+                  icon: Icons.question_answer_outlined,
+                  title: ManagerStrings.frequentlyAskedQuestions,
+                  onTap: () {
+                    customWebViewBottomSheet(
+                      context,
+                      ManagerStrings.frequentlyAskedQuestions,
+                      AppConstants.faq,
+                    );
+                  },
+                ),
+                _buildDivider(),
+                _buildSettingItem(
+                  context: context,
+                  icon: Icons.privacy_tip_outlined,
+                  title: ManagerStrings.privacyPolicy,
+                  onTap: () async {
+                    customWebViewBottomSheet(
+                      context,
+                      ManagerStrings.privacyPolicy,
+                      AppConstants.privacyPolicy,
+                    );
+                  },
+                ),
+                _buildDivider(),
+                _buildSettingItem(
+                  context: context,
+                  icon: Icons.info_outline,
+                  title: ManagerStrings.termsOfUse,
+                  onTap: () async {
+                    customWebViewBottomSheet(
+                      context,
+                      ManagerStrings.termsOfUse,
+                      AppConstants.termsOfUse,
+                    );
+                  },
+                ),
+              ],
+            ),
+            verticalSpace(ManagerHeights.h20),
+            _buildSectionContainer(
+              children: [
+                _buildSettingItem(
+                  context: context,
+                  icon: Icons.logout,
+                  title: ManagerStrings.logout,
+                  onTap: () {
+                    showConfirmationDialog(
+                      context,
+                      confirmButtonOnPressed: () async {
+                        context.read<LogoutSettingBloc>().add(LogoutProcess());
+                      },
+                    );
+                  },
+                )
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -275,29 +300,5 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
         ),
       ),
     );
-  }
-
-  Future<void> _performLogout(BuildContext context) async {
-    try {
-      instance.registerSingleton<LogoutUseCase>(
-        LogoutUseCase(instance()),
-      );
-      final logoutUseCase = instance<LogoutUseCase>();
-      final result = await logoutUseCase.execute(null);
-
-      result.fold(
-        (failure) {
-          showToast(failure.message);
-        },
-        (_) {
-          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
-            Routes.loginScreen,
-            (route) => false,
-          );
-        },
-      );
-    } catch (e) {
-      showToast('خطأ أثناء تسجيل الخروج');
-    }
   }
 }
