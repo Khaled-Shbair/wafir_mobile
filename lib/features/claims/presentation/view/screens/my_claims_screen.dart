@@ -65,7 +65,7 @@ class MyClaimsScreen extends StatelessWidget {
                       buttonText: 'تفاصيل',
                       onPressed: () => Navigator.of(context).pushNamed(
                         Routes.offerDetailsScreen,
-                        arguments: offerModel.offerId,
+                        arguments: [offerModel.offerId,'التفاصيل'],
                       ),
                     );
                   },

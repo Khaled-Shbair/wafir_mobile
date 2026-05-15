@@ -30,10 +30,11 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
   const OfferDetailsScreen({
     super.key,
     required this.offerId,
+     this.buttonText,
   });
 
   final int offerId;
-
+  final String? buttonText;
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<OfferDetailsBloc, OfferDetailsState>(
@@ -84,6 +85,7 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
 
               if (offerDetails != null) {
                 return _OfferDetailsContent(
+                  buttonText: buttonText,
                   offerDetails: offerDetails,
                   isClaiming: isClaiming,
                 );
@@ -467,7 +469,9 @@ class _OfferDetailsContent extends StatelessWidget {
   const _OfferDetailsContent({
     required this.offerDetails,
     required this.isClaiming,
+      this.buttonText
   });
+  final String? buttonText;
 
   final OfferDetailsModel offerDetails;
   final bool isClaiming;
@@ -640,7 +644,7 @@ class _OfferDetailsContent extends StatelessWidget {
             color: isNotStarted
                 ? ManagerColors.greyColor.withValues(alpha: 0.5)
                 : null,
-            text: isNotStarted ? remainingDays : 'احجز الآن',
+            text: isNotStarted ? remainingDays : buttonText ?? 'احجز الآن',
           ),
         ),
         if (isClaiming)

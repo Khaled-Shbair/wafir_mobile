@@ -179,12 +179,14 @@ class RouteGenerator {
         );
        case Routes.offerDetailsScreen:
          initOffers();
-         final offerId = setting.arguments as int;
+         final arguments = setting.arguments as List;
+         final offerId = arguments[0] as int;
+         final  buttonText = arguments[1] as String?;
          return MaterialPageRoute(
            builder: (_) => BlocProvider(
              create: (_) => instance<OfferDetailsBloc>()
                ..add(FetchOfferDetailsEvent(offerId)),
-             child: OfferDetailsScreen(offerId: offerId),
+             child: OfferDetailsScreen(offerId: offerId,buttonText: buttonText),
            ),
          );
        case Routes.myClaimsScreen:

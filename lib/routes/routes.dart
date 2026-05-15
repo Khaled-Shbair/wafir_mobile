@@ -20,7 +20,7 @@ class Routes {
   static const String vendorsScreen = '/vendors_screen';
   static const String vendorDetailsScreen = '/vendor_details_screen';
 
-  static const String offerDetailsScreen = '/offer_details_screen';
+   static const String offerDetailsScreen = '/offer_details_screen';
   static const String offersScreen = '/offers_screen';
   static const String notificationsScreen = '/notifications_screen';
   static const String myClaimsScreen = '/my_claims_screen';
