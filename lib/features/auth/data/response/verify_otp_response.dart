@@ -1,5 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
+import 'package:wafir_mobile/features/auth/data/response/user_response.dart';
 
 part 'verify_otp_response.g.dart';
 
@@ -16,7 +17,7 @@ class VerifyOtpResponse {
   @JsonKey(name: ApiKeys.path)
   final String? path;
   @JsonKey(name: ApiKeys.data)
-  final Map? data;
+  final UserResponse? data;
   @JsonKey(name: ApiKeys.resetToken)
   final String? token;
 

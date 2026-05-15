@@ -125,8 +125,7 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen>
           showCustomLoading(context);
         } else if (state is VerifyOtpSuccess) {
           Navigator.of(context, rootNavigator: true).pop();
-
-          // Navigator.of(context).pop();
+          Navigator.of(context).pop();
           Navigator.of(context).pushReplacementNamed(
             widget.nextScreenRoute,
             arguments: instance<SharedPreferencesController>()

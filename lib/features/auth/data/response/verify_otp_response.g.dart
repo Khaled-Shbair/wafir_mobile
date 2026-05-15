@@ -9,7 +9,9 @@ part of 'verify_otp_response.dart';
 VerifyOtpResponse _$VerifyOtpResponseFromJson(Map<String, dynamic> json) =>
     VerifyOtpResponse(
       message: json['message'] as String?,
-      data: json['data'] as Map<String, dynamic>?,
+      data: json['data'] == null
+          ? null
+          : UserResponse.fromJson(json['data'] as Map<String, dynamic>),
       success: json['success'] as bool?,
       token: json['reset_token'] as String?,
       statusCode: (json['statusCode'] as num?)?.toInt(),

@@ -33,22 +33,9 @@ class ProfileDataResponse {
   final String? createdAt;
   @JsonKey(name: ApiKeys.updatedAt)
   final String? updatedAt;
-  @JsonKey(name: ApiKeys.passwordResetToken)
-  final String? passwordResetToken;
-  @JsonKey(name: ApiKeys.passwordResetExpires)
-  final String? passwordResetExpires;
-  @JsonKey(name: ApiKeys.otpExpires)
-  final String? otpExpires;
   @JsonKey(name: ApiKeys.isVerified)
   final bool? isVerified;
-  @JsonKey(name: ApiKeys.lastOtpSentAt)
-  final String? lastOtpSentAt;
-  @JsonKey(name: ApiKeys.otpType)
-  final dynamic otpType;
-  @JsonKey(name: ApiKeys.otpAttempts)
-  final dynamic otpAttempts;
-  @JsonKey(name: ApiKeys.otpHash)
-  final dynamic otpHash;
+
   ProfileDataResponse({
     this.id,
     this.firstName,
@@ -64,14 +51,7 @@ class ProfileDataResponse {
     this.avatarPublicId,
     this.createdAt,
     this.updatedAt,
-    this.otpHash,
-    this.otpAttempts,
-    this.otpType,
-    this.lastOtpSentAt,
     this.isVerified,
-    this.passwordResetExpires,
-    this.passwordResetToken,
-    this.otpExpires
   });
   factory ProfileDataResponse.fromJson(Map<String, dynamic> json) =>
       _$ProfileDataResponseFromJson(json);

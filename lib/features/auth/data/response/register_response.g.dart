@@ -14,7 +14,7 @@ RegisterResponse _$RegisterResponseFromJson(Map<String, dynamic> json) =>
       statusCode: (json['statusCode'] as num?)?.toInt(),
       timestamp: json['timestamp'] as String?,
       path: json['path'] as String?,
-      data: json['data'],
+      data: json['data'] as Map<String, dynamic>?,
     );
 
 Map<String, dynamic> _$RegisterResponseToJson(RegisterResponse instance) =>

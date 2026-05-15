@@ -9,3 +9,9 @@ class FetchOfferDetailsEvent extends OfferDetailsEvent {
   const FetchOfferDetailsEvent(this.offerId);
 }
 
+class ClaimOfferEvent extends OfferDetailsEvent {
+  final int offerId;
+
+  const ClaimOfferEvent(this.offerId);
+}
+

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,14 +16,17 @@ import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.da
 import 'package:wafir_mobile/core/widgets/custom_button.dart';
 import 'package:wafir_mobile/core/widgets/custom_dialog.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
+import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
+import 'package:wafir_mobile/features/offers/domain/model/offer_claim_model.dart';
 import 'package:wafir_mobile/features/offers/domain/model/offer_details_model.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_bloc.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_event.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_state.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/widgets/custom_info_card_widget.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/widgets/custom_restaurant_card_widget.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
-class OfferDetailsScreen extends StatelessWidget {
+class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
   const OfferDetailsScreen({
     super.key,
     required this.offerId,
@@ -32,55 +36,70 @@ class OfferDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: ManagerColors.transparentColor,
-        leading: IconButton(
-          onPressed: () {
-            disposeOfferDetails();
-            Navigator.pop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: ManagerColors.whiteColor,
-            size: ManagerIconsSizes.i24,
-          ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              final state = context.read<OfferDetailsBloc>().state;
-              if (state is OfferDetailsLoaded) {
-                _shareOffer(state.offerDetails);
-              }
-            },
-            icon: Icon(
-              Icons.share_rounded,
-              color: ManagerColors.whiteColor,
-              size: ManagerIconsSizes.i24,
-            ),
-          ),
-        ],
-      ),
-      body: BlocBuilder<OfferDetailsBloc, OfferDetailsState>(
-        builder: (context, state) {
-          if (state is OfferDetailsLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
+    return BlocConsumer<OfferDetailsBloc, OfferDetailsState>(
+      listener: (context, state) {
+        _handleClaimState(context, state);
+      },
+      builder: (context, state) {
+        final bloc = context.read<OfferDetailsBloc>();
+        final offerDetails = bloc.currentOfferDetails;
+        final isClaiming = state is OfferClaimLoading;
 
-          if (state is OfferDetailsLoaded) {
-            return _OfferDetailsContent(offerDetails: state.offerDetails);
-          }
-          return Center(
-            child: Text(
-              state is OfferDetailsError ? state.message : 'حدث خطأ غير متوقع',
+        return Scaffold(
+          extendBodyBehindAppBar: true,
+          appBar: AppBar(
+            backgroundColor: ManagerColors.transparentColor,
+            leading: IconButton(
+              onPressed: () {
+                disposeOfferDetails();
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: ManagerColors.whiteColor,
+                size: ManagerIconsSizes.i24,
+              ),
             ),
-          );
-        },
-      ),
+            actions: [
+              IconButton(
+                onPressed: offerDetails == null
+                    ? null
+                    : () => _shareOffer(offerDetails),
+                icon: Icon(
+                  Icons.share_rounded,
+                  color: ManagerColors.whiteColor,
+                  size: ManagerIconsSizes.i24,
+                ),
+              ),
+            ],
+          ),
+          body: Builder(
+            builder: (context) {
+              if (state is OfferDetailsLoading
+                  && offerDetails == null) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+
+              if (offerDetails != null) {
+                return _OfferDetailsContent(
+                  offerDetails: offerDetails,
+                  isClaiming: isClaiming,
+                );
+              }
+
+              return Center(
+                child: Text(
+                  state is OfferDetailsError
+                      ? state.message
+                      : 'حدث خطأ غير متوقع',
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -94,33 +113,364 @@ class OfferDetailsScreen extends StatelessWidget {
     );
   }
 
-  String _formatDate(String value) {
-    final parsed = DateTime.tryParse(value);
-    if (parsed == null) return value;
-    return DateFormat('yyyy-MM-dd').format(parsed);
+  void _handleClaimState(BuildContext context, OfferDetailsState state) {
+    if (state is OfferClaimFailure) {
+      if (state.message.contains('الحد الأقصى')) {
+        _showAlreadyClaimedDialog(context, state.message);
+      } else {
+        showToast(state.message);
+      }
+      return;
+
+    }
+
+    if (state is! OfferClaimSuccess) {
+      print('Claim state is success: ${state.runtimeType}');
+      return;
+    }
+
+    final claim = state.claim;
+    final redemptionType = claim.redemptionType.trim().toLowerCase();
+
+    if (redemptionType == 'discount_code') {
+      if (claim.claimCode.trim().isEmpty) {
+        showToast('تم طلب العرض بنجاح، لكن لم يتم العثور على كود الخصم.');
+        return;
+      }
+
+      _showDiscountCodeDialog(context, claim);
+      return;
+    }
+
+    if (redemptionType == 'whatsapp') {
+      _openWhatsApp(context, claim);
+      return;
+    }
+
+    showToast(claim.message.isNotEmpty ? claim.message : 'تم طلب العرض بنجاح');
   }
 
-  String _getMainBranchAddress(List<BranchDetailModel> branches) {
-    if (branches.isEmpty) return 'لا يوجد عنوان';
+  void _showAlreadyClaimedDialog(BuildContext context, String message) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (dialogContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(ManagerRadius.r20),
+          ),
+          backgroundColor: ManagerColors.whiteColor,
+          child: Padding(
+            padding: EdgeInsets.all(ManagerWidths.w20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Warning icon
+                Container(
+                  width: ManagerWidths.w100,
+                  height: ManagerHeights.h90,
+                  margin: EdgeInsets.only(bottom: ManagerHeights.h15),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ManagerColors.primaryColor.withValues(alpha: 0.1),
+                  ),
+                  child: Icon(
+                    Icons.info_outline_rounded,
+                    color: ManagerColors.primaryColor,
+                    size: ManagerIconsSizes.i40,
+                  ),
+                ),
+                // Title
+                Text(
+                  'تنويه',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: ManagerFontsSizes.f22,
+                    fontWeight: ManagerFontWeight.bold,
+                    color: ManagerColors.blackColor,
+                  ),
+                ),
+                verticalSpace(ManagerHeights.h15),
+                // Message
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: ManagerFontsSizes.f14,
+                    color: ManagerColors.greyColor,
+                    height: 1.5,
+                  ),
+                ),
+                verticalSpace(ManagerHeights.h24),
+                // Buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                            vertical: ManagerHeights.h12,
+                          ),
+                        ),
+                        child: Text(
+                          'إغلاق',
+                          style: TextStyle(
+                            color: ManagerColors.greyColor,
+                            fontSize: ManagerFontsSizes.f16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    horizontalSpace(ManagerWidths.w12),
+                    Expanded(
+                      flex: 2,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.of(dialogContext).pop();
+                          Navigator.pushNamed(
+                            context,
+                            Routes.myClaimsScreen,
+                          );
+                        },
+                        icon: const Icon(Icons.arrow_forward_rounded),
+                        label: Text(
+                          'طلباتي',
+                          style: TextStyle(
+                            fontSize: ManagerFontsSizes.f16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                            vertical: ManagerHeights.h12,
+                          ),
+                          backgroundColor: ManagerColors.primaryColor,
+                          foregroundColor: ManagerColors.whiteColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
-    final mainBranch = branches.firstWhere(
-      (branch) => branch.isMain,
-      orElse: () => branches.first,
+  void _showDiscountCodeDialog(BuildContext context,
+      OfferClaimModel claim,) {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (dialogContext) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(ManagerRadius.r20),
+          ),
+          backgroundColor: ManagerColors.whiteColor,
+          child: Padding(
+            padding: EdgeInsets.all(ManagerWidths.w20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Success icon
+                Container(
+                  width: ManagerWidths.w100,
+                  height: ManagerHeights.h90,
+                  margin: EdgeInsets.only(bottom: ManagerHeights.h15),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ManagerColors.primaryColor.withValues(alpha: 0.1),
+                  ),
+                  child: Icon(
+                    Icons.check_circle_outline_rounded,
+                    color: ManagerColors.primaryColor,
+                    size: ManagerIconsSizes.i40,
+                  ),
+                ),
+                // Title
+                Text(
+                  'تنويه',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: ManagerFontsSizes.f22,
+                    fontWeight: FontWeight.bold,
+                    color: ManagerColors.blackColor,
+                  ),
+                ),
+                verticalSpace(ManagerHeights.h8),
+                // Subtitle
+                Text(
+                  'إليك كود الخصم الخاص بك',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: ManagerFontsSizes.f14,
+                    color: ManagerColors.greyColor,
+                  ),
+                ),
+                verticalSpace(ManagerHeights.h20),
+                // Code container
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: ManagerWidths.w16,
+                    vertical: ManagerHeights.h15,
+                  ),
+                  decoration: BoxDecoration(
+                    color: ManagerColors.primaryColor.withValues(alpha: 0.08),
+                    border: Border.all(
+                      color: ManagerColors.primaryColor.withValues(alpha: 0.3),
+                    ),
+                    borderRadius: BorderRadius.circular(ManagerRadius.r10),
+                  ),
+                  child: Column(
+                    children: [
+                      SelectableText(
+                        claim.claimCode,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: ManagerFontsSizes.f24,
+                          fontWeight: ManagerFontWeight.extraBold,
+                          color: ManagerColors.primaryColor,
+                          letterSpacing: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                verticalSpace(ManagerHeights.h15),
+                // Description
+                Text(
+                  'استخدم هذا الكود عند الشراء للحصول على الخصم',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: ManagerFontsSizes.f12,
+                    color: ManagerColors.greyColor,
+                  ),
+                ),
+                verticalSpace(ManagerHeights.h24),
+                // Buttons
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton(
+                        onPressed: () => Navigator.of(dialogContext).pop(),
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                            vertical: ManagerHeights.h12,
+                          ),
+                        ),
+                        child: Text(
+                          'إغلاق',
+                          style: TextStyle(
+                            color: ManagerColors.greyColor,
+                            fontSize: ManagerFontsSizes.f16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                    horizontalSpace(ManagerWidths.w12),
+                    Expanded(
+                      flex: 2,
+                      child: ElevatedButton.icon(
+                        onPressed: () async {
+                          final navigator = Navigator.of(dialogContext);
+                          await Clipboard.setData(
+                            ClipboardData(text: claim.claimCode),
+                          );
+                          if (navigator.canPop()) {
+                            navigator.pop();
+                          }
+                          if (!context.mounted) return;
+                          showToast('✓ تم نسخ الكود بنجاح');
+                        },
+                        icon: const Icon(Icons.copy_rounded),
+                        label: Text(
+                          'نسخ الكود',
+                          style: TextStyle(
+                            fontSize: ManagerFontsSizes.f16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          padding: EdgeInsets.symmetric(
+                            vertical: ManagerHeights.h12,
+                          ),
+                          backgroundColor: ManagerColors.primaryColor,
+                          foregroundColor: ManagerColors.whiteColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _openWhatsApp(
+    BuildContext context,
+    OfferClaimModel claim,
+  ) async {
+    final phoneNumber = _normalizePhoneNumber(
+      claim.whatsappNumber.trim().isNotEmpty
+          ? claim.whatsappNumber
+          : claim.vendorPrimaryPhoneNumber,
     );
 
-    final parts = <String>[
-      if (mainBranch.wilaya.isNotEmpty) mainBranch.wilaya,
-      if (mainBranch.address.isNotEmpty) mainBranch.address,
-    ];
+    if (phoneNumber.isEmpty) {
+      showToast('لا يوجد رقم واتساب صالح لإرسال الرسالة.');
+      return;
+    }
 
-    return parts.isNotEmpty ? parts.join(' - ') : 'لا يوجد عنوان';
+    final message = _buildWhatsAppMessage(claim);
+    final uri = Uri.parse(
+      'https://wa.me/$phoneNumber?text=${Uri.encodeComponent(message)}',
+    );
+
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
+      if (!context.mounted) return;
+      showToast('تعذر فتح واتساب.');
+    }
+  }
+
+  String _buildWhatsAppMessage(OfferClaimModel claim) {
+    final template = claim.whatsappMessageTemplate.trim();
+    final code = claim.claimCode.trim();
+
+    if (template.isEmpty) {
+      return code.isEmpty ? 'تم طلب العرض بنجاح' : code;
+    }
+
+    return template
+        .replaceAll('{{code}}', code)
+        .replaceAll('{code}', code)
+        .replaceAll('{{claim_code}}', code)
+        .replaceAll('{claim_code}', code);
+  }
+
+  String _normalizePhoneNumber(String value) {
+    return value.replaceAll(RegExp(r'[^0-9]'), '');
   }
 }
 
 class _OfferDetailsContent extends StatelessWidget {
-  const _OfferDetailsContent({required this.offerDetails});
+  const _OfferDetailsContent({
+    required this.offerDetails,
+    required this.isClaiming,
+  });
 
   final OfferDetailsModel offerDetails;
+  final bool isClaiming;
 
   @override
   Widget build(BuildContext context) {
@@ -279,7 +629,9 @@ class _OfferDetailsContent extends StatelessWidget {
                     if (instance<SharedPreferencesController>()
                             .getBool(SharedPreferencesKeys.loggedIn) ==
                         true) {
-                      // Handle claim offer
+                      context
+                          .read<OfferDetailsBloc>()
+                          .add(ClaimOfferEvent(offerDetails.offer.id));
                     } else {
                       loginPop(context);
                     }
@@ -291,6 +643,15 @@ class _OfferDetailsContent extends StatelessWidget {
             text: isNotStarted ? remainingDays : 'احجز الآن',
           ),
         ),
+        if (isClaiming)
+          Positioned.fill(
+            child: Container(
+              color: Colors.black.withValues(alpha: 0.25),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
       ],
     );
   }

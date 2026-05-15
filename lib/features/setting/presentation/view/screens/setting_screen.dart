@@ -22,6 +22,16 @@ import 'package:url_launcher/url_launcher.dart';
 class SettingScreen extends StatelessWidget with CustomToastMassage {
   SettingScreen({super.key});
 
+  final ValueNotifier<String> userNameNotifier = ValueNotifier<String>(
+    instance<SharedPreferencesController>()
+        .getString(SharedPreferencesKeys.name),
+  );
+
+  final ValueNotifier<String> userImageNotifier = ValueNotifier<String>(
+    instance<SharedPreferencesController>()
+        .getString(SharedPreferencesKeys.image),
+  );
+
   @override
   Widget build(BuildContext context) {
     initLogoutSetting();
@@ -64,34 +74,53 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
             end: ManagerWidths.w20,
           ),
           children: [
-            Container(
-              margin: EdgeInsetsDirectional.only(
-                bottom: ManagerHeights.h20,
-                start: ManagerWidths.w100,
-                end: ManagerWidths.w100,
-              ),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: ManagerColors.blackColor,
-              ),
-              child: ClipOval(
-                child: CachedNetworkImage(
-                  imageUrl: instance<SharedPreferencesController>()
-                      .getString(SharedPreferencesKeys.image),
-                  fit: BoxFit.fill,
-                  errorWidget: (context, url, error) => Image.asset(
-                    ManagerAssets.personImage,
-                    fit: BoxFit.fill,
+            ValueListenableBuilder<String>(
+              valueListenable: userImageNotifier,
+              builder: (context, userImage, _) {
+                print('User image URL: $userImage'); // Debug print
+                print(
+                    'User image URL: ${instance<SharedPreferencesController>().getString(SharedPreferencesKeys.image)}'); // Debug print
+                final imageUrl = userImage.trim();
+                return Container(
+                  height: ManagerHeights.h140,
+                  width: ManagerWidths.w140,
+                  margin: EdgeInsetsDirectional.only(
+                    bottom: ManagerHeights.h20,
+                    start: ManagerWidths.w100,
+                    end: ManagerWidths.w100,
                   ),
-                ),
-              ),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ManagerColors.blackColor,
+                  ),
+                  child: ClipOval(
+                    child: imageUrl.isEmpty
+                        ? Image.asset(
+                            ManagerAssets.personImage,
+                            fit: BoxFit.fill,
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: imageUrl,
+                            fit: BoxFit.fill,
+                            errorWidget: (context, url, error) => Image.asset(
+                              ManagerAssets.personImage,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                  ),
+                );
+              },
             ),
-            Center(
-              child: Text(
-                instance<SharedPreferencesController>()
-                    .getString(SharedPreferencesKeys.name),
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
+            ValueListenableBuilder<String>(
+              valueListenable: userNameNotifier,
+              builder: (context, userName, _) {
+                return Center(
+                  child: Text(
+                    userName,
+                    style: Theme.of(context).textTheme.headlineLarge,
+                  ),
+                );
+              },
             ),
             verticalSpace(ManagerHeights.h5),
             Center(
@@ -103,10 +132,11 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
             verticalSpace(ManagerHeights.h15),
             CustomButton(
               text: ManagerStrings.editProfile,
-              onPressed: () {
-                Navigator.of(context).pushNamed(
+              onPressed: () async {
+                await Navigator.of(context).pushNamed(
                   Routes.editProfileScreen,
                 );
+                _refreshUserData();
               },
             ),
             verticalSpace(ManagerHeights.h25),
@@ -214,6 +244,13 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
     );
   }
 
+  void _refreshUserData() {
+    userNameNotifier.value = instance<SharedPreferencesController>()
+        .getString(SharedPreferencesKeys.name);
+    userImageNotifier.value = instance<SharedPreferencesController>()
+        .getString(SharedPreferencesKeys.image);
+  }
+
   Widget _buildSectionTitle({
     required BuildContext context,
     required String title,
@@ -240,7 +277,7 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),

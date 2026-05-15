@@ -13,9 +13,11 @@ class OfferClaimModel {
   final String vendorPrimaryPhoneNumber;
   final String message;
   final String path;
+  final bool success;
 
   const OfferClaimModel({
 	required this.id,
+	required this.success,
 	required this.userId,
 	required this.offerId,
 	required this.claimCode,

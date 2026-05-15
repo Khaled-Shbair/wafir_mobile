@@ -19,9 +19,13 @@ class CustomOfferItemWidget extends StatelessWidget {
   const CustomOfferItemWidget({
     super.key,
     required this.item,
+    this.buttonText,
+    this.onPressed,
   });
 
   final OfferItemModel item;
+  final String? buttonText;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -169,13 +173,13 @@ class CustomOfferItemWidget extends StatelessWidget {
                       height: ManagerHeights.h30,
                       fontSize: ManagerFontsSizes.f12,
                       color: ManagerColors.buttonColor,
-                      onPressed: () {
+                      onPressed: onPressed ?? () {
                         Navigator.of(context).pushNamed(
                           Routes.offerDetailsScreen,
                           arguments: item.offerId,
                         );
                       },
-                      text: ManagerStrings.details,
+                      text: buttonText ?? ManagerStrings.details,
                     ),
                   ],
                 ),

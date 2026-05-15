@@ -57,6 +57,10 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
         response.data?.user?.email,
       );
       await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.image,
+        response.data?.user?.avatarUrl,
+      );
+      await _sharedPreferencesController.setData(
         SharedPreferencesKeys.token,
         response.token ?? '',
       );
@@ -173,6 +177,14 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
         await _sharedPreferencesController.setData(
           SharedPreferencesKeys.token,
           response.token,
+        );
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.name,
+          '${response.data?.firstName} ${response.data?.lastName}',
+        );
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.image,
+          response.data?.avatarUrl,
         );
         await _sharedPreferencesController.setData(
           SharedPreferencesKeys.loggedIn,

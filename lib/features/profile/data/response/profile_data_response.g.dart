@@ -22,14 +22,7 @@ ProfileDataResponse _$ProfileDataResponseFromJson(Map<String, dynamic> json) =>
       avatarPublicId: json['avatar_public_id'] as String?,
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
-      otpHash: json['otp_hash'],
-      otpAttempts: json['otp_attempts'],
-      otpType: json['otp_type'],
-      lastOtpSentAt: json['last_otp_sent_at'] as String?,
       isVerified: json['is_verified'] as bool?,
-      passwordResetExpires: json['password_reset_expires'] as String?,
-      passwordResetToken: json['password_reset_token'] as String?,
-      otpExpires: json['otp_expires'] as String?,
     );
 
 Map<String, dynamic> _$ProfileDataResponseToJson(
@@ -49,12 +42,5 @@ Map<String, dynamic> _$ProfileDataResponseToJson(
       'avatar_public_id': instance.avatarPublicId,
       'created_at': instance.createdAt,
       'updated_at': instance.updatedAt,
-      'password_reset_token': instance.passwordResetToken,
-      'password_reset_expires': instance.passwordResetExpires,
-      'otp_expires': instance.otpExpires,
       'is_verified': instance.isVerified,
-      'last_otp_sent_at': instance.lastOtpSentAt,
-      'otp_type': instance.otpType,
-      'otp_attempts': instance.otpAttempts,
-      'otp_hash': instance.otpHash,
     };

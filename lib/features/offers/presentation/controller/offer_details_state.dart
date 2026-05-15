@@ -1,4 +1,5 @@
 import 'package:wafir_mobile/features/offers/domain/model/offer_details_model.dart';
+import 'package:wafir_mobile/features/offers/domain/model/offer_claim_model.dart';
 
 abstract class OfferDetailsState {}
 
@@ -17,3 +18,19 @@ class OfferDetailsError extends OfferDetailsState {
 
   OfferDetailsError(this.message);
 }
+
+// Claim-related states (moved into OfferDetailsBloc)
+class OfferClaimLoading extends OfferDetailsState {}
+
+class OfferClaimSuccess extends OfferDetailsState {
+  final OfferClaimModel claim;
+
+  OfferClaimSuccess(this.claim);
+}
+
+class OfferClaimFailure extends OfferDetailsState {
+  final String message;
+
+  OfferClaimFailure(this.message);
+}
+

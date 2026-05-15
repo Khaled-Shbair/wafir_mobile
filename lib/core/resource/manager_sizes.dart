@@ -7,6 +7,7 @@ class ManagerWidths {
   static  double w12 = SizeUtil.setWidth(12);
   static  double w7 = SizeUtil.setWidth(7);
   static  double w180 = SizeUtil.setWidth(180);
+  static  double w140 = SizeUtil.setWidth(140);
   static  double w18 = SizeUtil.setWidth(18);
   static  double w16 = SizeUtil.setWidth(16);
   static  double w20 = SizeUtil.setWidth(20);
@@ -74,5 +75,6 @@ class ManagerIconsSizes {
   static double i20 = SizeUtil.setIconSize(20);
   static double i24 = SizeUtil.setIconSize(24);
   static double i28 = SizeUtil.setIconSize(28);
+  static double i40 = SizeUtil.setIconSize(40);
 }
 

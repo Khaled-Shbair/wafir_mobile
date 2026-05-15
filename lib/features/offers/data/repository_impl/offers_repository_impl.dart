@@ -19,7 +19,8 @@ class OffersRepositoryImpl implements OffersRepository {
   OffersRepositoryImpl(this._networkInfo, this._dataSource);
 
   @override
-  Future<Either<Failure, OffersModel>> getAllOffers(GetAllOffersRequest request) async {
+  Future<Either<Failure, OffersModel>> getAllOffers(
+      GetAllOffersRequest request) async {
     if (await _networkInfo.isConnected) {
       try {
         final response = await _dataSource.getAllOffers(request);
@@ -42,7 +43,16 @@ class OffersRepositoryImpl implements OffersRepository {
     if (await _networkInfo.isConnected) {
       try {
         final response = await _dataSource.claimOffer(offerId);
-        return Right(response.toDomain());
+        if (response.success == true) {
+          return Right(response.toDomain());
+        } else {
+          return Left(
+            Failure(
+              message: response.message ?? ManagerStrings.badRequest,
+              code: ResponseCode.BAD_REQUEST.value,
+            ),
+          );
+        }
       } catch (e) {
         return Left(ErrorHandler.handle(e).failure);
       }
@@ -57,7 +67,8 @@ class OffersRepositoryImpl implements OffersRepository {
   }
 
   @override
-  Future<Either<Failure, OfferDetailsModel>> getOfferDetails(int offerId) async {
+  Future<Either<Failure, OfferDetailsModel>> getOfferDetails(
+      int offerId) async {
     if (await _networkInfo.isConnected) {
       try {
         final response = await _dataSource.getOfferDetails(offerId);

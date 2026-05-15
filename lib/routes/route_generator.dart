@@ -21,9 +21,11 @@ import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/main_bottom_nav_screen.dart';
+import 'package:wafir_mobile/features/claims/presentation/view/screens/my_claims_screen.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_bloc.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_event.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
+import 'package:wafir_mobile/features/offers/presentation/controller/my_claims_bloc.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offer_details_screen.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
 import 'package:wafir_mobile/features/on_boarding/presentation/view/screens/on_boarding_screen.dart';
@@ -175,17 +177,26 @@ class RouteGenerator {
             child: const OffersScreen(),
           ),
         );
-      case Routes.offerDetailsScreen:
-        initOffers();
-        final offerId = setting.arguments as int;
-        return MaterialPageRoute(
-          builder: (_) => BlocProvider(
-            create: (_) => instance<OfferDetailsBloc>()
-              ..add(FetchOfferDetailsEvent(offerId)),
-            child: OfferDetailsScreen(offerId: offerId),
-          ),
-        );
-      default:
+       case Routes.offerDetailsScreen:
+         initOffers();
+         final offerId = setting.arguments as int;
+         return MaterialPageRoute(
+           builder: (_) => BlocProvider(
+             create: (_) => instance<OfferDetailsBloc>()
+               ..add(FetchOfferDetailsEvent(offerId)),
+             child: OfferDetailsScreen(offerId: offerId),
+           ),
+         );
+       case Routes.myClaimsScreen:
+         initOffers();
+         return MaterialPageRoute(
+           builder: (_) => BlocProvider<MyClaimsBloc>(
+             create: (_) => instance<MyClaimsBloc>()
+               ..add(GetMyClaimsEvent()),
+             child: const MyClaimsScreen(),
+           ),
+         );
+       default:
         return unDefinedRoute();
     }
   }

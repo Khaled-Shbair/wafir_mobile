@@ -13,14 +13,7 @@ class ProfileDataModel {
   final String avatarPublicId;
   final String createdAt;
   final String updatedAt;
-  final String passwordResetToken;
-  final String passwordResetExpires;
-  final String otpExpires;
   final bool isVerified;
-  final String lastOtpSentAt;
-  final String otpType;
-  final String otpAttempts;
-  final String otpHash;
 
   ProfileDataModel(
       {required this.id,
@@ -37,12 +30,6 @@ class ProfileDataModel {
       required this.avatarPublicId,
       required this.createdAt,
       required this.updatedAt,
-      required this.otpHash,
-      required this.otpAttempts,
-      required this.otpType,
-      required this.lastOtpSentAt,
       required this.isVerified,
-      required this.passwordResetExpires,
-      required this.passwordResetToken,
-      required this.otpExpires});
+      });
 }

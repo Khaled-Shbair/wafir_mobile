@@ -79,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
         } else if (state is LoginFailure) {
           // Close loading dialog using root navigator
           Navigator.of(context, rootNavigator: true).pop();
-          if (state.errorMessage.contains('غير مفعل')) {
+          if (state.errorMessage.contains('تعذر إكمال تسجيل الدخول')) {
             customActivationMessenger(context, email.text.trim());
           } else {
             showToast(state.errorMessage);

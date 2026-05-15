@@ -21,7 +21,19 @@ class RemoteProfileDataSourceImpl implements RemoteProfileDataSource {
 
   @override
   Future<ProfileResponse> getProfile() async {
-    return await _appApi.getProfile();
+    var response = await _appApi.getProfile();
+
+    if (response.success == true) {
+      await _sharedPref.setData(
+        SharedPreferencesKeys.image,
+        response.data?.avatarUrl,
+      );
+      await _sharedPref.setData(
+        SharedPreferencesKeys.name,
+        '${response.data?.firstName} ${response.data?.lastName}',
+      );
+    }
+    return response;
   }
 
   @override
@@ -33,6 +45,7 @@ class RemoteProfileDataSourceImpl implements RemoteProfileDataSource {
       request.governorate,
       request.wilaya,
     );
+
     if (response.success == true) {
       _sharedPref.setData(
         SharedPreferencesKeys.name,

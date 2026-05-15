@@ -34,14 +34,7 @@ extension ProfileDataMapper on ProfileDataResponse {
       updatedAt: updatedAt.onNull(),
       id: id.onNull(),
       fcmToken: fcmToken.onNull(),
-      passwordResetExpires: passwordResetExpires.onNull(),
-      passwordResetToken: passwordResetToken.onNull(),
-      otpExpires: otpExpires.onNull(),
       isVerified: isVerified.onNull(),
-      lastOtpSentAt: lastOtpSentAt.onNull(),
-      otpType: otpType.toString().onNull(),
-      otpAttempts: otpAttempts.toString().onNull(),
-      otpHash: otpHash.toString().onNull(),
     );
   }
 }

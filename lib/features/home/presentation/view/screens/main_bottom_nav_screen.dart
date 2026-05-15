@@ -146,9 +146,9 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen>
                         if (instance<SharedPreferencesController>()
                                 .getBool(SharedPreferencesKeys.loggedIn) ==
                             true) {
-                          disposeOffers();
-                          disposeHome();
-                          disposeFavorite();
+                          // disposeOffers();
+                          // /disposeHome();
+                          // disposeFavorite();
                           context.read<NavigationCubit>().goToSettings();
                         } else {
                           loginPop(context);

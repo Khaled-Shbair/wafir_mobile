@@ -12,6 +12,7 @@ class ManagerStrings {
   static String subTitleOnBoardingThree = 'sub_title_on_boarding_three'.tr();
   static String frequentlyAskedQuestions = 'frequently_asked_questions'.tr();
   static String copy = 'copy'.tr();
+  static String claims = 'claims'.tr();
   static String description = 'description'.tr();
   static String login = 'login'.tr();
   static String favourite = 'favourite'.tr();

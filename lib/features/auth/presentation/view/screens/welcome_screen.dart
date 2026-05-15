@@ -69,9 +69,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   child: CustomButton(
                     onPressed: () {
                       Navigator.of(context)
-                          .pushReplacementNamed(Routes.loginScreen);
+                          .pushNamed(Routes.loginScreen);
                     },
-
                     text: ManagerStrings.login,
                     color: ManagerColors.buttonColor,
                     colorText: ManagerColors.whiteColor,
