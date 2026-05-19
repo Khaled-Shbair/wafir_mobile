@@ -18,6 +18,7 @@ import 'package:wafir_mobile/features/auth/presentation/view/screens/reset_passw
 import 'package:wafir_mobile/features/auth/presentation/view/screens/verify_otp_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/welcome_screen.dart';
 import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
+import 'package:wafir_mobile/features/favorite/presentation/view/screens/favorites_screen.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/main_bottom_nav_screen.dart';
@@ -74,7 +75,15 @@ class RouteGenerator {
             create: (_) => instance<RegisterBloc>(),
             child: RegisterScreen(),
           ),
-        );
+        );      case Routes.favoriteScreen:
+      initFavorite();
+      return MaterialPageRoute(
+        builder: (_) => BlocProvider<FavoriteBloc>(
+          create: (_) => instance<FavoriteBloc>()..add(GetFavoriteOffers(message:'',offerId: 1)),
+          child: FavoritesScreen(),
+
+        ),
+      );
       case Routes.welcomeScreen:
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
       case Routes.resetPasswordScreen:
@@ -129,13 +138,13 @@ class RouteGenerator {
       case Routes.mainScreen:
         initHome();
         initOffers();
-        initFavorite();
+        initClaims();
         initLogoutSetting();
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
               BlocProvider.value(value: instance<HomeBloc>()),
-              BlocProvider.value(value: instance<FavoriteBloc>()),
+              BlocProvider.value(value: instance<MyClaimsBloc>()),
               BlocProvider.value(value: instance<OffersBloc>()),
               BlocProvider.value(value: instance<LogoutSettingBloc>()),
             ],

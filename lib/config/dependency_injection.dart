@@ -476,6 +476,29 @@ void initOffers() async {
     );
   }
 }
+void initClaims() async {
+
+  if (!GetIt.I.isRegistered<MyClaimsDataSource>()) {
+    instance.registerLazySingleton<MyClaimsDataSource>(
+          () => MyClaimsDataSourceImpl(instance<Dio>()),
+    );
+  }
+  if (!GetIt.I.isRegistered<MyClaimsRepository>()) {
+    instance.registerLazySingleton<MyClaimsRepository>(
+          () => MyClaimsRepositoryImpl(instance<MyClaimsDataSource>()),
+    );
+  }
+  if (!GetIt.I.isRegistered<GetMyClaimsUseCase>()) {
+    instance.registerLazySingleton<GetMyClaimsUseCase>(
+          () => GetMyClaimsUseCase(instance<MyClaimsRepository>()),
+    );
+  }
+  if (!GetIt.I.isRegistered<MyClaimsBloc>()) {
+    instance.registerLazySingleton<MyClaimsBloc>(
+          () => MyClaimsBloc(instance<GetMyClaimsUseCase>()),
+    );
+  }
+}
 
 void initHome() async {
   if (!GetIt.I.isRegistered<RemoteHomeDataSource>()) {
@@ -536,6 +559,15 @@ void disposeOffers() async {
   }
   if (GetIt.I.isRegistered<OfferDetailsBloc>()) {
     instance.unregister<OfferDetailsBloc>();
+  }
+}
+void disposeClaims() async {
+  if (GetIt.I.isRegistered<MyClaimsDataSource>()) {
+    instance.unregister<MyClaimsDataSource>();
+  }  if (GetIt.I.isRegistered<GetMyClaimsUseCase>()) {
+    instance.unregister<GetMyClaimsUseCase>();
+  }  if (GetIt.I.isRegistered<MyClaimsBloc>()) {
+    instance.unregister<MyClaimsBloc>();
   }
 }
 

@@ -127,7 +127,6 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
     }
 
     if (state is! OfferClaimSuccess) {
-      print('Claim state is success: ${state.runtimeType}');
       return;
     }
 
@@ -386,11 +385,11 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
                           await Clipboard.setData(
                             ClipboardData(text: claim.claimCode),
                           );
-                          if (navigator.canPop()) {
                             navigator.pop();
-                          }
-                          if (!context.mounted) return;
-                          showToast('✓ تم نسخ الكود بنجاح');
+                            showToast('✓ تم نسخ الكود بنجاح',false);
+
+
+
                         },
                         icon: const Icon(Icons.copy_rounded),
                         label: Text(
@@ -413,6 +412,7 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
                 ),
               ],
             ),
+
           ),
         );
       },

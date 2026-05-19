@@ -8,6 +8,7 @@ import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/core/widgets/custom_dialog.dart';
 import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
+import 'package:wafir_mobile/features/claims/presentation/view/screens/my_claims_screen.dart';
 import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
 import 'package:wafir_mobile/features/favorite/presentation/view/screens/favorites_screen.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
@@ -17,6 +18,8 @@ import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_bott
 import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
 import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
+
+import '../../../../offers/presentation/controller/my_claims_bloc.dart';
 
 class MainBottomNavScreen extends StatefulWidget {
   const MainBottomNavScreen({super.key});
@@ -29,10 +32,11 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen>
     with CustomToastMassage {
   DateTime? _lastBackPressedAt;
 
-  final List<Widget> _pages = const <Widget>[
+  final List<Widget> _pages =  <Widget>[
     HomeScreen(),
     OffersScreen(),
-    FavoritesScreen(),
+    MyClaimsScreen(),
+    SettingScreen(),
   ];
 
   @override
@@ -120,8 +124,8 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen>
                       },
                     ),
                     CustomBottomNavItem(
-                      icon: Icons.favorite_border_rounded,
-                      label: ManagerStrings.favorite,
+                      icon: Icons.shopping_bag_outlined,
+                      label: ManagerStrings.claims,
                       active: state.selectedIndex == 2,
                       onTap: () {
                         disposeOffers();
@@ -129,10 +133,11 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen>
                         if (instance<SharedPreferencesController>()
                                 .getBool(SharedPreferencesKeys.loggedIn) ==
                             true) {
+
                           context
-                              .read<FavoriteBloc>()
-                              .add(GetFavoriteOffers(message: '', offerId: 1));
-                          context.read<NavigationCubit>().goToFavorites();
+                              .read<MyClaimsBloc>()
+                              .add(GetMyClaimsEvent());
+                          context.read<NavigationCubit>().goToFClaims();
                         } else {
                           loginPop(context);
                         }

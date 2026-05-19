@@ -56,7 +56,7 @@ class NavigationCubit extends Cubit<NavigationState> {
     selectTab(1);
   }
 
-  void goToFavorites() => selectTab(2);
+  void goToFClaims() => selectTab(2);
 
   void goToSettings() => selectTab(3);
 }

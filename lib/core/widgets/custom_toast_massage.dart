@@ -9,7 +9,8 @@ mixin CustomToastMassage {
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
         backgroundColor:
-            isError ? ManagerColors.failureColor : ManagerColors.secondaryColor,
+            isError ? ManagerColors.failureColor : ManagerColors.buttonColor,
         fontSize: 16.0);
+
   }
 }

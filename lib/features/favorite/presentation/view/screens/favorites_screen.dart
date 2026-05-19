@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
@@ -17,6 +18,12 @@ class FavoritesScreen extends StatelessWidget {
         title: Text(ManagerStrings.favourite),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        leading: IconButton(onPressed: (){
+          disposeFavorite();
+
+          Navigator.of(context).pop();
+
+        }, icon: Icon(Icons.arrow_back_ios)),
       ),
       body: BlocBuilder<FavoriteBloc, FavoriteState>(
         builder: (context, state) {
@@ -45,6 +52,7 @@ class FavoritesScreen extends StatelessWidget {
                 start: ManagerWidths.w15,
                 end: ManagerWidths.w15,
                 bottom: ManagerHeights.h15,
+                top: ManagerHeights.h15,
               ),
               itemCount: items.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

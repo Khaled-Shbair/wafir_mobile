@@ -176,7 +176,7 @@ class CustomOfferItemWidget extends StatelessWidget {
                       onPressed: onPressed ?? () {
                         Navigator.of(context).pushNamed(
                           Routes.offerDetailsScreen,
-                          arguments: [item.offerId]
+                          arguments: [item.offerId,null]
                         );
                       },
                       text: ManagerStrings.details,

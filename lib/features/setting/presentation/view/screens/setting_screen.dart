@@ -52,6 +52,7 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
           disposeOffers();
           disposeVendors();
           disposeOfferDetails();
+          disposeClaims();
           Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(
             Routes.loginScreen,
             (route) => false,
@@ -154,6 +155,18 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
                   onTap: () {
                     Navigator.of(context)
                         .pushNamed(Routes.changePasswordScreen);
+                  },
+                ),
+              ],
+            ),  verticalSpace(ManagerHeights.h10),  _buildSectionContainer(
+              children: [
+                _buildSettingItem(
+                  context: context,
+                  icon: Icons.favorite_border,
+                  title: ManagerStrings.favorite,
+                  onTap: () {
+                    Navigator.of(context)
+                        .pushNamed(Routes.favoriteScreen);
                   },
                 ),
               ],
