@@ -1,4 +1,6 @@
 {
+  "no_internet_connection": "لا يتوفر اتصال بالإنترنت",
+  "bad_request": "هناك شي ما خطاء، يرجى المحاولة مرة أخرى",
   "no_route_found": "الصفحة غير متوفرة",
   "title_on_boarding_one": "وفر أموالك بذكاء",
   "title_on_boarding_two": "متاجر موثوقة ومضمونة",

@@ -25,3 +25,4 @@ class Routes {
   static const String notificationsScreen = '/notifications_screen';
   static const String myClaimsScreen = '/my_claims_screen';
 }
+
