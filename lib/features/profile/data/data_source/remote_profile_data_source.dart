@@ -23,14 +23,14 @@ class RemoteProfileDataSourceImpl implements RemoteProfileDataSource {
   Future<ProfileResponse> getProfile() async {
     var response = await _appApi.getProfile();
 
-    if (response.success == true) {
+    if (response.success == true && response.data != null) {
       await _sharedPref.setData(
         SharedPreferencesKeys.image,
-        response.data?.avatarUrl,
+        response.data!.avatarUrl,
       );
       await _sharedPref.setData(
         SharedPreferencesKeys.name,
-        '${response.data?.firstName} ${response.data?.lastName}',
+        '${response.data!.firstName} ${response.data!.lastName}',
       );
     }
     return response;

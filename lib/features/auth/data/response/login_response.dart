@@ -27,10 +27,10 @@ class LoginResponse {
   LoginResponse({
     this.success,
     this.statusCode,
+    this.token,
     this.timestamp,
     this.path,
     this.message,
-    this.token,
     this.errorCode,
     this.data,
   });

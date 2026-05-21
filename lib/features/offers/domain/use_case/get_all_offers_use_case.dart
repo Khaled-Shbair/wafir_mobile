@@ -7,13 +7,23 @@ import 'package:wafir_mobile/features/offers/domain/repository/offers_repository
 
 class GetAllOffersInput {
   final int page;
-  final int pageSize;
-  final String? searchQuery;
+  final int take;
+  final String? q;
+  final String? sector;
+  final String? city;
+  final String? discount;
+  final String? sort;
+  final int? vendorId;
 
   GetAllOffersInput({
     required this.page,
-    required this.pageSize,
-    this.searchQuery,
+    required this.take,
+    this.q,
+    this.sector,
+    this.city,
+    this.discount,
+    this.sort,
+    this.vendorId,
   });
 }
 
@@ -28,8 +38,13 @@ class GetAllOffersUseCase
     return await _repository.getAllOffers(
       GetAllOffersRequest(
         page: input.page,
-        pageSize: input.pageSize,
-        searchQuery: input.searchQuery,
+        take: input.take,
+        q: input.q,
+        sector: input.sector,
+        city: input.city,
+        discount: input.discount,
+        sort: input.sort,
+        vendorId: input.vendorId,
       ),
     );
   }

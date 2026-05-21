@@ -40,14 +40,18 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
           if (state.status == EditProfileStatus.loadingProfile ||
               state.status == EditProfileStatus.submitting) {
             showCustomLoading(context);
-          } else if (state.status == EditProfileStatus.failure ||
-              state.status == EditProfileStatus.success ||
+          } else if (state.status == EditProfileStatus.failure ) {
+            // hide loading dialog if shown
+            final rootNavigator = Navigator.of(context, rootNavigator: true);
+            if (rootNavigator.canPop()) rootNavigator.pop();
+            showToast(state.message!);
+          } else if (state.status == EditProfileStatus.success ||
               state.status == EditProfileStatus.ready) {
             // hide loading dialog if shown
             final rootNavigator = Navigator.of(context, rootNavigator: true);
             if (rootNavigator.canPop()) rootNavigator.pop();
             if (state.message != null && state.message!.isNotEmpty) {
-              showToast(state.message!);
+              showToast(state.message!,  false);
             }
           }
         },

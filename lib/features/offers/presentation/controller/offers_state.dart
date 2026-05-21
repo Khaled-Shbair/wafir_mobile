@@ -4,14 +4,25 @@ sealed class OffersState {
   final String? selectedGovernorate;
   final String? selectedWilaya;
   final String? selectedCategory;
+  final String? selectedDiscount;
+  final String? selectedSort;
+  final int? selectedVendorId;
 
   OffersState(
-      {this.selectedGovernorate, this.selectedWilaya, this.selectedCategory});
+      {this.selectedGovernorate,
+      this.selectedWilaya,
+      this.selectedCategory,
+      this.selectedDiscount,
+      this.selectedSort,
+      this.selectedVendorId});
 
   OffersState copyWith({
     String? selectedGovernorate,
     String? selectedWilaya,
     String? selectedCategory,
+    String? selectedDiscount,
+    String? selectedSort,
+    int? selectedVendorId,
   }) {
     final String? newSelectedGovernorate =
         selectedGovernorate ?? this.selectedGovernorate;
@@ -19,11 +30,18 @@ sealed class OffersState {
 
     final String? newSelectedCategory =
         selectedCategory ?? this.selectedCategory;
+    final String? newSelectedDiscount =
+        selectedDiscount ?? this.selectedDiscount;
+    final String? newSelectedSort = selectedSort ?? this.selectedSort;
+    final int? newSelectedVendorId = selectedVendorId ?? this.selectedVendorId;
     if (this is OffersInitial) {
       return OffersInitial(
         selectedGovernorate: newSelectedGovernorate,
         selectedWilaya: newSelectedWilaya,
         selectedCategory: newSelectedCategory,
+        selectedDiscount: newSelectedDiscount,
+        selectedSort: newSelectedSort,
+        selectedVendorId: newSelectedVendorId,
       );
     }
 
@@ -32,6 +50,9 @@ sealed class OffersState {
         selectedGovernorate: newSelectedGovernorate,
         selectedWilaya: newSelectedWilaya,
         selectedCategory: newSelectedCategory,
+        selectedDiscount: newSelectedDiscount,
+        selectedSort: newSelectedSort,
+        selectedVendorId: newSelectedVendorId,
       );
     }
 
@@ -43,6 +64,9 @@ sealed class OffersState {
         selectedCategory: newSelectedCategory,
         selectedGovernorate: newSelectedGovernorate,
         selectedWilaya: newSelectedWilaya,
+        selectedDiscount: newSelectedDiscount,
+        selectedSort: newSelectedSort,
+        selectedVendorId: newSelectedVendorId,
         currentPage: loadedSuccess.currentPage,
         totalPages: loadedSuccess.totalPages,
       );
@@ -55,6 +79,9 @@ sealed class OffersState {
         message: failure.message,
         selectedGovernorate: newSelectedGovernorate,
         selectedWilaya: newSelectedWilaya,
+        selectedDiscount: newSelectedDiscount,
+        selectedSort: newSelectedSort,
+        selectedVendorId: newSelectedVendorId,
       );
     }
 
@@ -66,14 +93,20 @@ class OffersInitial extends OffersState {
   OffersInitial(
       {super.selectedGovernorate,
       super.selectedWilaya,
-      super.selectedCategory});
+      super.selectedCategory,
+      super.selectedDiscount,
+      super.selectedSort,
+      super.selectedVendorId});
 }
 
 class OffersLoading extends OffersState {
   OffersLoading(
       {super.selectedGovernorate,
       super.selectedWilaya,
-      super.selectedCategory});
+      super.selectedCategory,
+      super.selectedDiscount,
+      super.selectedSort,
+      super.selectedVendorId});
 }
 
 class OffersLoadedSuccessfully extends OffersState {
@@ -87,7 +120,10 @@ class OffersLoadedSuccessfully extends OffersState {
       this.totalPages = 1,
       super.selectedGovernorate,
       super.selectedWilaya,
-      super.selectedCategory});
+      super.selectedCategory,
+      super.selectedDiscount,
+      super.selectedSort,
+      super.selectedVendorId});
 }
 
 class OffersLoadingMore extends OffersState {
@@ -101,7 +137,10 @@ class OffersLoadingMore extends OffersState {
       this.totalPages = 1,
       super.selectedGovernorate,
       super.selectedWilaya,
-      super.selectedCategory});
+      super.selectedCategory,
+      super.selectedDiscount,
+      super.selectedSort,
+      super.selectedVendorId});
 }
 
 class OffersFailure extends OffersState {
@@ -111,5 +150,8 @@ class OffersFailure extends OffersState {
       {required this.message,
       super.selectedGovernorate,
       super.selectedWilaya,
-      super.selectedCategory});
+      super.selectedCategory,
+      super.selectedDiscount,
+      super.selectedSort,
+      super.selectedVendorId});
 }

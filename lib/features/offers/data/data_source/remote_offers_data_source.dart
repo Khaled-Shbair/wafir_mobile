@@ -24,8 +24,13 @@ class RemoteOffersDataSourceImpl implements RemoteOffersDataSource {
   Future<GetOffersResponse> getAllOffers(GetAllOffersRequest request) {
     return _appApi.getAllOffers(
       request.page,
-      request.pageSize,
-      request.searchQuery,
+      request.take,
+      request.q,
+      request.sector,
+      request.city,
+      request.discount,
+      request.sort,
+      request.vendorId,
     );
   }
 
@@ -53,13 +58,10 @@ class RemoteOffersDataSourceImpl implements RemoteOffersDataSource {
   @override
   Future<OfferDetailsResponse> getOfferDetails(int offerId) async {
     final url = '${ApiConstants.offers}/$offerId?includeStats=true';
-    print('Fetching offer details from: $url');
 
     final response = await _dio.get(url);
 
     final responseData = response.data;
-    print('OfferDetails Response: $responseData');
-
     if (responseData is Map<String, dynamic>) {
       return OfferDetailsResponse.fromJson(responseData);
     }

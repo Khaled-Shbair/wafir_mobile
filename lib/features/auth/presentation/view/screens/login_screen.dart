@@ -14,6 +14,7 @@ import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
 import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/widgets/custom_activation_messenger.dart';
+import 'package:wafir_mobile/features/home/presentation/controller/navigation_cubit.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 
@@ -76,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
           // // Navigate using root navigator to escape dialog context
           Navigator.pushNamedAndRemoveUntil(
               context, Routes.mainScreen, (route) => false);
+          context.read<NavigationCubit>().goToHome();
         } else if (state is LoginFailure) {
           // Close loading dialog using root navigator
           Navigator.of(context, rootNavigator: true).pop();

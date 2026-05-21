@@ -38,6 +38,8 @@ abstract class RemoteAuthDataSource {
   Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request);
 
   Future<LogoutResponse> logout();
+
+  Future<bool> refreshToken();
 }
 
 class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
@@ -47,6 +49,39 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
 
   RemoteAuthDataSourceImpl(
       this._appApi, this._sharedPreferencesController, this._googleAuthService);
+
+  @override
+  Future<bool> refreshToken() async {
+    var response = await _appApi.bootstrap();
+    if (response.success == true) {
+      if (response.data?.refreshed == true) {
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.token,
+          response.data?.token,
+        );
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.refreshToken,
+          response.data?.refreshToken,
+        );
+      }
+      return true;
+    }
+    await _sharedPreferencesController.setData(
+      SharedPreferencesKeys.loggedIn,
+      false,
+    );
+    await _sharedPreferencesController.removeData(SharedPreferencesKeys.token);
+    await _sharedPreferencesController
+        .removeData(SharedPreferencesKeys.refreshToken);
+    await _sharedPreferencesController.removeData(SharedPreferencesKeys.image);
+    await _sharedPreferencesController
+        .removeData(SharedPreferencesKeys.resetToken);
+    await _sharedPreferencesController.removeData(SharedPreferencesKeys.email);
+    await _sharedPreferencesController
+        .removeData(SharedPreferencesKeys.rememberMy);
+    await _sharedPreferencesController.removeData(SharedPreferencesKeys.name);
+    return false;
+  }
 
   @override
   Future<LoginResponse> loginByEmail(LoginByEmailRequest request) async {
@@ -109,7 +144,11 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
         );
         await _sharedPreferencesController.setData(
           SharedPreferencesKeys.token,
-          response.data?.token ?? '',
+          response.token,
+        );
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.refreshToken,
+          response.data?.refreshToken,
         );
         await _sharedPreferencesController.setData(
           SharedPreferencesKeys.name,

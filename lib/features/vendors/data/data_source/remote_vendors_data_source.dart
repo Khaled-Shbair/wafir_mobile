@@ -29,8 +29,12 @@ class RemoteVendorsDataSourceImpl implements RemoteVendorsDataSource {
     return await _appApi.getPublicVendors(
       request.page,
       20,
-      request.searchQuery,
+      request.q,
+      request.sector,
+      request.city,
+      request.discount,
+      request.sort,
+      request.vendorId,
     );
   }
-
 }

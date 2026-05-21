@@ -8,12 +8,11 @@ part 'login_data_response.g.dart';
 class LoginDataResponse {
   @JsonKey(name: ApiKeys.user)
   final UserResponse? user;
-  @JsonKey(name: ApiKeys.token)
-  final String? token;
-
+  @JsonKey(name: ApiKeys.refreshToken)
+  final String? refreshToken;
   LoginDataResponse({
     this.user,
-    this.token,
+    this.refreshToken,
   });
 
   factory LoginDataResponse.fromJson(Map<String, dynamic> json) =>

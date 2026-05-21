@@ -11,11 +11,11 @@ LoginDataResponse _$LoginDataResponseFromJson(Map<String, dynamic> json) =>
       user: json['user'] == null
           ? null
           : UserResponse.fromJson(json['user'] as Map<String, dynamic>),
-      token: json['token'] as String?,
+      refreshToken: json['refresh_token'] as String?,
     );
 
 Map<String, dynamic> _$LoginDataResponseToJson(LoginDataResponse instance) =>
     <String, dynamic>{
       'user': instance.user,
-      'token': instance.token,
+      'refresh_token': instance.refreshToken,
     };

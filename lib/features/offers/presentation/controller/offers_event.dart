@@ -23,3 +23,4 @@ class WilayaChangedEvent extends OffersEvent {
 
   WilayaChangedEvent(this.wilaya);
 }
+

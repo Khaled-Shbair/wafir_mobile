@@ -1,11 +1,21 @@
 class GetAllOffersRequest {
-  final String? searchQuery;
   final int page;
-  final int pageSize;
+  final int take;
+  final String? q;
+  final String? sector;
+  final String? city;
+  final String? discount;
+  final String? sort;
+  final int? vendorId;
 
   GetAllOffersRequest({
-    this.searchQuery,
     required this.page,
-    required this.pageSize,
+    required this.take,
+    this.q,
+    this.sector,
+    this.city,
+    this.discount,
+    this.sort,
+    this.vendorId,
   });
 }

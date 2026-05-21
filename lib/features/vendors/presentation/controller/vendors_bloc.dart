@@ -85,6 +85,14 @@ class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
     ));
   }
 
+  String? _normalizedCategory() {
+    final category = state.selectedCategory?.trim();
+    if (category == null || category.isEmpty || category == 'الكل') {
+      return null;
+    }
+    return category;
+  }
+
   Future<void> _onGetPublicVendors(
     GetPublicVendorsEvent event,
     Emitter<VendorsState> emit,
@@ -100,7 +108,12 @@ class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
       (await _getPublicVendorsUseCase.execute(
         GetAllVendorsInput(
           page: 1,
-          searchQuery: event.searchQuery,
+          q: event.searchQuery,
+          city: state.selectedWilaya,
+          discount: null,
+          vendorId: null,
+          sort: null,
+          sector: _normalizedCategory(),
         ),
       ))
           .fold(

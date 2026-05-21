@@ -21,7 +21,7 @@ extension LoginMapper on LoginResponse {
 extension LoginDataMapper on LoginDataResponse {
   LoginDataModel toDomain() {
     return LoginDataModel(
-      token: token.onNull(),
+      refreshToken: refreshToken.onNull(),
       user: user!.toDomain(),
     );
   }

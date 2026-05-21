@@ -5,6 +5,7 @@ import 'package:wafir_mobile/config/constants/shared_preferences_keys.dart';
 import 'package:wafir_mobile/config/dependency_injection.dart';
 import 'package:wafir_mobile/core/resource/manager_assets.dart';
 import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
+import 'package:wafir_mobile/features/auth/data/data_source/remote_auth_data_source.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,13 +19,16 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () async {
       if (mounted) {
         if (instance<SharedPreferencesController>()
             .getBool(SharedPreferencesKeys.viewOnBoarding)) {
-          if (instance<SharedPreferencesController>()
+          bool refreshed =
+              await instance<RemoteAuthDataSource>().refreshToken();
+          bool loggedIn = instance<SharedPreferencesController>()
                   .getBool(SharedPreferencesKeys.loggedIn) ==
-              true) {
+              true;
+          if (refreshed && loggedIn) {
             Navigator.of(context).pushNamedAndRemoveUntil(
               Routes.mainScreen,
               (route) => false,

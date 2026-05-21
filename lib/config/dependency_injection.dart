@@ -116,7 +116,7 @@ Future<void> _intiDio() async {
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 //Auth
-void _initAuth() async {
+void initAuth() async {
   if (!GetIt.I.isRegistered<GoogleAuthService>()) {
     instance
         .registerLazySingleton<GoogleAuthService>(() => GoogleAuthService());
@@ -148,7 +148,7 @@ void disposeAuth() async {
 }
 
 void initLogin() async {
-  _initAuth();
+  initAuth();
   if (!GetIt.I.isRegistered<LoginByEmailUseCase>()) {
     instance.registerLazySingleton<LoginByEmailUseCase>(
       () => LoginByEmailUseCase(instance<AuthRepository>()),
@@ -184,7 +184,7 @@ void disposeLogin() async {
 }
 
 void initRegister() async {
-  _initAuth();
+  initAuth();
   if (!GetIt.I.isRegistered<RegisterByEmailUseCase>()) {
     instance.registerLazySingleton<RegisterByEmailUseCase>(
       () => RegisterByEmailUseCase(instance<AuthRepository>()),
@@ -241,7 +241,7 @@ void disposeForgetPassword() async {
 }
 
 void initResetPassword() async {
-  _initAuth();
+  initAuth();
   if (!GetIt.I.isRegistered<ResetPasswordUseCase>()) {
     instance
         .registerLazySingleton<ResetPasswordUseCase>(() => ResetPasswordUseCase(
@@ -255,7 +255,7 @@ void initResetPassword() async {
 }
 
 void initChangePassword() async {
-  _initAuth();
+  initAuth();
   if (!GetIt.I.isRegistered<ChangePasswordUseCase>()) {
     instance.registerLazySingleton<ChangePasswordUseCase>(
         () => ChangePasswordUseCase(
@@ -327,7 +327,7 @@ void disposeVerifyOtp() async {
 }
 
 void initLogout() async {
-  _initAuth();
+  initAuth();
   if (!GetIt.I.isRegistered<LogoutUseCase>()) {
     instance.registerLazySingleton<LogoutUseCase>(
       () => LogoutUseCase(instance<AuthRepository>()),
@@ -723,7 +723,7 @@ void initNavigation() {
 ///////////////////////////////////////////////////////////////////////////////
 // Setting (Logout)
 void initLogoutSetting() async {
-  _initAuth();
+  initAuth();
   if (!GetIt.I.isRegistered<LogoutUseCase>()) {
     instance.registerLazySingleton<LogoutUseCase>(
       () => LogoutUseCase(instance<AuthRepository>()),

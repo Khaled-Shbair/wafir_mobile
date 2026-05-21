@@ -62,21 +62,38 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
         selectedCategory: state.selectedCategory,
         selectedGovernorate: state.selectedGovernorate));
   }
-
+  String? _normalizedCategory() {
+    final category = state.selectedCategory?.trim();
+    if (category == null || category.isEmpty || category == 'الكل') {
+      return null;
+    }
+    return category;
+  }
   Future<void> _onGetAllOffers(
       GetAllOffersEvent event, Emitter<OffersState> emit) async {
     _isLoadingMore = false;
     _totalCount = 0;
+    print('Fetching offers with selectedCategory: ${state.selectedCategory}');
+    print('Fetching offers with selectedWilaya: ${state.selectedWilaya}');
+    print('Fetching offers with selectedGovernorate: ${state.selectedGovernorate}');
     emit(OffersLoading(
       selectedGovernorate: state.selectedGovernorate,
       selectedWilaya: state.selectedWilaya,
       selectedCategory: state.selectedCategory,
+      selectedDiscount: state.selectedDiscount,
+      selectedSort: state.selectedSort,
+      selectedVendorId: state.selectedVendorId,
     ));
     (await _getAllOffersUseCase.execute(
       GetAllOffersInput(
         page: _currentPage,
-        pageSize: 20,
-        searchQuery: search.text.isEmpty ? null : search.text,
+        take: 20,
+        q: search.text.isNotEmpty ? search.text : null,
+        sector: _normalizedCategory(),
+        city: state.selectedWilaya,
+        discount: state.selectedDiscount,
+        sort: state.selectedSort,
+        vendorId: state.selectedVendorId,
       ),
     ))
         .fold(
@@ -86,6 +103,9 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
           selectedCategory: state.selectedCategory,
           selectedGovernorate: state.selectedGovernorate,
           selectedWilaya: state.selectedWilaya,
+          selectedDiscount: state.selectedDiscount,
+          selectedSort: state.selectedSort,
+          selectedVendorId: state.selectedVendorId,
         ));
       },
       (r) {
@@ -97,6 +117,9 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
           selectedCategory: state.selectedCategory,
           selectedGovernorate: state.selectedGovernorate,
           selectedWilaya: state.selectedWilaya,
+          selectedDiscount: state.selectedDiscount,
+          selectedSort: state.selectedSort,
+          selectedVendorId: state.selectedVendorId,
         ));
       },
     );
@@ -126,13 +149,21 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
       selectedCategory: state.selectedCategory,
       selectedGovernorate: state.selectedGovernorate,
       selectedWilaya: state.selectedWilaya,
+      selectedDiscount: state.selectedDiscount,
+      selectedSort: state.selectedSort,
+      selectedVendorId: state.selectedVendorId,
     ));
 
     (await _getAllOffersUseCase.execute(
       GetAllOffersInput(
         page: nextPage,
-        pageSize: 10,
-        searchQuery: search.text.isEmpty ? null : search.text,
+        take: 10,
+        q: search.text.isNotEmpty ? search.text : null,
+        sector: state.selectedCategory,
+        city: state.selectedWilaya,
+        discount: state.selectedDiscount,
+        sort: state.selectedSort,
+        vendorId: state.selectedVendorId,
       ),
     ))
         .fold(
@@ -145,6 +176,9 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
           selectedCategory: state.selectedCategory,
           selectedGovernorate: state.selectedGovernorate,
           selectedWilaya: state.selectedWilaya,
+          selectedDiscount: state.selectedDiscount,
+          selectedSort: state.selectedSort,
+          selectedVendorId: state.selectedVendorId,
         ));
       },
       (r) {
@@ -165,6 +199,9 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
             selectedCategory: state.selectedCategory,
             selectedGovernorate: state.selectedGovernorate,
             selectedWilaya: state.selectedWilaya,
+            selectedDiscount: state.selectedDiscount,
+            selectedSort: state.selectedSort,
+            selectedVendorId: state.selectedVendorId,
           ));
 
           return;
@@ -178,6 +215,9 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
           selectedCategory: state.selectedCategory,
           selectedGovernorate: state.selectedGovernorate,
           selectedWilaya: state.selectedWilaya,
+          selectedDiscount: state.selectedDiscount,
+          selectedSort: state.selectedSort,
+          selectedVendorId: state.selectedVendorId,
         ));
       },
     );

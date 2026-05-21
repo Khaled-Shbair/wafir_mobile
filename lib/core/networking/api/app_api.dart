@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
+import 'package:wafir_mobile/features/auth/data/response/bootstrap_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/forgot_password_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/login_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/logout_response.dart';
@@ -111,7 +112,12 @@ abstract class AppApi {
   Future<GetVendorsPublicResponse> getPublicVendors(
     @Query(ApiKeys.page) int? page,
     @Query(ApiKeys.take) int? take,
-    @Query(ApiKeys.query) String? query,
+      @Query('q') String? q,
+      @Query('sector') String? sector,
+      @Query('city') String? city,
+      @Query('discount') String? discount,
+      @Query('sort') String? sort,
+      @Query('vendorId') int? vendorId,
   );
 
   @POST(ApiConstants.logout)
@@ -129,7 +135,12 @@ abstract class AppApi {
   Future<GetOffersResponse> getAllOffers(
     @Query(ApiKeys.page) int? page,
     @Query(ApiKeys.take) int? take,
-    @Query(ApiKeys.query) String? query,
+    @Query('q') String? q,
+    @Query('sector') String? sector,
+    @Query('city') String? city,
+    @Query('discount') String? discount,
+    @Query('sort') String? sort,
+    @Query('vendorId') int? vendorId,
   );
 
   @GET('${ApiConstants.getOfferDetails}{id}')
@@ -137,4 +148,7 @@ abstract class AppApi {
     @Path(ApiKeys.id) int offerId,
     @Query('includeStats') bool? includeStats,
   );
+
+  @GET(ApiConstants.bootstrap)
+  Future<BootstrapResponse> bootstrap();
 }

@@ -6,12 +6,22 @@ import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.
 import 'package:wafir_mobile/features/vendors/domain/repository/vendors_repository.dart';
 
 class GetAllVendorsInput {
-  final int? page;
-  final String? searchQuery;
+  final int page;
+  final String? q;
+  final String? sector;
+  final String? city;
+  final String? discount;
+  final String? sort;
+  final int? vendorId;
 
   GetAllVendorsInput({
-    this.page,
-    this.searchQuery,
+    required this.page,
+    this.q,
+    this.sector,
+    this.city,
+    this.discount,
+    this.sort,
+    this.vendorId,
   });
 }
 
@@ -27,7 +37,13 @@ class GetPublicVendorsUseCase
     return await _repository.getPublicVendors(
       GetAllVendorsRequest(
         page: input.page,
-        searchQuery: input.searchQuery,
+        vendorId: input.vendorId,
+        city: input.city,
+        discount: input.discount,
+        sort: input.sort,
+
+        q: input.q,
+        sector: input.sector,
       ),
     );
   }

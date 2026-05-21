@@ -49,12 +49,16 @@ class DioFactory {
   Map<String, dynamic> get _headers {
     final token =
         _sharedPreferencesController.getString(SharedPreferencesKeys.token);
+    final refreshToken = _sharedPreferencesController
+        .getString(SharedPreferencesKeys.refreshToken);
 
     return {
       ApiKeys.contentType: ApiConstants.applicationJson,
       ApiKeys.xClientPlatform: ApiKeys.mobile,
       if (token.isNotEmpty)
         ApiKeys.authorization: '${ApiConstants.bearer} $token',
+      if (token.isNotEmpty)
+        ApiKeys.xRefreshToken: '${ApiConstants.bearer} $refreshToken',
     };
   }
 }

@@ -17,6 +17,7 @@ class ApiConstants {
   static const String loginByGoogle = '${baseUrl}auth/login';
   static const String forgotPassword = '${baseUrl}auth/forgot-password';
   static const String profile = '${baseUrl}auth/me';
+  static const String bootstrap = '${baseUrl}auth/bootstrap';
   static const String editProfile = '${baseUrl}users/';
   static const String sectors = '${baseUrl}vendors/';
   static const String home = '${baseUrl}home';
@@ -38,6 +39,7 @@ class ApiKeys {
   static const String mobile = 'mobile';
   static const String page = 'page';
   static const String take = 'take';
+  static const String refreshed = 'refreshed';
   static const String query = 'q';
 
   // Login / generic response keys
@@ -51,6 +53,8 @@ class ApiKeys {
   // Auth / user keys
   static const String user = 'user';
   static const String token = 'token';
+  static const String xRefreshToken = 'x-refresh-token';
+  static const String refreshToken = 'refresh_token';
   static const String id = 'id';
   static const String firstName = 'first_name';
   static const String lastName = 'last_name';
