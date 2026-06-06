@@ -12,7 +12,7 @@ part of 'app_api.dart';
 
 class _AppApi implements AppApi {
   _AppApi(this._dio, {this.baseUrl, this.errorLogger}) {
-    baseUrl ??= 'https://discount-platform.onrender.com/api/';
+    baseUrl ??= 'https://wafir-om.com/api/';
   }
 
   final Dio _dio;
@@ -31,7 +31,7 @@ class _AppApi implements AppApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/login',
+            'https://wafir-om.com/api/auth/login',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -58,7 +58,7 @@ class _AppApi implements AppApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/login',
+            'https://wafir-om.com/api/auth/login',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -101,7 +101,7 @@ class _AppApi implements AppApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/register',
+            'https://wafir-om.com/api/auth/register',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -128,7 +128,7 @@ class _AppApi implements AppApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/register-by-google',
+            'https://wafir-om.com/api/auth/register-by-google',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -155,7 +155,7 @@ class _AppApi implements AppApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/forgot-password',
+            'https://wafir-om.com/api/auth/forgot-password',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -186,7 +186,7 @@ class _AppApi implements AppApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/verify-otp',
+            'https://wafir-om.com/api/auth/verify-otp',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -213,7 +213,7 @@ class _AppApi implements AppApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/resend-otp',
+            'https://wafir-om.com/api/auth/resend-otp',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -246,7 +246,7 @@ class _AppApi implements AppApi {
       Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/users/me/password',
+            'https://wafir-om.com/api/users/me/password',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -281,7 +281,7 @@ class _AppApi implements AppApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/reset-password',
+            'https://wafir-om.com/api/auth/reset-password',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -322,7 +322,7 @@ class _AppApi implements AppApi {
       Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/users/me',
+            'https://wafir-om.com/api/users/me',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -355,7 +355,7 @@ class _AppApi implements AppApi {
       )
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/users/me/avatar',
+            'https://wafir-om.com/api/users/me/avatar',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -382,7 +382,7 @@ class _AppApi implements AppApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/me',
+            'https://wafir-om.com/api/auth/me',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -409,7 +409,7 @@ class _AppApi implements AppApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/home',
+            'https://wafir-om.com/api/home',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -436,7 +436,7 @@ class _AppApi implements AppApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/vendors/public/${id}',
+            'https://wafir-om.com/api/vendors/public/${id}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -482,7 +482,7 @@ class _AppApi implements AppApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/vendors/public',
+            'https://wafir-om.com/api/vendors/public',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -509,7 +509,7 @@ class _AppApi implements AppApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/logout',
+            'https://wafir-om.com/api/auth/logout',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -536,7 +536,7 @@ class _AppApi implements AppApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/favorites/offers/my',
+            'https://wafir-om.com/api/favorites/offers/my',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -563,7 +563,7 @@ class _AppApi implements AppApi {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/favorites/offers/${offerId}/toggle',
+            'https://wafir-om.com/api/favorites/offers/${offerId}/toggle',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -609,7 +609,7 @@ class _AppApi implements AppApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/offers/active',
+            'https://wafir-om.com/api/offers/active',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -640,7 +640,7 @@ class _AppApi implements AppApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/offers/${offerId}',
+            'https://wafir-om.com/api/offers/${offerId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -667,7 +667,7 @@ class _AppApi implements AppApi {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'https://discount-platform.onrender.com/api/auth/bootstrap',
+            'https://wafir-om.com/api/auth/bootstrap',
             queryParameters: queryParameters,
             data: _data,
           )

@@ -103,10 +103,12 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
         SharedPreferencesKeys.loggedIn,
         true,
       );
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.name,
-        '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
-      );
+      if (response.data?.user?.firstName != null) {
+        await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.name,
+          '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
+        );
+      }
     }
     return response;
   }

@@ -3,7 +3,7 @@ class ApiConstants {
   static const int receiveTimeoutSeconds = 60;
   static const String bearer = 'Bearer';
   static const String applicationJson = 'application/json';
-  static const String baseUrl = 'https://discount-platform.onrender.com/api/';
+  static const String baseUrl = 'https://wafir-om.com/api/';
   static const String register = '${baseUrl}auth/register';
   static const String registerByGoogle = '${baseUrl}auth/register-by-google';
   static const String logout = '${baseUrl}auth/logout';

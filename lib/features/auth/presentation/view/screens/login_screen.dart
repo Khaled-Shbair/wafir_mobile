@@ -89,7 +89,6 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
         }
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
@@ -205,61 +204,61 @@ class _LoginScreenState extends State<LoginScreen> with CustomToastMassage {
                   ));
                 },
               ),
-              verticalSpace(ManagerHeights.h40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Divider(
-                      indent: ManagerWidths.w5,
-                      color: ManagerColors.unFocusBorderColor,
-                    ),
-                  ),
-                  Text(
-                    ManagerStrings.orLoginBy,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                          fontSize: ManagerFontsSizes.f14,
-                          color: ManagerColors.blackColor,
-                        ),
-                  ),
-                  Expanded(
-                    child: Divider(
-                      indent: ManagerWidths.w5,
-                      color: ManagerColors.unFocusBorderColor,
-                    ),
-                  ),
-                ],
-              ),
-              verticalSpace(ManagerHeights.h20),
-              CustomButton(
-                color: ManagerColors.unFocusBorderColor,
-                onPressed: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  ScaffoldMessenger.of(context).clearSnackBars();
-                  //TODO: implement login by google
-                  // controller.add(LoginByGoogle());
-                  showToast('سيتم تنفيذ تسجيل الدخول عبر جوجل قريباً');
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      ManagerAssets.googleIcon,
-                      width: ManagerWidths.w20,
-                    ),
-                    horizontalSpace(ManagerWidths.w10),
-                    Text(
-                      ManagerStrings.google,
-                      style: TextStyle(
-                        fontFamily: ManagerFontFamily.tajawal,
-                        fontSize: ManagerFontsSizes.f18,
-                        fontWeight: ManagerFontWeight.bold,
-                        color: ManagerColors.primaryColor,
-                      ),
-                    )
-                  ],
-                ),
-              ),
+              // verticalSpace(ManagerHeights.h40),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     Expanded(
+              //       child: Divider(
+              //         indent: ManagerWidths.w5,
+              //         color: ManagerColors.unFocusBorderColor,
+              //       ),
+              //     ),
+              //     Text(
+              //       ManagerStrings.orLoginBy,
+              //       style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              //             fontSize: ManagerFontsSizes.f14,
+              //             color: ManagerColors.blackColor,
+              //           ),
+              //     ),
+              //     Expanded(
+              //       child: Divider(
+              //         indent: ManagerWidths.w5,
+              //         color: ManagerColors.unFocusBorderColor,
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // verticalSpace(ManagerHeights.h20),
+              // CustomButton(
+              //   color: ManagerColors.unFocusBorderColor,
+              //   onPressed: () {
+              //     FocusManager.instance.primaryFocus?.unfocus();
+              //     ScaffoldMessenger.of(context).clearSnackBars();
+              //     //TODO: implement login by google
+              //     // controller.add(LoginByGoogle());
+              //     showToast('سيتم تنفيذ تسجيل الدخول عبر جوجل قريباً');
+              //   },
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Image.asset(
+              //         ManagerAssets.googleIcon,
+              //         width: ManagerWidths.w20,
+              //       ),
+              //       horizontalSpace(ManagerWidths.w10),
+              //       Text(
+              //         ManagerStrings.google,
+              //         style: TextStyle(
+              //           fontFamily: ManagerFontFamily.tajawal,
+              //           fontSize: ManagerFontsSizes.f18,
+              //           fontWeight: ManagerFontWeight.bold,
+              //           color: ManagerColors.primaryColor,
+              //         ),
+              //       )
+              //     ],
+              //   ),
+              // ),
               verticalSpace(ManagerHeights.h50),
               RichText(
                 text: TextSpan(

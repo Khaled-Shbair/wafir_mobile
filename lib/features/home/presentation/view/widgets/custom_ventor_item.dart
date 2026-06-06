@@ -21,8 +21,10 @@ class CustomVentorItem extends StatelessWidget {
     return SizedBox(
       height: ManagerHeights.h100,
       child: ListView.separated(
-        shrinkWrap: true,
-        padding: EdgeInsets.symmetric(horizontal: ManagerWidths.w15),
+        padding: EdgeInsets.symmetric(
+          horizontal: ManagerWidths.w15,
+          vertical: ManagerHeights.h5,
+        ),
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           final item = sortedVentors[index];
@@ -64,11 +66,14 @@ class CustomVentorItem extends StatelessWidget {
                         ),
                       ],
                       border: Border.all(color: const Color(0xFFE1E9EB)),
-                      image: DecorationImage(
-                        image: CachedNetworkImageProvider(item.iconUrl),
-                        fit: BoxFit.fill,
-                      ),
+                      image: item.iconUrl.isNotEmpty
+                          ? DecorationImage(
+                              image: CachedNetworkImageProvider(item.iconUrl),
+                              fit: BoxFit.fill,
+                            )
+                          : null,
                     ),
+                    child: Icon(Icons.error_outline),
                   ),
                 ),
                 Text(

@@ -1,16 +1,14 @@
 class AppConstants {
   static const double deviceHeight = 812;
   static const double deviceWidth = 375;
-  static const String baseUrl = 'https://api.example.com';
-  static const String privacyPolicy =
-      'https://discount-platform-three.vercel.app/privacy-policy';
-  static const String faq = 'https://discount-platform-three.vercel.app/faq';
-  static const String termsOfUse =
-      'https://discount-platform-three.vercel.app/terms-of-use';
+  static const String privacyPolicy = 'https://wafir-om.com/privacy-policy';
+  static const String faq = 'https://wafir-om.com/faq';
+  static const String termsOfUse = 'https://wafir-om.com/terms-of-use';
 
   // قائمة الفئات
   static const List<String> categories = [
     'الكل',
+    
     'المطاعم',
     'الفنادق',
     'تأجير السيارات',
