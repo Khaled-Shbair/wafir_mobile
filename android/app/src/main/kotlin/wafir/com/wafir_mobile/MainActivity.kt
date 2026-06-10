@@ -1,4 +1,4 @@
-package wafir.com.wafir_mobile
+package com.wafiroman.app
 
 import io.flutter.embedding.android.FlutterActivity
 
