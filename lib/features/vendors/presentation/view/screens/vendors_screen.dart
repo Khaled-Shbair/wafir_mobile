@@ -301,18 +301,18 @@ class _VendorLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ImageProvider imageProvider = url.trim().isNotEmpty
-        ? CachedNetworkImageProvider(url)
-        : const AssetImage('assets/images/icons/info.png');
-
     return Container(
       width: ManagerWidths.w55,
       height: ManagerHeights.h55,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(ManagerRadius.r10),
         color: const Color(0xFFEAF3F4),
-        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+        image: url.trim().isNotEmpty || url != ""
+            ? DecorationImage(
+                image: CachedNetworkImageProvider(url), fit: BoxFit.cover)
+            : null,
       ),
+      child: url.trim().isEmpty || url == "" ?Icon(Icons.info_outline):null,
     );
   }
 }

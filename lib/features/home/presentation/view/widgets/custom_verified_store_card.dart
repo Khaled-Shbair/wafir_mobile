@@ -39,13 +39,14 @@ class CustomVerifiedStoreCard extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Color(0xFFEAF3F4),
                 shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: store.logoUrl.isNotEmpty
-                      ? CachedNetworkImageProvider(store.logoUrl)
-                      : const AssetImage('assets/images/icons/info.png'),
-                  fit: BoxFit.fill,
-                ),
+                image: store.logoUrl.isNotEmpty
+                    ? DecorationImage(
+                        image: CachedNetworkImageProvider(store.logoUrl),
+                        fit: BoxFit.fill,
+                      )
+                    : null,
               ),
+              child: store.logoUrl.isEmpty ? Icon(Icons.info_outline) : null,
             ),
             verticalSpace(ManagerHeights.h10),
             Text(
