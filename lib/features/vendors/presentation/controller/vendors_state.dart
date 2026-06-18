@@ -13,21 +13,24 @@ sealed class VendorsState {
     this.selectedCategoryId,
   });
 
-
   VendorsState copyWith({
-    String? selectedGovernorate,
-    String? selectedWilaya,
-    String? selectedCategory,
+    Object? selectedGovernorate = #unset,
+    Object? selectedWilaya = #unset,
+    Object? selectedCategory = #unset,
     int? selectedCategoryId,
     bool clearCategoryId = false,
   }) {
-    final newSelectedGovernorate =
-        selectedGovernorate ?? this.selectedGovernorate;
-    final newSelectedWilaya = selectedWilaya ?? this.selectedWilaya;
-    final newSelectedCategory = selectedCategory ?? this.selectedCategory;
-    final newSelectedCategoryId = clearCategoryId
-        ? null
-        : (selectedCategoryId ?? this.selectedCategoryId);
+    final String? newSelectedGovernorate = identical(selectedGovernorate, #unset)
+        ? this.selectedGovernorate
+        : selectedGovernorate as String?;
+    final String? newSelectedWilaya = identical(selectedWilaya, #unset)
+        ? this.selectedWilaya
+        : selectedWilaya as String?;
+    final String? newSelectedCategory = identical(selectedCategory, #unset)
+        ? this.selectedCategory
+        : selectedCategory as String?;
+    final newSelectedCategoryId =
+        clearCategoryId ? null : (selectedCategoryId ?? this.selectedCategoryId);
 
     if (this is VendorsInitial) {
       return VendorsInitial(

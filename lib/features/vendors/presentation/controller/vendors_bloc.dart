@@ -23,12 +23,11 @@ class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
 
   final TextEditingController search = TextEditingController();
   final GetPublicVendorsUseCase _getPublicVendorsUseCase;
-
   final List<VendorPublicItemModel> _allVendors = [];
 
   void _onSearchTextChanged() {
     if (search.text.isEmpty) {
-      add(SearchVendorsEvent());
+      add(GetPublicVendorsEvent());
     }
   }
 
@@ -92,44 +91,38 @@ class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
     GetPublicVendorsEvent event,
     Emitter<VendorsState> emit,
   ) async {
-    print('55555555555 ${ _normalizedCategory()}');
-
-    if (_allVendors.isEmpty) {
-      emit(VendorsLoading(
-        selectedCategory: event.searchQuery,
+    emit(VendorsLoading(
+      selectedCategory: state.selectedCategory,
+      selectedCategoryId: state.selectedCategoryId,
+      selectedGovernorate: state.selectedGovernorate,
+      selectedWilaya: state.selectedWilaya,
+    ));
+    (await _getPublicVendorsUseCase.execute(
+      GetAllVendorsInput(
+        page: 1,
+        q: search.text.isNotEmpty ? search.text : null,
+        city: state.selectedWilaya,
+        discount: null,
+        vendorId: null,
+        sort: null,
+        sector: _normalizedCategory(),
+      ),
+    ))
+        .fold(
+      (l) => emit(VendorsFailure(
+        message: l.message,
+        selectedCategory: state.selectedCategory,
         selectedCategoryId: state.selectedCategoryId,
         selectedGovernorate: state.selectedGovernorate,
         selectedWilaya: state.selectedWilaya,
-      ));
-      (await _getPublicVendorsUseCase.execute(
-        GetAllVendorsInput(
-          page: 1,
-          q: search.text.isNotEmpty ? search.text : null,
-          city: state.selectedWilaya,
-          discount: null,
-          vendorId: null,
-          sort: null,
-          sector: _normalizedCategory(),
-        ),
-      ))
-          .fold(
-        (l) => emit(VendorsFailure(
-          message: l.message,
-          selectedCategory: state.selectedCategory,
-          selectedCategoryId: state.selectedCategoryId,
-          selectedGovernorate: state.selectedGovernorate,
-          selectedWilaya: state.selectedWilaya,
-        )),
-        (r) {
-          _allVendors.clear();
-          _allVendors.addAll(r.items);
-          _emitFilteredVendors(emit);
-        },
-      );
-      return;
-    }
-
-    _emitFilteredVendors(emit);
+      )),
+      (r) {
+        _allVendors
+          ..clear()
+          ..addAll(r.items);
+        _emitFilteredVendors(emit);
+      },
+    );
   }
 
   void _onSearchVendors(SearchVendorsEvent event, Emitter<VendorsState> emit) {

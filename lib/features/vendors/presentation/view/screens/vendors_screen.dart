@@ -88,9 +88,8 @@ class _VendorsScreenState extends State<VendorsScreen> {
                     onFieldSubmitted: (v) {
                       if (v != null || v!.isNotEmpty) {
                         FocusManager.instance.primaryFocus?.unfocus();
-                        context
-                            .read<VendorsBloc>()
-                            .add(GetPublicVendorsEvent(widget.sectorName));
+                        context.read<VendorsBloc>().add(GetPublicVendorsEvent(
+                            searchQuery: widget.sectorName));
                       }
                     },
                     hintText: ManagerStrings.searchOnStoreOrOffer,
@@ -112,7 +111,6 @@ class _VendorsScreenState extends State<VendorsScreen> {
                           ),
                           builder: (context) => BlocProvider<VendorsBloc>.value(
                             value: offersBloc,
-
                             child: BlocBuilder<VendorsBloc, VendorsState>(
                               builder: (context, state) {
                                 return CustomFilterBottomSheet(
@@ -121,6 +119,17 @@ class _VendorsScreenState extends State<VendorsScreen> {
                                   selectedGovernorate:
                                       state.selectedGovernorate,
                                   selectedWilaya: state.selectedWilaya,
+                                  onApply: (selection) {
+                                    final bloc = context.read<VendorsBloc>();
+                                    bloc.add(CategoryChangedVendorsEvent(
+                                        selection.category));
+                                    bloc.add(GovernorateChangedVendorsEvent(
+                                        selection.governorate));
+                                    bloc.add(WilayaChangedVendorsEvent(
+                                        selection.wilaya));
+
+                                    bloc.add(GetPublicVendorsEvent());
+                                  },
                                 );
                               },
                             ),

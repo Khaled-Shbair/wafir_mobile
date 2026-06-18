@@ -5,7 +5,7 @@ abstract class VendorsEvent {}
 class GetPublicVendorsEvent extends VendorsEvent {
   final String? searchQuery;
 
-  GetPublicVendorsEvent(this.searchQuery);
+  GetPublicVendorsEvent({this.searchQuery});
 }
 
 class SearchVendorsEvent extends VendorsEvent {}
