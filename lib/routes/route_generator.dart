@@ -64,8 +64,8 @@ class RouteGenerator {
         return MaterialPageRoute(
           settings: RouteSettings(name: Routes.vendorsScreen),
           builder: (_) => BlocProvider<VendorsBloc>(
-            create: (_) =>
-                instance<VendorsBloc>()..add(GetPublicVendorsEvent(sectorName)),
+            create: (_) => instance<VendorsBloc>()
+              ..add(GetPublicVendorsEvent(searchQuery: sectorName)),
             child: VendorsScreen(sectorName: sectorName),
           ),
         );
@@ -76,15 +76,16 @@ class RouteGenerator {
             create: (_) => instance<RegisterBloc>(),
             child: RegisterScreen(),
           ),
-        );      case Routes.favoriteScreen:
-      initFavorite();
-      return MaterialPageRoute(
-        builder: (_) => BlocProvider<FavoriteBloc>(
-          create: (_) => instance<FavoriteBloc>()..add(GetFavoriteOffers(message:'',offerId: 1)),
-          child: FavoritesScreen(),
-
-        ),
-      );
+        );
+      case Routes.favoriteScreen:
+        initFavorite();
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<FavoriteBloc>(
+            create: (_) => instance<FavoriteBloc>()
+              ..add(GetFavoriteOffers(message: '', offerId: 1)),
+            child: FavoritesScreen(),
+          ),
+        );
       case Routes.welcomeScreen:
         return MaterialPageRoute(builder: (_) => WelcomeScreen());
       case Routes.resetPasswordScreen:
@@ -187,28 +188,28 @@ class RouteGenerator {
             child: const OffersScreen(),
           ),
         );
-       case Routes.offerDetailsScreen:
-         initOffers();
-         final arguments = setting.arguments as List;
-         final offerId = arguments[0] as int;
-         final  buttonText = arguments[1] as String?;
-         return MaterialPageRoute(
-           builder: (_) => BlocProvider(
-             create: (_) => instance<OfferDetailsBloc>()
-               ..add(FetchOfferDetailsEvent(offerId)),
-             child: OfferDetailsScreen(offerId: offerId,buttonText: buttonText),
-           ),
-         );
-       case Routes.myClaimsScreen:
-         initMyClaimOffers();
-         return MaterialPageRoute(
-           builder: (_) => BlocProvider<MyClaimOffersBloc>(
-             create: (_) => instance<MyClaimOffersBloc>()
-               ..add(GetMyClaimsEvent()),
-             child: const MyClaimOffersScreen(),
-           ),
-         );
-       default:
+      case Routes.offerDetailsScreen:
+        initOffers();
+        final arguments = setting.arguments as List;
+        final offerId = arguments[0] as int;
+        final buttonText = arguments[1] as String?;
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (_) => instance<OfferDetailsBloc>()
+              ..add(FetchOfferDetailsEvent(offerId)),
+            child: OfferDetailsScreen(offerId: offerId, buttonText: buttonText),
+          ),
+        );
+      case Routes.myClaimsScreen:
+        initMyClaimOffers();
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider<MyClaimOffersBloc>(
+            create: (_) =>
+                instance<MyClaimOffersBloc>()..add(GetMyClaimsEvent()),
+            child: const MyClaimOffersScreen(),
+          ),
+        );
+      default:
         return unDefinedRoute();
     }
   }

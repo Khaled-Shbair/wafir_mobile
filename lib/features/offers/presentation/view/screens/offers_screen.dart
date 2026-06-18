@@ -33,7 +33,6 @@ class _OffersScreenState extends State<OffersScreen> {
 
   @override
   void initState() {
-
     super.initState();
     _searchFocusNode = FocusNode();
   }
@@ -100,15 +99,28 @@ class _OffersScreenState extends State<OffersScreen> {
                         top: Radius.circular(ManagerRadius.r20),
                       ),
                     ),
-                    builder: (context) => BlocProvider<OffersBloc>.value(
+                    builder: (context) =>
+                    BlocProvider<OffersBloc>.value(
                       value: offersBloc,
                       child: BlocBuilder<OffersBloc, OffersState>(
                         builder: (context, state) {
                           return CustomFilterBottomSheet(
-                            categories: AppConstants.categories,
-                            selectedCategory: state.selectedCategory,
-                            selectedGovernorate: state.selectedGovernorate,
-                            selectedWilaya: state.selectedWilaya,
+                              categories: AppConstants.categories,
+                              selectedCategory: state.selectedCategory,
+                              selectedGovernorate: state.selectedGovernorate,
+                              selectedWilaya: state.selectedWilaya,
+                              onApply: (selection) {
+                                final bloc = context.read<OffersBloc>();
+
+                                // ترسل events حتى عند null لتنظيف الفلاتر
+                                bloc.add(
+                                    CategoryChangedEvent(selection.category));
+                                bloc.add(GovernorateChangedEvent(
+                                    selection.governorate));
+                                bloc.add(WilayaChangedEvent(selection.wilaya));
+
+                                bloc.add(GetAllOffersEvent());
+                              } ,
                           );
                         },
                       ),
@@ -162,7 +174,7 @@ class _OffersScreenState extends State<OffersScreen> {
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
+                          SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
                             crossAxisSpacing: ManagerWidths.w15,
                             mainAxisSpacing: ManagerWidths.w15,
