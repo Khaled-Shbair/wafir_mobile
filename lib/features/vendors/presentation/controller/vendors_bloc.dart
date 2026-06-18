@@ -18,7 +18,6 @@ class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
     on<GovernorateChangedVendorsEvent>(_governorateChanged);
     on<WilayaChangedVendorsEvent>(_wilayaChanged);
     on<CategoryChangedVendorsEvent>(_categoryChanged);
-
     search.addListener(_onSearchTextChanged);
   }
 
@@ -26,14 +25,10 @@ class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
   final GetPublicVendorsUseCase _getPublicVendorsUseCase;
 
   final List<VendorPublicItemModel> _allVendors = [];
-  Timer? _debounceTimer;
 
   void _onSearchTextChanged() {
-    _debounceTimer?.cancel();
     if (search.text.isEmpty) {
-      _debounceTimer = Timer(const Duration(milliseconds: 300), () {
-        add(SearchVendorsEvent());
-      });
+      add(SearchVendorsEvent());
     }
   }
 
@@ -87,7 +82,7 @@ class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
 
   String? _normalizedCategory() {
     final category = state.selectedCategory?.trim();
-    if (category == null || category.isEmpty || category == 'الكل') {
+    if (category == null || category.isEmpty || category == '') {
       return null;
     }
     return category;
@@ -97,18 +92,19 @@ class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
     GetPublicVendorsEvent event,
     Emitter<VendorsState> emit,
   ) async {
+    print('55555555555 ${ _normalizedCategory()}');
+
     if (_allVendors.isEmpty) {
       emit(VendorsLoading(
-        selectedCategory: state.selectedCategory,
+        selectedCategory: event.searchQuery,
         selectedCategoryId: state.selectedCategoryId,
         selectedGovernorate: state.selectedGovernorate,
         selectedWilaya: state.selectedWilaya,
       ));
-
       (await _getPublicVendorsUseCase.execute(
         GetAllVendorsInput(
           page: 1,
-          q: event.searchQuery,
+          q: search.text.isNotEmpty ? search.text : null,
           city: state.selectedWilaya,
           discount: null,
           vendorId: null,
@@ -205,7 +201,6 @@ class VendorsBloc extends Bloc<VendorsEvent, VendorsState> {
 
   @override
   Future<void> close() {
-    _debounceTimer?.cancel();
     search.removeListener(_onSearchTextChanged);
     search.dispose();
     disposePublicVendors();

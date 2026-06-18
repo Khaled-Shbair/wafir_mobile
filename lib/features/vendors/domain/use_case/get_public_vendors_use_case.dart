@@ -41,7 +41,6 @@ class GetPublicVendorsUseCase
         city: input.city,
         discount: input.discount,
         sort: input.sort,
-
         q: input.q,
         sector: input.sector,
       ),

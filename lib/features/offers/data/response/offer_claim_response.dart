@@ -3,14 +3,13 @@ import 'package:wafir_mobile/config/constants/api_constants.dart';
 
 part 'offer_claim_response.g.dart';
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class OfferClaimResponse {
   @JsonKey(name: ApiKeys.path)
   final String? path;
 
   @JsonKey(name: ApiKeys.message)
   final String? message;
-
 
   @JsonKey(name: ApiKeys.success)
   final bool? success;
@@ -26,15 +25,15 @@ class OfferClaimResponse {
   Map<String, dynamic> toJson() => _$OfferClaimResponseToJson(this);
 }
 
-@JsonSerializable(explicitToJson: true)
+@JsonSerializable()
 class OfferClaimDataResponse {
-  @JsonKey(name: ApiKeys.id, fromJson: _toInt)
+  @JsonKey(name: ApiKeys.id)
   final int? id;
 
-  @JsonKey(name: ApiKeys.userId, fromJson: _toInt)
+  @JsonKey(name: ApiKeys.userId)
   final int? userId;
 
-  @JsonKey(name: ApiKeys.offerId, fromJson: _toInt)
+  @JsonKey(name: ApiKeys.offerId)
   final int? offerId;
 
   @JsonKey(name: ApiKeys.claimCode)
@@ -83,10 +82,4 @@ class OfferClaimDataResponse {
       _$OfferClaimDataResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$OfferClaimDataResponseToJson(this);
-
-  static int? _toInt(dynamic value) {
-    if (value == null) return null;
-    if (value is int) return value;
-    return int.tryParse(value.toString());
-  }
 }

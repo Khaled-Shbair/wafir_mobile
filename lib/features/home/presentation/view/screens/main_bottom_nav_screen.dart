@@ -8,9 +8,8 @@ import 'package:wafir_mobile/core/resource/manager_strings.dart';
 import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/core/widgets/custom_dialog.dart';
 import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
-import 'package:wafir_mobile/features/claims/presentation/view/screens/my_claims_screen.dart';
-import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
-import 'package:wafir_mobile/features/favorite/presentation/view/screens/favorites_screen.dart';
+import 'package:wafir_mobile/features/claims/presentation/controller/my_claim_offers_bloc.dart';
+import 'package:wafir_mobile/features/claims/presentation/view/screens/my_claim_offers_screen.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/navigation_cubit.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
@@ -18,8 +17,6 @@ import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_bott
 import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
 import 'package:wafir_mobile/features/setting/presentation/view/screens/setting_screen.dart';
-
-import '../../../../offers/presentation/controller/my_claims_bloc.dart';
 
 class MainBottomNavScreen extends StatefulWidget {
   const MainBottomNavScreen({super.key});
@@ -32,10 +29,10 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen>
     with CustomToastMassage {
   DateTime? _lastBackPressedAt;
 
-  final List<Widget> _pages =  <Widget>[
+  final List<Widget> _pages = <Widget>[
     HomeScreen(),
     OffersScreen(),
-    MyClaimsScreen(),
+    MyClaimOffersScreen(),
     SettingScreen(),
   ];
 
@@ -133,9 +130,8 @@ class _MainBottomNavScreenState extends State<MainBottomNavScreen>
                         if (instance<SharedPreferencesController>()
                                 .getBool(SharedPreferencesKeys.loggedIn) ==
                             true) {
-
                           context
-                              .read<MyClaimsBloc>()
+                              .read<MyClaimOffersBloc>()
                               .add(GetMyClaimsEvent());
                           context.read<NavigationCubit>().goToFClaims();
                         } else {

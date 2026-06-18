@@ -14,7 +14,7 @@ OfferItemDataResponse _$OfferItemDataResponseFromJson(
           ?.map((e) =>
               OfferVendorBranchResponse.fromJson(e as Map<String, dynamic>))
           .toList(),
-      isFavorited: json['is_favorited'] as bool?,
+      isFavorited: json['is_favorite'] as bool?,
       vendor: json['vendor'] == null
           ? null
           : OfferVendorResponse.fromJson(
@@ -44,7 +44,7 @@ Map<String, dynamic> _$OfferItemDataResponseToJson(
         OfferItemDataResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'is_favorited': instance.isFavorited,
+      'is_favorite': instance.isFavorited,
       'branches': instance.branches,
       'title': instance.title,
       'description': instance.description,

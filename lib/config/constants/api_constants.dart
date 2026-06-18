@@ -26,7 +26,8 @@ class ApiConstants {
   static const String getAllOffers = '${baseUrl}offers/active';
   static const String offers = '${baseUrl}offers';
   static const String getOfferDetails = '${baseUrl}offers/';
-  static const String offerClaims = '${baseUrl}offer-claims';
+  static const String getMyClaimOffers = '${baseUrl}offer-claims/my';
+  static const String offerClaim = '${baseUrl}offer-claims/';
   static const String getVendorDetails = '${baseUrl}vendors/public/';
   static const String getAllVendor = '${baseUrl}vendors/public';
 }

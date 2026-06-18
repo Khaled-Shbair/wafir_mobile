@@ -7,7 +7,7 @@ extension VerifyOtpMapper on VerifyOtpResponse {
     return VerifyOtpModel(
       message: message.onNull(),
       success: success.onNull(),
-      token: token.onNull(),
+      resetToken: resetToken.onNull(),
     );
   }
 }

@@ -49,7 +49,7 @@ class RemoteProfileDataSourceImpl implements RemoteProfileDataSource {
     if (response.success == true) {
       _sharedPref.setData(
         SharedPreferencesKeys.name,
-        '${request.firstName} ${request.lastName}',
+        '${response.data?.firstName} ${response.data?.lastName}',
       );
       _sharedPref.setData(
         SharedPreferencesKeys.image,

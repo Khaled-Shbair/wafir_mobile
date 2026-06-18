@@ -27,11 +27,7 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
   bool _isLoadingMore = false;
   int _totalCount = 0;
 
-  /// يتم استدعاؤه عند تغيير نص البحث
   void _onSearchTextChanged() {
-    // إلغاء التايمر السابق
-
-    // عندما يمسح المستخدم الكلمة (البحث يصبح فارغاً)
     if (search.text.isEmpty) {
       add(GetAllOffersEvent());
     }
@@ -56,26 +52,25 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
   }
 
   void _wilayaChanged(WilayaChangedEvent event, Emitter emit) {
-    _currentPage = 1;
-    emit(state.copyWith(
-        selectedWilaya: event.wilaya,
-        selectedCategory: state.selectedCategory,
-        selectedGovernorate: state.selectedGovernorate));
+  _currentPage = 1;
+  emit(state.copyWith(
+  selectedWilaya: event.wilaya,
+  selectedCategory: state.selectedCategory,
+  selectedGovernorate: state.selectedGovernorate));
   }
+
   String? _normalizedCategory() {
-    final category = state.selectedCategory?.trim();
-    if (category == null || category.isEmpty || category == 'الكل') {
-      return null;
-    }
-    return category;
+  final category = state.selectedCategory?.trim();
+  if (category == null || category.isEmpty || category == '') {
+  return null;
   }
+  return category;
+  }
+
   Future<void> _onGetAllOffers(
-      GetAllOffersEvent event, Emitter<OffersState> emit) async {
+  GetAllOffersEvent event, Emitter<OffersState> emit) async {
     _isLoadingMore = false;
     _totalCount = 0;
-    print('Fetching offers with selectedCategory: ${state.selectedCategory}');
-    print('Fetching offers with selectedWilaya: ${state.selectedWilaya}');
-    print('Fetching offers with selectedGovernorate: ${state.selectedGovernorate}');
     emit(OffersLoading(
       selectedGovernorate: state.selectedGovernorate,
       selectedWilaya: state.selectedWilaya,
@@ -129,7 +124,6 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
       LoadMoreOffersEvent event, Emitter<OffersState> emit) async {
     if (state is! OffersLoadedSuccessfully) return;
 
-    // منع الطلبات المتكررة
     if (_isLoadingMore) return;
 
     final currentState = state as OffersLoadedSuccessfully;
@@ -184,13 +178,11 @@ class OffersBloc extends Bloc<OffersEvent, OffersState> {
       (r) {
         _isLoadingMore = false;
 
-        // تصفية البيانات المكررة
         final newOffers = r.items
             .where((newItem) => !currentState.offers
                 .any((existingItem) => existingItem.id == newItem.id))
             .toList();
 
-        // إذا لم تكن هناك بيانات جديدة، توقف التحميل
         if (newOffers.isEmpty) {
           emit(OffersLoadedSuccessfully(
             offers: currentState.offers,

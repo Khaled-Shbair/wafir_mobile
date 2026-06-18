@@ -96,7 +96,7 @@ HomeOfferResponse _$HomeOfferResponseFromJson(Map<String, dynamic> json) =>
     HomeOfferResponse(
       id: (json['id'] as num?)?.toInt(),
       title: json['title'] as String?,
-      isFavorited: json['is_favorited'] as bool?,
+      isFavorited: json['is_favorite'] as bool?,
       description: json['description'] as String?,
       imageUrl: json['image_url'] as String?,
       discountPercentage: (json['discount_percentage'] as num?)?.toInt(),
@@ -116,6 +116,6 @@ Map<String, dynamic> _$HomeOfferResponseToJson(HomeOfferResponse instance) =>
       'discount_percentage': instance.discountPercentage,
       'redemption_type': instance.redemptionType,
       'valid_until': instance.validUntil,
-      'is_favorited': instance.isFavorited,
+      'is_favorite': instance.isFavorited,
       'store': instance.store,
     };

@@ -27,15 +27,10 @@ class CustomFilterBottomSheet extends StatelessWidget {
       onApply: (selection) {
         final bloc = context.read<OffersBloc>();
 
-        if (selection.category != null) {
-          bloc.add(CategoryChangedEvent(selection.category!));
-        }
-        if (selection.governorate != null) {
-          bloc.add(GovernorateChangedEvent(selection.governorate!));
-        }
-        if (selection.wilaya != null) {
-          bloc.add(WilayaChangedEvent(selection.wilaya!));
-        }
+        // ترسل events حتى عند null لتنظيف الفلاتر
+        bloc.add(CategoryChangedEvent(selection.category));
+        bloc.add(GovernorateChangedEvent(selection.governorate));
+        bloc.add(WilayaChangedEvent(selection.wilaya));
 
         bloc.add(GetAllOffersEvent());
       },

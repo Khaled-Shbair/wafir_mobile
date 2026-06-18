@@ -7,7 +7,6 @@ extension OfferClaimResponseMapper on OfferClaimResponse {
     final claimData = data;
 
     return OfferClaimModel(
-
       success: success.onNull(),
       id: claimData?.id.onNull() ?? 0,
       userId: claimData?.userId.onNull() ?? 0,

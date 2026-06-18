@@ -22,15 +22,15 @@ Map<String, dynamic> _$OfferClaimResponseToJson(OfferClaimResponse instance) =>
       'path': instance.path,
       'message': instance.message,
       'success': instance.success,
-      'data': instance.data?.toJson(),
+      'data': instance.data,
     };
 
 OfferClaimDataResponse _$OfferClaimDataResponseFromJson(
         Map<String, dynamic> json) =>
     OfferClaimDataResponse(
-      id: OfferClaimDataResponse._toInt(json['id']),
-      userId: OfferClaimDataResponse._toInt(json['user_id']),
-      offerId: OfferClaimDataResponse._toInt(json['offer_id']),
+      id: (json['id'] as num?)?.toInt(),
+      userId: (json['user_id'] as num?)?.toInt(),
+      offerId: (json['offer_id'] as num?)?.toInt(),
       claimCode: json['claim_code'] as String?,
       status: json['status'] as String?,
       redeemedAt: json['redeemed_at'] as String?,

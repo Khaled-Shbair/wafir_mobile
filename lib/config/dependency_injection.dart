@@ -26,6 +26,11 @@ import 'package:wafir_mobile/features/auth/domain/use_case/login_by_email_use_ca
 import 'package:wafir_mobile/features/auth/presentation/controller/login_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/forget_password_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/verify_otp_bloc.dart';
+import 'package:wafir_mobile/features/claims/data/data_source/remote_my_claims_data_source.dart';
+import 'package:wafir_mobile/features/claims/data/repository_impl/offers_repository_impl.dart';
+import 'package:wafir_mobile/features/claims/domain/repository/my_claim_offers_repository.dart';
+import 'package:wafir_mobile/features/claims/domain/use_case/get_my_claim_offers_use_case.dart';
+import 'package:wafir_mobile/features/claims/presentation/controller/my_claim_offers_bloc.dart';
 import 'package:wafir_mobile/features/home/data/repository_impl/home_repository_impl.dart';
 import 'package:wafir_mobile/features/profile/data/data_source/remote_profile_data_source.dart';
 import 'package:wafir_mobile/features/profile/data/repository_impl/profile_repository_impl.dart';
@@ -39,12 +44,8 @@ import 'package:wafir_mobile/features/offers/domain/repository/offers_repository
 import 'package:wafir_mobile/features/offers/domain/use_case/get_offer_details_use_case.dart';
 import 'package:wafir_mobile/features/offers/domain/use_case/get_all_offers_use_case.dart';
 import 'package:wafir_mobile/features/offers/domain/use_case/claim_offer_use_case.dart';
-import 'package:wafir_mobile/features/offers/domain/use_case/get_my_claims_use_case.dart';
-import 'package:wafir_mobile/features/offers/data/data_source/my_claims_data_source.dart';
-import 'package:wafir_mobile/features/offers/domain/repository/my_claims_repository.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_bloc.dart';
-import 'package:wafir_mobile/features/offers/presentation/controller/my_claims_bloc.dart';
 import 'package:wafir_mobile/features/home/data/data_source/remote_home_data_source.dart';
 import 'package:wafir_mobile/features/home/domain/repository/home_repository.dart';
 import 'package:wafir_mobile/features/home/domain/use_case/get_home_data_use_case.dart';
@@ -413,7 +414,7 @@ void disposeEditProfile() async {
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 //Offers
-void initOffers() async {
+void initOffers() {
   if (!GetIt.I.isRegistered<RemoteOffersDataSource>()) {
     instance.registerLazySingleton<RemoteOffersDataSource>(
       () => RemoteOffersDataSourceImpl(instance<AppApi>(), instance<Dio>()),
@@ -455,47 +456,30 @@ void initOffers() async {
       ),
     );
   }
-  if (!GetIt.I.isRegistered<MyClaimsDataSource>()) {
-    instance.registerLazySingleton<MyClaimsDataSource>(
-      () => MyClaimsDataSourceImpl(instance<Dio>()),
-    );
-  }
-  if (!GetIt.I.isRegistered<MyClaimsRepository>()) {
-    instance.registerLazySingleton<MyClaimsRepository>(
-      () => MyClaimsRepositoryImpl(instance<MyClaimsDataSource>()),
-    );
-  }
-  if (!GetIt.I.isRegistered<GetMyClaimsUseCase>()) {
-    instance.registerLazySingleton<GetMyClaimsUseCase>(
-      () => GetMyClaimsUseCase(instance<MyClaimsRepository>()),
-    );
-  }
-  if (!GetIt.I.isRegistered<MyClaimsBloc>()) {
-    instance.registerLazySingleton<MyClaimsBloc>(
-      () => MyClaimsBloc(instance<GetMyClaimsUseCase>()),
-    );
-  }
 }
-void initClaims() async {
 
-  if (!GetIt.I.isRegistered<MyClaimsDataSource>()) {
-    instance.registerLazySingleton<MyClaimsDataSource>(
-          () => MyClaimsDataSourceImpl(instance<Dio>()),
+void initMyClaimOffers() async {
+  if (!GetIt.I.isRegistered<RemoteMyClaimsDataSource>()) {
+    instance.registerLazySingleton<RemoteMyClaimsDataSource>(
+      () => RemoteMyClaimsDataSourceImpl(instance<AppApi>()),
     );
   }
-  if (!GetIt.I.isRegistered<MyClaimsRepository>()) {
-    instance.registerLazySingleton<MyClaimsRepository>(
-          () => MyClaimsRepositoryImpl(instance<MyClaimsDataSource>()),
+  if (!GetIt.I.isRegistered<MyClaimOffersRepository>()) {
+    instance.registerLazySingleton<MyClaimOffersRepository>(
+      () => MyClaimOffersRepositoryImpl(
+        instance<NetworkInfo>(),
+        instance<RemoteMyClaimsDataSource>(),
+      ),
     );
   }
-  if (!GetIt.I.isRegistered<GetMyClaimsUseCase>()) {
-    instance.registerLazySingleton<GetMyClaimsUseCase>(
-          () => GetMyClaimsUseCase(instance<MyClaimsRepository>()),
+  if (!GetIt.I.isRegistered<GetMyClaimOffersUseCase>()) {
+    instance.registerLazySingleton<GetMyClaimOffersUseCase>(
+      () => GetMyClaimOffersUseCase(instance<MyClaimOffersRepository>()),
     );
   }
-  if (!GetIt.I.isRegistered<MyClaimsBloc>()) {
-    instance.registerLazySingleton<MyClaimsBloc>(
-          () => MyClaimsBloc(instance<GetMyClaimsUseCase>()),
+  if (!GetIt.I.isRegistered<MyClaimOffersBloc>()) {
+    instance.registerLazySingleton<MyClaimOffersBloc>(
+      () => MyClaimOffersBloc(instance<GetMyClaimOffersUseCase>()),
     );
   }
 }
@@ -561,13 +545,19 @@ void disposeOffers() async {
     instance.unregister<OfferDetailsBloc>();
   }
 }
+
 void disposeClaims() async {
-  if (GetIt.I.isRegistered<MyClaimsDataSource>()) {
-    instance.unregister<MyClaimsDataSource>();
-  }  if (GetIt.I.isRegistered<GetMyClaimsUseCase>()) {
-    instance.unregister<GetMyClaimsUseCase>();
-  }  if (GetIt.I.isRegistered<MyClaimsBloc>()) {
-    instance.unregister<MyClaimsBloc>();
+  if (GetIt.I.isRegistered<RemoteMyClaimsDataSource>()) {
+    instance.unregister<RemoteMyClaimsDataSource>();
+  }
+  if (GetIt.I.isRegistered<MyClaimOffersRepository>()) {
+    instance.unregister<MyClaimOffersRepository>();
+  }
+  if (GetIt.I.isRegistered<GetMyClaimOffersUseCase>()) {
+    instance.unregister<GetMyClaimOffersUseCase>();
+  }
+  if (GetIt.I.isRegistered<MyClaimOffersBloc>()) {
+    instance.unregister<MyClaimOffersBloc>();
   }
 }
 
@@ -744,4 +734,3 @@ void disposeLogoutSetting() async {
     instance.unregister<LogoutSettingBloc>();
   }
 }
-

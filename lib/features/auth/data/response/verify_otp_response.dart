@@ -17,15 +17,14 @@ class VerifyOtpResponse {
   @JsonKey(name: ApiKeys.path)
   final String? path;
   @JsonKey(name: ApiKeys.data)
-  final UserResponse? data;
+  final VerifyOtpDataResponse? data;
   @JsonKey(name: ApiKeys.resetToken)
-  final String? token;
-
+  final String? resetToken;
   VerifyOtpResponse({
     this.message,
     this.data,
     this.success,
-    this.token,
+    this.resetToken,
     this.statusCode,
     this.timestamp,
     this.path,
@@ -35,4 +34,21 @@ class VerifyOtpResponse {
       _$VerifyOtpResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$VerifyOtpResponseToJson(this);
+}
+
+@JsonSerializable()
+class VerifyOtpDataResponse {
+
+  @JsonKey(name: ApiKeys.user)
+  final UserResponse? user;
+
+
+  VerifyOtpDataResponse({
+    this.user,
+  });
+
+  factory VerifyOtpDataResponse.fromJson(Map<String, dynamic> json) =>
+      _$VerifyOtpDataResponseFromJson(json);
+
+  Map<String, dynamic> toJson() => _$VerifyOtpDataResponseToJson(this);
 }

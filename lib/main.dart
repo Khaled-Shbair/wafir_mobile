@@ -13,7 +13,7 @@ import 'package:wafir_mobile/routes/route_generator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  initModule();
+  await initModule();
 
   await EasyLocalization.ensureInitialized();
   // Lock the app to landscape mode only (prevent portrait)

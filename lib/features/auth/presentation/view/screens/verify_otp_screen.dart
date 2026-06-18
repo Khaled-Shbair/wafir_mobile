@@ -14,7 +14,6 @@ import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_toast_massage.dart';
 import 'package:wafir_mobile/features/auth/presentation/controller/verify_otp_bloc.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/widgets/custom_otp_filed.dart';
-import 'package:wafir_mobile/routes/routes.dart';
 
 class VerifyOtpScreen extends StatefulWidget {
   const VerifyOtpScreen({
@@ -128,7 +127,9 @@ class _VerifyOtpScreenState extends State<VerifyOtpScreen>
           Navigator.of(context).pop();
           Navigator.of(context).pushReplacementNamed(
             widget.nextScreenRoute,
-            arguments: instance<SharedPreferencesController>()
+
+            arguments:
+            instance<SharedPreferencesController>()
                 .getString(SharedPreferencesKeys.resetToken),
           );
         } else if (state is VerifyOtpFailure) {

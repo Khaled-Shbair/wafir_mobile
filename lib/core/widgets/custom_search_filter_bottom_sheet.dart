@@ -34,6 +34,7 @@ class CustomSearchFilterBottomSheet extends StatefulWidget {
   final String? selectedWilaya;
   final ValueChanged<FilterSelectionResult> onApply;
 
+
   @override
   State<CustomSearchFilterBottomSheet> createState() =>
       _CustomSearchFilterBottomSheetState();
@@ -66,7 +67,9 @@ class _CustomSearchFilterBottomSheetState
       _tempGovernorate = null;
       _tempWilaya = null;
     });
+    _applyFilters();
   }
+
 
   void _applyFilters() {
     widget.onApply(

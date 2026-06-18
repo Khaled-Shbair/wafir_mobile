@@ -9,6 +9,8 @@ import 'package:wafir_mobile/features/auth/data/response/register_response.dart'
 import 'package:wafir_mobile/features/auth/data/response/reset_otp_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/reset_password_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/verify_otp_response.dart';
+import 'package:wafir_mobile/features/claims/data/response/my_claim_offers_response.dart';
+import 'package:wafir_mobile/features/offers/data/response/offer_claim_response.dart';
 import 'package:wafir_mobile/features/profile/data/response/profile_response.dart';
 import 'package:wafir_mobile/features/home/data/response/home_response.dart';
 import 'package:wafir_mobile/features/vendors/data/response/get_vendor_details_response.dart';
@@ -34,6 +36,8 @@ abstract class AppApi {
   Future<LoginResponse> loginByGoogle(
     @Field(ApiKeys.token) String token,
   );
+
+
 
   @POST(ApiConstants.register)
   Future<RegisterResponse> registerByEmail(
@@ -112,12 +116,12 @@ abstract class AppApi {
   Future<GetVendorsPublicResponse> getPublicVendors(
     @Query(ApiKeys.page) int? page,
     @Query(ApiKeys.take) int? take,
-      @Query('q') String? q,
-      @Query('sector') String? sector,
-      @Query('city') String? city,
-      @Query('discount') String? discount,
-      @Query('sort') String? sort,
-      @Query('vendorId') int? vendorId,
+    @Query('q') String? q,
+    @Query('sector') String? sector,
+    @Query('city') String? city,
+    @Query('discount') String? discount,
+    @Query('sort') String? sort,
+    @Query('vendorId') int? vendorId,
   );
 
   @POST(ApiConstants.logout)
@@ -130,6 +134,11 @@ abstract class AppApi {
   Future<FavoriteToggleResponse> toggleFavoriteOffer(
     @Path(ApiKeys.id) int offerId,
   );
+  @POST(ApiConstants.offerClaim)
+  Future<OfferClaimResponse> offerClaim(
+      @Field(ApiKeys.offerId) int offerId,
+      );
+
 
   @GET(ApiConstants.getAllOffers)
   Future<GetOffersResponse> getAllOffers(
@@ -148,6 +157,9 @@ abstract class AppApi {
     @Path(ApiKeys.id) int offerId,
     @Query('includeStats') bool? includeStats,
   );
+
+  @GET(ApiConstants.getMyClaimOffers)
+  Future<MyClaimOffersResponse> getOfferClaims();
 
   @GET(ApiConstants.bootstrap)
   Future<BootstrapResponse> bootstrap();

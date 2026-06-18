@@ -30,16 +30,28 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
   const OfferDetailsScreen({
     super.key,
     required this.offerId,
-     this.buttonText,
+    this.buttonText,
   });
 
   final int offerId;
   final String? buttonText;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<OfferDetailsBloc, OfferDetailsState>(
       listener: (context, state) {
-        _handleClaimState(context, state);
+        print(
+            '#########${context.read<OfferDetailsBloc>().currentOfferDetails?.offer.vendor.websiteUrl}');
+        _handleClaimState(
+            context,
+            state,
+            (context
+                    .read<OfferDetailsBloc>()
+                    .currentOfferDetails
+                    ?.offer
+                    .vendor
+                    .websiteUrl) ??
+                '');
       },
       builder: (context, state) {
         final bloc = context.read<OfferDetailsBloc>();
@@ -76,13 +88,11 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
           ),
           body: Builder(
             builder: (context) {
-              if (state is OfferDetailsLoading
-                  && offerDetails == null) {
+              if (state is OfferDetailsLoading && offerDetails == null) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
-
               if (offerDetails != null) {
                 return _OfferDetailsContent(
                   buttonText: buttonText,
@@ -115,7 +125,8 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
     );
   }
 
-  void _handleClaimState(BuildContext context, OfferDetailsState state) {
+  void _handleClaimState(
+      BuildContext context, OfferDetailsState state, String websiteUrl) {
     if (state is OfferClaimFailure) {
       if (state.message.contains('الحد الأقصى')) {
         _showAlreadyClaimedDialog(context, state.message);
@@ -123,7 +134,6 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
         showToast(state.message);
       }
       return;
-
     }
 
     if (state is! OfferClaimSuccess) {
@@ -139,7 +149,7 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
         return;
       }
 
-      _showDiscountCodeDialog(context, claim);
+      _showDiscountCodeDialog(context, claim, websiteUrl);
       return;
     }
 
@@ -263,8 +273,11 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
     );
   }
 
-  void _showDiscountCodeDialog(BuildContext context,
-      OfferClaimModel claim,) {
+  void _showDiscountCodeDialog(
+    BuildContext context,
+    OfferClaimModel claim,
+    String websiteUrl,
+  ) {
     showDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -385,11 +398,15 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
                           await Clipboard.setData(
                             ClipboardData(text: claim.claimCode),
                           );
-                            navigator.pop();
-                            showToast('✓ تم نسخ الكود بنجاح',false);
-
-
-
+                          navigator.pop();
+                          showToast('✓ تم نسخ الكود بنجاح', false);
+                          final Uri url = Uri.parse(websiteUrl);
+                          if (await canLaunchUrl(url)) {
+                            await launchUrl(
+                              url,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          }
                         },
                         icon: const Icon(Icons.copy_rounded),
                         label: Text(
@@ -412,7 +429,6 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
                 ),
               ],
             ),
-
           ),
         );
       },
@@ -466,11 +482,9 @@ class OfferDetailsScreen extends StatelessWidget with CustomToastMassage {
 }
 
 class _OfferDetailsContent extends StatelessWidget {
-  const _OfferDetailsContent({
-    required this.offerDetails,
-    required this.isClaiming,
-      this.buttonText
-  });
+  const _OfferDetailsContent(
+      {required this.offerDetails, required this.isClaiming, this.buttonText});
+
   final String? buttonText;
 
   final OfferDetailsModel offerDetails;
@@ -572,15 +586,45 @@ class _OfferDetailsContent extends StatelessWidget {
                             child: Html(
                               data: offerDetails.offer.description,
                               style: {
-                                'h3': Style(
-                                  fontSize: FontSize(ManagerFontsSizes.f22),
-                                  color: ManagerColors.blackColor,
-                                  fontWeight: ManagerFontWeight.bold,
-                                ),
-                                'body': Style(
-                                  fontSize: FontSize(ManagerFontsSizes.f14),
+                                "body": Style(
+                                  margin: Margins.zero,
+                                  padding: HtmlPaddings.zero,
+                                  fontSize: FontSize(14),
                                   color: ManagerColors.greyColor,
-                                  lineHeight: LineHeight.number(-0.5),
+                                  lineHeight: LineHeight.number(1.4),
+                                ),
+
+                                "h2": Style(
+                                  fontSize: FontSize(22),
+                                  fontWeight: FontWeight.bold,
+                                  color: ManagerColors.blackColor,
+                                  margin: Margins.only(bottom: 10),
+                                ),
+
+                                "h3": Style(
+                                  fontSize: FontSize(18),
+                                  fontWeight: FontWeight.w700,
+                                  color: ManagerColors.blackColor,
+                                  margin: Margins.only(top: 12, bottom: 8),
+                                ),
+
+                                "p": Style(
+                                  margin: Margins.zero,
+                                  padding: HtmlPaddings.zero,
+                                ),
+
+                                "ul": Style(
+                                  margin: Margins.zero,
+                                  padding: HtmlPaddings.only(right: 16),
+                                ),
+
+                                "li": Style(
+                                  margin: Margins.only(bottom: 6),
+                                ),
+
+                                "strong": Style(
+                                  fontWeight: FontWeight.bold,
+                                  color: ManagerColors.blackColor,
                                 ),
                               },
                             ),

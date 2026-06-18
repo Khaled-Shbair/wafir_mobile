@@ -173,21 +173,10 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       request.governorate,
       request.city,
     );
+    print('545645: ${request.firstName} ${request.lastName}');
     if (response.success == true) {
-      _sharedPreferencesController.setData(
+      await _sharedPreferencesController.setData(
           SharedPreferencesKeys.token, response.verificationToken);
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.name,
-        '${request.firstName} ${request.lastName}',
-      );
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.email,
-        request.email,
-      );
-      await _sharedPreferencesController.setData(
-        SharedPreferencesKeys.loggedIn,
-        true,
-      );
     }
     return response;
   }
@@ -213,28 +202,24 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       request.otp,
       request.type,
     );
+
     if (response.success == true) {
+      await _sharedPreferencesController.setData(
+        SharedPreferencesKeys.resetToken,
+        response.resetToken,
+      );
       if (request.type == ApiKeys.registrationType) {
         await _sharedPreferencesController.setData(
-          SharedPreferencesKeys.token,
-          response.token,
-        );
-        await _sharedPreferencesController.setData(
           SharedPreferencesKeys.name,
-          '${response.data?.firstName} ${response.data?.lastName}',
+          '${response.data?.user?.firstName} ${response.data?.user?.lastName}',
         );
         await _sharedPreferencesController.setData(
           SharedPreferencesKeys.image,
-          response.data?.avatarUrl,
+          response.data?.user?.avatarUrl,
         );
         await _sharedPreferencesController.setData(
           SharedPreferencesKeys.loggedIn,
           true,
-        );
-      } else {
-        await _sharedPreferencesController.setData(
-          SharedPreferencesKeys.resetToken,
-          response.token,
         );
       }
     }

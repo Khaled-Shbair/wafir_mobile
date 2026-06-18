@@ -31,11 +31,11 @@ class CustomVentorItem extends StatelessWidget {
           return GestureDetector(
             onTap: item.status != 'soon'
                 ? () {
-                    Navigator.of(context).pushNamed(
-                      Routes.vendorsScreen,
-                      arguments: item.name,
-                    );
-                  }
+              Navigator.of(context).pushNamed(
+                Routes.vendorsScreen,
+                arguments: item.name,
+              );
+            }
                 : null,
             child: Column(
               children: [
@@ -44,10 +44,14 @@ class CustomVentorItem extends StatelessWidget {
                   isLabelVisible: item.status == 'soon',
                   label: Text(
                     'قريباً',
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          color: Colors.white,
-                          fontSize: ManagerFontsSizes.f8,
-                        ),
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .labelSmall!
+                        .copyWith(
+                      color: Colors.white,
+                      fontSize: ManagerFontsSizes.f8,
+                    ),
                   ),
                   child: Container(
                     width: ManagerWidths.w55,
@@ -68,17 +72,21 @@ class CustomVentorItem extends StatelessWidget {
                       border: Border.all(color: const Color(0xFFE1E9EB)),
                       image: item.iconUrl.isNotEmpty
                           ? DecorationImage(
-                              image: CachedNetworkImageProvider(item.iconUrl),
-                              fit: BoxFit.fill,
-                            )
+                        image: CachedNetworkImageProvider(item.iconUrl),
+                        fit: BoxFit.fill,
+                      )
                           : null,
                     ),
-                    child: Icon(Icons.error_outline),
+                    child: item.iconUrl.isEmpty? Icon(Icons.error_outline):
+                        null,
                   ),
                 ),
                 Text(
                   item.name,
-                  style: Theme.of(context).textTheme.labelSmall,
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .labelSmall,
                 ),
               ],
             ),

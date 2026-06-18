@@ -72,8 +72,9 @@ class HomeScreen extends StatelessWidget with CustomToastMassage {
                     CustomSectionHeader(
                       title: 'أحدث العروض والخصومات',
                       viewAllButton: () {
+                        context.read<OffersBloc>().add(GetAllOffersEvent());
                         context.read<NavigationCubit>().goToOffers();
-                      },
+                        },
                     ),
                     verticalSpace(ManagerHeights.h18),
                     _buildLatestOffers(state.home.offers),

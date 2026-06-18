@@ -13,6 +13,7 @@ sealed class VendorsState {
     this.selectedCategoryId,
   });
 
+
   VendorsState copyWith({
     String? selectedGovernorate,
     String? selectedWilaya,

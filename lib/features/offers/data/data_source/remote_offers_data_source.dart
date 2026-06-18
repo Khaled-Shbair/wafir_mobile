@@ -36,23 +36,7 @@ class RemoteOffersDataSourceImpl implements RemoteOffersDataSource {
 
   @override
   Future<OfferClaimResponse> claimOffer(int offerId) async {
-    final response = await _dio.post(
-      ApiConstants.offerClaims,
-      data: <String, dynamic>{'offer_id': offerId},
-    );
-
-    final responseData = response.data;
-    if (responseData is Map<String, dynamic>) {
-      return OfferClaimResponse.fromJson(responseData);
-    }
-
-    if (responseData is Map) {
-      return OfferClaimResponse.fromJson(
-        Map<String, dynamic>.from(responseData),
-      );
-    }
-
-    throw const FormatException('Invalid offer claim response format');
+    return _appApi.offerClaim(offerId);
   }
 
   @override

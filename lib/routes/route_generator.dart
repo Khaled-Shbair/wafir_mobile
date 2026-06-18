@@ -17,16 +17,16 @@ import 'package:wafir_mobile/features/auth/presentation/view/screens/register_sc
 import 'package:wafir_mobile/features/auth/presentation/view/screens/reset_password_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/verify_otp_screen.dart';
 import 'package:wafir_mobile/features/auth/presentation/view/screens/welcome_screen.dart';
+import 'package:wafir_mobile/features/claims/presentation/controller/my_claim_offers_bloc.dart';
 import 'package:wafir_mobile/features/favorite/presentation/controller/favorite_bloc.dart';
 import 'package:wafir_mobile/features/favorite/presentation/view/screens/favorites_screen.dart';
 import 'package:wafir_mobile/features/home/presentation/controller/home_bloc.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/home_screen.dart';
 import 'package:wafir_mobile/features/home/presentation/view/screens/main_bottom_nav_screen.dart';
-import 'package:wafir_mobile/features/claims/presentation/view/screens/my_claims_screen.dart';
+import 'package:wafir_mobile/features/claims/presentation/view/screens/my_claim_offers_screen.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_bloc.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offer_details_event.dart';
 import 'package:wafir_mobile/features/offers/presentation/controller/offers_bloc.dart';
-import 'package:wafir_mobile/features/offers/presentation/controller/my_claims_bloc.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offer_details_screen.dart';
 import 'package:wafir_mobile/features/offers/presentation/view/screens/offers_screen.dart';
 import 'package:wafir_mobile/features/on_boarding/presentation/view/screens/on_boarding_screen.dart';
@@ -139,13 +139,13 @@ class RouteGenerator {
       case Routes.mainScreen:
         initHome();
         initOffers();
-        initClaims();
+        initMyClaimOffers();
         initLogoutSetting();
         return MaterialPageRoute(
           builder: (_) => MultiBlocProvider(
             providers: [
               BlocProvider.value(value: instance<HomeBloc>()),
-              BlocProvider.value(value: instance<MyClaimsBloc>()),
+              BlocProvider.value(value: instance<MyClaimOffersBloc>()),
               BlocProvider.value(value: instance<OffersBloc>()),
               BlocProvider.value(value: instance<LogoutSettingBloc>()),
             ],
@@ -200,12 +200,12 @@ class RouteGenerator {
            ),
          );
        case Routes.myClaimsScreen:
-         initOffers();
+         initMyClaimOffers();
          return MaterialPageRoute(
-           builder: (_) => BlocProvider<MyClaimsBloc>(
-             create: (_) => instance<MyClaimsBloc>()
+           builder: (_) => BlocProvider<MyClaimOffersBloc>(
+             create: (_) => instance<MyClaimOffersBloc>()
                ..add(GetMyClaimsEvent()),
-             child: const MyClaimsScreen(),
+             child: const MyClaimOffersScreen(),
            ),
          );
        default:

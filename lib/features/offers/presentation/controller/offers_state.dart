@@ -17,22 +17,24 @@ sealed class OffersState {
       this.selectedVendorId});
 
   OffersState copyWith({
-    String? selectedGovernorate,
-    String? selectedWilaya,
-    String? selectedCategory,
-    String? selectedDiscount,
-    String? selectedSort,
+    Object? selectedGovernorate = #unset,
+    Object? selectedWilaya = #unset,
+    Object? selectedCategory = #unset,
+    Object? selectedDiscount = #unset,
+    Object? selectedSort = #unset,
     int? selectedVendorId,
+
   }) {
     final String? newSelectedGovernorate =
-        selectedGovernorate ?? this.selectedGovernorate;
-    final String? newSelectedWilaya = selectedWilaya ?? this.selectedWilaya;
-
+        identical(selectedGovernorate, #unset) ? this.selectedGovernorate : selectedGovernorate as String?;
+    final String? newSelectedWilaya =
+        identical(selectedWilaya, #unset) ? this.selectedWilaya : selectedWilaya as String?;
     final String? newSelectedCategory =
-        selectedCategory ?? this.selectedCategory;
+        identical(selectedCategory, #unset) ? this.selectedCategory : selectedCategory as String?;
     final String? newSelectedDiscount =
-        selectedDiscount ?? this.selectedDiscount;
-    final String? newSelectedSort = selectedSort ?? this.selectedSort;
+        identical(selectedDiscount, #unset) ? this.selectedDiscount : selectedDiscount as String?;
+    final String? newSelectedSort =
+        identical(selectedSort, #unset) ? this.selectedSort : selectedSort as String?;
     final int? newSelectedVendorId = selectedVendorId ?? this.selectedVendorId;
     if (this is OffersInitial) {
       return OffersInitial(

@@ -47,6 +47,7 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
         if (state is LogoutSettingLoading) {
           showCustomLoading(context);
         } else if (state is LogoutSettingSuccess) {
+          Navigator.of(context, rootNavigator: true).pop();
           disposeHome();
           disposeLogoutSetting();
           disposeOffers();
@@ -78,9 +79,6 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
             ValueListenableBuilder<String>(
               valueListenable: userImageNotifier,
               builder: (context, userImage, _) {
-                print('User image URL: $userImage'); // Debug print
-                print(
-                    'User image URL: ${instance<SharedPreferencesController>().getString(SharedPreferencesKeys.image)}'); // Debug print
                 final imageUrl = userImage.trim();
                 return Container(
                   height: ManagerHeights.h140,
@@ -98,14 +96,14 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
                     child: imageUrl.isEmpty
                         ? Image.asset(
                             ManagerAssets.personImage,
-                            fit: BoxFit.fill,
+                            fit: BoxFit.cover,
                           )
                         : CachedNetworkImage(
                             imageUrl: imageUrl,
                             fit: BoxFit.fill,
                             errorWidget: (context, url, error) => Image.asset(
                               ManagerAssets.personImage,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                           ),
                   ),
@@ -158,15 +156,16 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
                   },
                 ),
               ],
-            ),  verticalSpace(ManagerHeights.h10),  _buildSectionContainer(
+            ),
+            verticalSpace(ManagerHeights.h10),
+            _buildSectionContainer(
               children: [
                 _buildSettingItem(
                   context: context,
                   icon: Icons.favorite_border,
                   title: ManagerStrings.favorite,
                   onTap: () {
-                    Navigator.of(context)
-                        .pushNamed(Routes.favoriteScreen);
+                    Navigator.of(context).pushNamed(Routes.favoriteScreen);
                   },
                 ),
               ],

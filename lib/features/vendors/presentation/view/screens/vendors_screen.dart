@@ -7,22 +7,41 @@ import 'package:wafir_mobile/core/resource/manager_colors.dart';
 import 'package:wafir_mobile/core/resource/manager_fonts.dart';
 import 'package:wafir_mobile/core/resource/manager_sizes.dart';
 import 'package:wafir_mobile/core/resource/manager_strings.dart';
-import 'package:wafir_mobile/core/widgets/custom_search_filter_bottom_sheet.dart';
 import 'package:wafir_mobile/core/widgets/custom_spacing.dart';
 import 'package:wafir_mobile/core/widgets/custom_text_field.dart';
 import 'package:wafir_mobile/features/home/presentation/view/widgets/custom_section_header.dart';
+import 'package:wafir_mobile/features/offers/presentation/view/widgets/custom_filter_bottom_sheet.dart';
 import 'package:wafir_mobile/features/vendors/domain/model/vendors_public_model.dart';
 import 'package:wafir_mobile/features/vendors/presentation/controller/vendors_bloc.dart';
 import 'package:wafir_mobile/routes/routes.dart';
 
-class VendorsScreen extends StatelessWidget {
-  const VendorsScreen({this.sectorName, super.key});
+class VendorsScreen extends StatefulWidget {
+  const VendorsScreen({super.key, this.sectorName});
 
   final String? sectorName;
 
   @override
+  State<VendorsScreen> createState() => _VendorsScreenState();
+}
+
+class _VendorsScreenState extends State<VendorsScreen> {
+  late final FocusNode _searchFocusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final bloc = context.read<VendorsBloc>();
+    final controller = context.read<VendorsBloc>();
 
     return Scaffold(
       appBar: AppBar(
@@ -62,16 +81,27 @@ class VendorsScreen extends StatelessWidget {
                 children: [
                   CustomTextField(
                     textInputAction: TextInputAction.search,
-                    controller: bloc.search,
-                    onFieldSubmitted: (_) =>
-                        bloc.add(GetPublicVendorsEvent(sectorName)),
+                    controller: controller.search,
+                    top: 0,
+                    bottom: 0,
+                    focusNode: _searchFocusNode,
+                    onFieldSubmitted: (v) {
+                      if (v != null || v!.isNotEmpty) {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        context
+                            .read<VendorsBloc>()
+                            .add(GetPublicVendorsEvent(widget.sectorName));
+                      }
+                    },
                     hintText: ManagerStrings.searchOnStoreOrOffer,
                     prefixIcon: Icon(
                       Icons.search,
-                      size: ManagerIconsSizes.i24,
+                      size: ManagerIconsSizes.i20,
                     ),
                     suffix: IconButton(
                       onPressed: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
+                        final offersBloc = context.read<VendorsBloc>();
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
@@ -80,32 +110,28 @@ class VendorsScreen extends StatelessWidget {
                               top: Radius.circular(ManagerRadius.r20),
                             ),
                           ),
-                          builder: (context) => CustomSearchFilterBottomSheet(
-                            categories: AppConstants.categories,
-                            selectedCategory: state.selectedCategory,
-                            selectedGovernorate: state.selectedGovernorate,
-                            selectedWilaya: state.selectedWilaya,
-                            onApply: (selection) {
-                              bloc.add(
-                                CategoryChangedVendorsEvent(selection.category),
-                              );
-                              bloc.add(
-                                GovernorateChangedVendorsEvent(
-                                  selection.governorate,
-                                ),
-                              );
-                              bloc.add(
-                                WilayaChangedVendorsEvent(selection.wilaya),
-                              );
-                              bloc.add(GetPublicVendorsEvent(sectorName));
-                            },
+                          builder: (context) => BlocProvider<VendorsBloc>.value(
+                            value: offersBloc,
+
+                            child: BlocBuilder<VendorsBloc, VendorsState>(
+                              builder: (context, state) {
+                                return CustomFilterBottomSheet(
+                                  categories: AppConstants.categories,
+                                  selectedCategory: state.selectedCategory,
+                                  selectedGovernorate:
+                                      state.selectedGovernorate,
+                                  selectedWilaya: state.selectedWilaya,
+                                );
+                              },
+                            ),
                           ),
                         );
                       },
+                      padding: EdgeInsets.zero,
                       icon: Icon(
                         Icons.filter_list_outlined,
-                        size: ManagerIconsSizes.i24,
-                        color: Colors.red,
+                        size: ManagerIconsSizes.i20,
+                        color: ManagerColors.primaryColor,
                       ),
                     ),
                   ),
