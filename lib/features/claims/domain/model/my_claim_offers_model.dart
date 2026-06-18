@@ -18,20 +18,11 @@ class MyClaimOffersModel {
 class ClaimOfferModel {
   final int id;
 
-  final int userId;
-
-  final int offerId;
-
   final OfferModel offer;
-
-  final String claimCode;
 
   const ClaimOfferModel({
     required this.id,
-    required this.userId,
-    required this.offerId,
     required this.offer,
-    required this.claimCode,
   });
 }
 

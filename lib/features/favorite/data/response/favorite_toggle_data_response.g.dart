@@ -13,12 +13,12 @@ FavoriteToggleDataResponse _$FavoriteToggleDataResponseFromJson(
           ? null
           : FavoriteSimpleResponse.fromJson(
               json['favorite'] as Map<String, dynamic>),
-      isFavorited: json['is_favorite'] as bool?,
+      isFavorited: json['is_favorited'] as bool?,
     );
 
 Map<String, dynamic> _$FavoriteToggleDataResponseToJson(
         FavoriteToggleDataResponse instance) =>
     <String, dynamic>{
       'favorite': instance.favorite,
-      'is_favorite': instance.isFavorited,
+      'is_favorited': instance.isFavorited,
     };

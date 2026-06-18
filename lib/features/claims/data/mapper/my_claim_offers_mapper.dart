@@ -45,9 +45,6 @@ extension OfferClaimMapper on ClaimOfferResponse {
     return ClaimOfferModel(
       offer: offer!.toDomain(),
       id: offer!.id.onNull(),
-      userId: userId.onNull(),
-      offerId: offerId.onNull(),
-      claimCode: claimCode.onNull(),
     );
   }
 }

@@ -21,6 +21,7 @@ class MyClaimOffersRepositoryImpl implements MyClaimOffersRepository {
       try {
         final response = await _dataSource.getMyClaims();
         if (response.success == true) {
+          print('33333${response.data![0].offer!.isFavorited}');
           return Right(response.toDomain());
         } else {
           return Left(

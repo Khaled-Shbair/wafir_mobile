@@ -69,7 +69,7 @@ class MyClaimOffersScreen extends StatelessWidget {
                     discountPercentage: offerModel.offer.discountPercentage,
                     id: offerModel.id,
                     offerId: offerModel.offer.id,
-                    discountCode: offerModel.claimCode,
+                    discountCode: '',
                     description: offerModel.offer.title,
                     isFavorite: offerModel.offer.isFavorited,
                     wilaya: '',
@@ -94,3 +94,4 @@ class MyClaimOffersScreen extends StatelessWidget {
     );
   }
 }
+

@@ -35,24 +35,12 @@ class ClaimOfferResponse {
   @JsonKey(name: ApiKeys.id)
   final int? id;
 
-  @JsonKey(name: ApiKeys.userId)
-  final int? userId;
-
-  @JsonKey(name: ApiKeys.offerId)
-  final int? offerId;
-
   @JsonKey(name: ApiKeys.offer)
   final OfferResponse? offer;
 
-  @JsonKey(name: ApiKeys.claimCode)
-  final String? claimCode;
-
   const ClaimOfferResponse({
     this.id,
-    this.userId,
-    this.offerId,
     this.offer,
-    this.claimCode,
   });
 
   factory ClaimOfferResponse.fromJson(Map<String, dynamic> json) =>

@@ -29,27 +29,21 @@ Map<String, dynamic> _$MyClaimOffersResponseToJson(
 ClaimOfferResponse _$ClaimOfferResponseFromJson(Map<String, dynamic> json) =>
     ClaimOfferResponse(
       id: (json['id'] as num?)?.toInt(),
-      userId: (json['user_id'] as num?)?.toInt(),
-      offerId: (json['offer_id'] as num?)?.toInt(),
       offer: json['offer'] == null
           ? null
           : OfferResponse.fromJson(json['offer'] as Map<String, dynamic>),
-      claimCode: json['claim_code'] as String?,
     );
 
 Map<String, dynamic> _$ClaimOfferResponseToJson(ClaimOfferResponse instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'user_id': instance.userId,
-      'offer_id': instance.offerId,
       'offer': instance.offer,
-      'claim_code': instance.claimCode,
     };
 
 OfferResponse _$OfferResponseFromJson(Map<String, dynamic> json) =>
     OfferResponse(
       id: (json['id'] as num?)?.toInt(),
-      isFavorited: json['is_favorite'] as bool?,
+      isFavorited: json['is_favarite'] as bool?,
       vendorId: (json['vendor_id'] as num?)?.toInt(),
       validUntil: json['valid_until'] as String?,
       validFrom: json['valid_from'] as String?,
