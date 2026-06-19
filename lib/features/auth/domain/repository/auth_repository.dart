@@ -19,6 +19,7 @@ abstract class AuthRepository {
   Future<Either<Failure, LoginModel>> loginByEmail(LoginByEmailRequest request);
 
   Future<Either<Failure, LoginModel>> loginByGoogle();
+  Future<Either<Failure, String>> deleteAccount();
 
   Future<Either<Failure, RegisterModel>> registerByEmail(
       RegisterByEmailRequest request);

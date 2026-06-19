@@ -61,6 +61,9 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
         } else if (state is LogoutSettingFailure) {
           Navigator.of(context, rootNavigator: true).pop();
           showToast(state.message);
+        }else if (state is DeleteAccountSuccess) {
+          Navigator.of(context, rootNavigator: true).pop();
+          showToast(state.message);
         }
       },
       child: Scaffold(
@@ -244,6 +247,25 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
                       context,
                       confirmButtonOnPressed: () async {
                         context.read<LogoutSettingBloc>().add(LogoutProcess());
+                      },
+                    );
+                  },
+                )
+              ],
+            ),
+            _buildSectionContainer(
+              children: [
+                _buildSettingItem(
+                  context: context,
+                  icon: Icons.delete_outline,
+                  title: 'حذف حسابي',
+                  onTap: () {
+                    showConfirmationDialog(
+                      context,
+                       title: 'حذف حسابي',
+                      message: 'هل انت متاكد من انك تريد حذف حسابك؟',
+                      confirmButtonOnPressed: () async {
+                        context.read<LogoutSettingBloc>().add(DeleteAccountProcess());
                       },
                     );
                   },

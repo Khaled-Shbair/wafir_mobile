@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
 import 'package:wafir_mobile/features/auth/data/response/bootstrap_response.dart';
+import 'package:wafir_mobile/features/auth/data/response/delete_account_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/forgot_password_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/login_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/logout_response.dart';
@@ -126,6 +127,8 @@ abstract class AppApi {
 
   @POST(ApiConstants.logout)
   Future<LogoutResponse> logout();
+  @POST(ApiConstants.logout)
+  Future<DeleteAccountResponse> deleteAccount();
 
   @GET(ApiConstants.getAllFavoriteOffers)
   Future<FavoriteOffersResponse> getAllFavoriteOffers();

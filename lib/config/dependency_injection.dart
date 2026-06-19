@@ -8,6 +8,7 @@ import 'package:wafir_mobile/core/networking/api/dio_factory.dart';
 import 'package:wafir_mobile/core/storage/local/shared_preferences_controller.dart';
 import 'package:wafir_mobile/features/auth/data/services/google_auth_service.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/change_password_use_case.dart';
+import 'package:wafir_mobile/features/auth/domain/use_case/delete_account_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/forgot_password_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/login_by_google_use_case.dart';
 import 'package:wafir_mobile/features/auth/domain/use_case/logout_use_case.dart';
@@ -721,12 +722,15 @@ void initLogoutSetting() async {
   }
   if (!GetIt.I.isRegistered<LogoutSettingBloc>()) {
     instance.registerLazySingleton<LogoutSettingBloc>(
-      () => LogoutSettingBloc(instance<LogoutUseCase>()),
+      () => LogoutSettingBloc(instance<LogoutUseCase>(),instance<DeleteAccountUseCase>(),),
     );
   }
 }
 
 void disposeLogoutSetting() async {
+  if (GetIt.I.isRegistered<DeleteAccountUseCase>()) {
+    instance.unregister<DeleteAccountUseCase>();
+  }
   if (GetIt.I.isRegistered<LogoutUseCase>()) {
     instance.unregister<LogoutUseCase>();
   }

@@ -15,6 +15,10 @@ class LogoutSettingLoading extends LogoutSettingState {
 
 class LogoutSettingSuccess extends LogoutSettingState {
   const LogoutSettingSuccess();
+}class DeleteAccountSuccess extends LogoutSettingState {
+  final String message;
+  const DeleteAccountSuccess({required this.message});
+
 }
 
 class LogoutSettingFailure extends LogoutSettingState {

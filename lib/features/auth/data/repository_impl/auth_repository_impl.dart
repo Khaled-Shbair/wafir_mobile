@@ -62,7 +62,33 @@ class AuthRepositoryImpl implements AuthRepository {
       );
     }
   }
-
+  @override
+  Future<Either<Failure, String>> deleteAccount() async {
+    if (await _networkInfo.isConnected) {
+      try {
+        final response = await _dataSource.deleteAccount();
+        if (response.success == true) {
+          return Right(response.message!);
+        } else {
+          return Left(
+            Failure(
+              message: response.message ?? 'Delete Account failed',
+              code: response.statusCode ?? ResponseCode.BAD_REQUEST.value,
+            ),
+          );
+        }
+      } catch (e) {
+        return Left(ErrorHandler.handle(e).failure);
+      }
+    } else {
+      return Left(
+        Failure(
+          message: ManagerStrings.noInternetConnection,
+          code: ResponseCode.NO_INTERNET_CONNECTION.value,
+        ),
+      );
+    }
+  }
   @override
   Future<Either<Failure, LoginModel>> loginByGoogle() async {
     if (await _networkInfo.isConnected) {

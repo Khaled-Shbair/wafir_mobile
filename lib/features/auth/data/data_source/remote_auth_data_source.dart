@@ -9,6 +9,7 @@ import 'package:wafir_mobile/features/auth/data/request/register_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/reset_otp_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/reset_password_request.dart';
 import 'package:wafir_mobile/features/auth/data/request/verify_otp_request.dart';
+import 'package:wafir_mobile/features/auth/data/response/delete_account_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/forgot_password_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/login_response.dart';
 import 'package:wafir_mobile/features/auth/data/response/logout_response.dart';
@@ -38,6 +39,7 @@ abstract class RemoteAuthDataSource {
   Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request);
 
   Future<LogoutResponse> logout();
+  Future<DeleteAccountResponse> deleteAccount();
 
   Future<bool> refreshToken();
 }
@@ -116,6 +118,20 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
   @override
   Future<LogoutResponse> logout() async {
     var response = await _appApi.logout();
+    if (response.success == true) {
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.token);
+      await _sharedPreferencesController.setData(
+          SharedPreferencesKeys.loggedIn, false);
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.resetToken);
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.email);
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.name);
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.image);
+    }
+    return response;
+  }
+  @override
+  Future<DeleteAccountResponse> deleteAccount() async {
+    var response = await _appApi.deleteAccount();
     if (response.success == true) {
       _sharedPreferencesController.removeData(SharedPreferencesKeys.token);
       await _sharedPreferencesController.setData(
