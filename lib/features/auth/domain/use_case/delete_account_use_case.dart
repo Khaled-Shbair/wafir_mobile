@@ -5,18 +5,13 @@ import 'package:wafir_mobile/features/auth/data/request/change_password_request.
 import 'package:wafir_mobile/features/auth/domain/model/reset_password_model.dart';
 import 'package:wafir_mobile/features/auth/domain/repository/auth_repository.dart';
 
-
-class DeleteAccountUseCase
-    implements BaseOutUseCase<String> {
+class DeleteAccountUseCase implements BaseOutUseCase<String> {
   final AuthRepository _repository;
 
   DeleteAccountUseCase(this._repository);
 
   @override
-  Future<Either<Failure, String>> execute(
-      ) async {
-    return await _repository.deleteAccount(
-
-    );
+  Future<Either<Failure, String>> execute() async {
+    return await _repository.deleteAccount();
   }
 }

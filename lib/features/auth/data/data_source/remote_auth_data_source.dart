@@ -137,6 +137,8 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       await _sharedPreferencesController.setData(
           SharedPreferencesKeys.loggedIn, false);
       _sharedPreferencesController.removeData(SharedPreferencesKeys.resetToken);
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.rememberMy);
+      _sharedPreferencesController.removeData(SharedPreferencesKeys.refreshToken);
       _sharedPreferencesController.removeData(SharedPreferencesKeys.email);
       _sharedPreferencesController.removeData(SharedPreferencesKeys.name);
       _sharedPreferencesController.removeData(SharedPreferencesKeys.image);
@@ -189,7 +191,6 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
       request.governorate,
       request.city,
     );
-    print('545645: ${request.firstName} ${request.lastName}');
     if (response.success == true) {
       await _sharedPreferencesController.setData(
           SharedPreferencesKeys.token, response.verificationToken);

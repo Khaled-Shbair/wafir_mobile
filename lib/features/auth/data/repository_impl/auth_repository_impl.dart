@@ -68,7 +68,7 @@ class AuthRepositoryImpl implements AuthRepository {
       try {
         final response = await _dataSource.deleteAccount();
         if (response.success == true) {
-          return Right(response.message!);
+          return Right('تم حذف الحساب بنجاح');
         } else {
           return Left(
             Failure(

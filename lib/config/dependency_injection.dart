@@ -720,9 +720,18 @@ void initLogoutSetting() async {
       () => LogoutUseCase(instance<AuthRepository>()),
     );
   }
+  if (!GetIt.I.isRegistered<DeleteAccountUseCase>()) {
+    instance.registerLazySingleton<DeleteAccountUseCase>(
+      () => DeleteAccountUseCase(instance<AuthRepository>()),
+    );
+  }
+
   if (!GetIt.I.isRegistered<LogoutSettingBloc>()) {
     instance.registerLazySingleton<LogoutSettingBloc>(
-      () => LogoutSettingBloc(instance<LogoutUseCase>(),instance<DeleteAccountUseCase>(),),
+      () => LogoutSettingBloc(
+        instance<LogoutUseCase>(),
+        instance<DeleteAccountUseCase>(),
+      ),
     );
   }
 }

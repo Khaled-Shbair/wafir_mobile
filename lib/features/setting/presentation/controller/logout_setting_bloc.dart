@@ -9,7 +9,8 @@ part 'logout_setting_event.dart';
 part 'logout_setting_state.dart';
 
 class LogoutSettingBloc extends Bloc<LogoutSettingEvent, LogoutSettingState> {
-  LogoutSettingBloc(this._logoutUseCase,this._deleteAccountUseCase) : super(const LogoutSettingInitial()) {
+  LogoutSettingBloc(this._logoutUseCase, this._deleteAccountUseCase)
+      : super(const LogoutSettingInitial()) {
     on<LogoutProcess>(_onLogoutProcess);
     on<DeleteAccountProcess>(_onDeleteAccountProcess);
   }
@@ -24,12 +25,15 @@ class LogoutSettingBloc extends Bloc<LogoutSettingEvent, LogoutSettingState> {
       (f) => emit(LogoutSettingFailure(message: f.message)),
       (r) => emit(const LogoutSettingSuccess()),
     );
-  } Future<void> _onDeleteAccountProcess(DeleteAccountProcess event, Emitter emit) async {
+  }
+
+  Future<void> _onDeleteAccountProcess(
+      DeleteAccountProcess event, Emitter emit) async {
     emit(const LogoutSettingLoading());
     final result = await _deleteAccountUseCase.execute();
     result.fold(
-          (f) => emit(LogoutSettingFailure(message: f.message)),
-          (r) => emit( DeleteAccountSuccess(message:r)),
+      (f) => emit(LogoutSettingFailure(message: f.message)),
+      (r) => emit(LogoutSettingSuccess(r)),
     );
   }
 }

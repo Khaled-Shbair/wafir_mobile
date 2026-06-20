@@ -2,7 +2,6 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:wafir_mobile/config/constants/api_constants.dart';
 
 part 'delete_account_response.g.dart';
-
 @JsonSerializable()
 class DeleteAccountResponse  {
   @JsonKey(name: ApiKeys.success)
