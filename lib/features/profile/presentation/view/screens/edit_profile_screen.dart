@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wafir_mobile/config/constants/app_constants.dart';
@@ -40,7 +41,7 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
           if (state.status == EditProfileStatus.loadingProfile ||
               state.status == EditProfileStatus.submitting) {
             showCustomLoading(context);
-          } else if (state.status == EditProfileStatus.failure ) {
+          } else if (state.status == EditProfileStatus.failure) {
             // hide loading dialog if shown
             final rootNavigator = Navigator.of(context, rootNavigator: true);
             if (rootNavigator.canPop()) rootNavigator.pop();
@@ -51,7 +52,7 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
             final rootNavigator = Navigator.of(context, rootNavigator: true);
             if (rootNavigator.canPop()) rootNavigator.pop();
             if (state.message != null && state.message!.isNotEmpty) {
-              showToast(state.message!,  false);
+              showToast(state.message!, false);
             }
           }
         },
@@ -86,10 +87,17 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
                                   fit: BoxFit.cover,
                                 )
                               : controller.avatarUrl.isNotEmpty
-                                  ? Image.network(
-                                      controller.avatarUrl,
+                                  ? CachedNetworkImage(
+                                      imageUrl: controller.avatarUrl,
                                       fit: BoxFit.cover,
-                                    )
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(
+                                            ManagerAssets.personImage,
+                                            fit: BoxFit.fitWidth,
+                                          ),
+                                      progressIndicatorBuilder:
+                                          (context, url, progress) =>
+                                              const CircularProgressIndicator())
                                   : Image.asset(
                                       ManagerAssets.personImage,
                                       fit: BoxFit.fitWidth,
@@ -116,7 +124,8 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
                   Row(
                     children: [
                       Flexible(
-                        child: CustomTextField(  maxLength: 30,
+                        child: CustomTextField(
+                          maxLength: 30,
                           labelText: ManagerStrings.firstName,
                           controller: controller.firstName,
                           validator: (v) => Validator.nameValidate(v),
@@ -129,7 +138,8 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
                       ),
                       horizontalSpace(ManagerWidths.w10),
                       Flexible(
-                        child: CustomTextField(  maxLength: 30,
+                        child: CustomTextField(
+                          maxLength: 30,
                           labelText: ManagerStrings.lastName,
                           controller: controller.lastName,
                           validator: (v) => Validator.nameValidate(v),
@@ -143,7 +153,8 @@ class EditProfileScreen extends StatelessWidget with CustomToastMassage {
                     ],
                   ),
                   verticalSpace(ManagerHeights.h20),
-                  CustomTextField(   maxLength: 30,
+                  CustomTextField(
+                    maxLength: 30,
                     labelText: ManagerStrings.email,
                     controller: controller.email,
                     readOnly: true,
