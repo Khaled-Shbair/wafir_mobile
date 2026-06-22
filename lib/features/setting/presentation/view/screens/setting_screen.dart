@@ -102,9 +102,12 @@ class SettingScreen extends StatelessWidget with CustomToastMassage {
                             fit: BoxFit.cover,
                           )
                         : CachedNetworkImage(
-                            imageUrl: imageUrl,
-                            fit: BoxFit.fill,
-                            errorWidget: (context, url, error) => Image.asset(
+                      imageUrl: imageUrl,
+                            fit: BoxFit.cover,
+                        progressIndicatorBuilder: (context, url, error) =>
+                      CircularProgressIndicator(),
+
+                        errorWidget: (context, url, error) => Image.asset(
                               ManagerAssets.personImage,
                               fit: BoxFit.cover,
                             ),
