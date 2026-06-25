@@ -46,26 +46,33 @@ class RemoteProfileDataSourceImpl implements RemoteProfileDataSource {
       request.wilaya,
     );
 
+
     if (response.success == true) {
+
       _sharedPref.setData(
         SharedPreferencesKeys.name,
         '${response.data?.firstName} ${response.data?.lastName}',
       );
-      _sharedPref.setData(
-        SharedPreferencesKeys.image,
-        response.data?.avatarUrl,
-      );
+
     }
     return response;
   }
 
   @override
   Future<ProfileResponse> editProfileImage(EditProfileRequest request) async {
-    return await _appApi.updateProfileAvatar(
+    var response = await _appApi.updateProfileAvatar(
       await MultipartFile.fromFile(
         request.image?.path ?? '',
         filename: request.image?.path.split('/').last,
       ),
     );
+
+    if (response.success == true) {
+      _sharedPref.setData(
+        SharedPreferencesKeys.image,
+        response.data?.avatarUrl,
+      );
+    }
+    return response;
   }
 }
