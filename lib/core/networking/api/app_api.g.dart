@@ -81,12 +81,13 @@ class _AppApi implements AppApi {
     String password,
     String firstName,
     String lastName,
-    String phoneNumber,
+    String? phoneNumber,
     String governorate,
     String wilaya,
   ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
+    queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     final _data = {
       'email': email,
@@ -97,6 +98,7 @@ class _AppApi implements AppApi {
       'governorate': governorate,
       'wilaya': wilaya,
     };
+    _data.removeWhere((k, v) => v == null);
     final _options = _setStreamType<RegisterResponse>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
