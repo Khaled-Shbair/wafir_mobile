@@ -8,7 +8,7 @@ import 'package:wafir_mobile/features/auth/domain/repository/auth_repository.dar
 class RegisterByEmailUseCaseInput {
   final String firstName;
   final String lastName;
-  final String phoneNumber;
+  final String? phoneNumber;
   final String email;
   final String password;
   final String governorate;
@@ -19,7 +19,7 @@ class RegisterByEmailUseCaseInput {
     required this.password,
     required this.firstName,
     required this.lastName,
-    required this.phoneNumber,
+     this.phoneNumber,
     required this.governorate,
     required this.city,
   });

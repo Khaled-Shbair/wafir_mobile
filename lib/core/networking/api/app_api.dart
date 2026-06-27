@@ -46,7 +46,7 @@ abstract class AppApi {
     @Field(ApiKeys.password) String password,
     @Field(ApiKeys.firstName) String firstName,
     @Field(ApiKeys.lastName) String lastName,
-    @Field(ApiKeys.phoneNumber) String phoneNumber,
+    @Field(ApiKeys.phoneNumber) String? phoneNumber,
     @Field(ApiKeys.governorate) String governorate,
     @Field(ApiKeys.wilaya) String wilaya,
   );

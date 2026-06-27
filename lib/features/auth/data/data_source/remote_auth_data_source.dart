@@ -39,6 +39,7 @@ abstract class RemoteAuthDataSource {
   Future<ResetPasswordResponse> resetPassword(ResetPasswordRequest request);
 
   Future<LogoutResponse> logout();
+
   Future<DeleteAccountResponse> deleteAccount();
 
   Future<bool> refreshToken();
@@ -129,6 +130,7 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
     }
     return response;
   }
+
   @override
   Future<DeleteAccountResponse> deleteAccount() async {
     var response = await _appApi.deleteAccount();
@@ -138,7 +140,8 @@ class RemoteAuthDataSourceImpl implements RemoteAuthDataSource {
           SharedPreferencesKeys.loggedIn, false);
       _sharedPreferencesController.removeData(SharedPreferencesKeys.resetToken);
       _sharedPreferencesController.removeData(SharedPreferencesKeys.rememberMy);
-      _sharedPreferencesController.removeData(SharedPreferencesKeys.refreshToken);
+      _sharedPreferencesController
+          .removeData(SharedPreferencesKeys.refreshToken);
       _sharedPreferencesController.removeData(SharedPreferencesKeys.email);
       _sharedPreferencesController.removeData(SharedPreferencesKeys.name);
       _sharedPreferencesController.removeData(SharedPreferencesKeys.image);

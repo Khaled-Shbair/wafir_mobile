@@ -226,7 +226,6 @@ class _RegisterScreenState extends State<RegisterScreen>
                       focusNode: phoneNumberFocusNode,
                       keyboardType: TextInputType.phone,
                       textInputAction: TextInputAction.next,
-                      validator: (v) => Validator.phoneValidate(v),
                     ),
                     verticalSpace(ManagerHeights.h20),
                     BlocBuilder<RegisterBloc, RegisterState>(
