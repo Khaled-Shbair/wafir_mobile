@@ -43,7 +43,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
             password: event.password,
             firstName: event.firstName,
             lastName: event.lastName,
-            phoneNumber: event.phoneNumber != null ? '+968${event.phoneNumber}' : null,
+            phoneNumber: event.phoneNumber.isNotEmpty
+                ? '+968${event.phoneNumber}'
+                : null,
             governorate: event.governorate,
             city: event.city,
           ),
