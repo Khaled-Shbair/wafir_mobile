@@ -220,7 +220,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                     CustomTextField(
                       maxLength: 8,
                       controller: phoneNumber,
-                      hintText: ManagerStrings.phoneNumber,
+                      hintText: '${ManagerStrings.phoneNumber} (${ManagerStrings.optional})',
                       prefixIconData: Icons.phone,
                       isFocused: phoneNumberIsFocused,
                       focusNode: phoneNumberFocusNode,

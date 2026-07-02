@@ -2,13 +2,19 @@ import 'package:wafir_mobile/core/resource/manager_strings.dart';
 
 class Validator {
   static String? emailValidator(String? email) {
-    if (email == null || email.trim().isEmpty) {
+
+    final value = email?.trim() ?? '';
+
+    if (value.isEmpty) {
       return ManagerStrings.pleaseEnterYourEmailAddress;
     }
 
-    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+').hasMatch(email.trim())) {
+    const pattern = r'^[A-Za-z][A-Za-z0-9._%+-]*@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$';
+
+    if (!RegExp(pattern).hasMatch(value)) {
       return ManagerStrings.pleaseEnterYourEmailAddressCorrectly;
     }
+
     return null;
   }
 
